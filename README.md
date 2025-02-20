@@ -4,10 +4,10 @@ Este projeto tem como objetivo desenvolver uma solução web para a **????Ltda.*
 
 # 👩‍💻🧑‍💻 Grupo de Trabalho
 
-<p><a href="https://github.com/">Edson</a></p>
+<p><a href="https://github.com/EdsoonHenrique">Edson</a></p>
 <p><a href="https://github.com/FlpRocha236">Felipe Rocha</a></p>
 <p><a href="https://github.com/jmcardoso18">Jamila M. Cardoso</a></p>
-<p><a href="https://github.com/">Jefferson</a></p>
+<p><a href="https://github.com/Jefferson434">Jefferson</a></p>
 <p><a href="https://github.com/LemesdeMorais">Rafaela C.L. de Morais</a></p>
 ---
 
