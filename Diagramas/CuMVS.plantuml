@@ -1,0 +1,31 @@
+@startuml
+
+left to right direction
+actor "MSV" as Msv
+
+rectangle "MSV"{
+    usecase "ManterCliente" as UC1
+    usecase "ManterFornecedor"as UC2
+    usecase "PedirOrçamento" as UC3
+    usecase "Compra" as UC6
+    usecase "Pagamento" as UC7
+    usecase "Venda" as UC8
+    usecase "Cotação" as UC5
+    usecase "ManterTransportadora" as UC9 
+    usecase "ManterProdutos" as UC4
+   
+}
+
+
+Msv --> UC1
+Msv --> UC2
+Msv --> UC3
+Msv --> UC6
+Msv --> UC8
+Msv --> UC5
+Msv --> UC9
+Msv --> UC4
+
+UC8 --> UC7:<<include>>
+UC6 --> UC7:<<include>>
+@enduml
