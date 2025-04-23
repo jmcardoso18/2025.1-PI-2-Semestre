@@ -1,0 +1,25 @@
+@startuml
+ 
+actor Cliente
+actor MVS
+boundary "Tela Cliente" as TC
+control "Pedido" as CC
+entity "Sistema" as SI
+boundary "Tela Fornecedor" as TF
+actor Fornecedor
+
+Cliente -> TC : seleciona produtos 
+TC -> SI : solicita orçamento
+SI-> Fornecedor: solicita cotacao ao fornecedor 
+Fornecedor --> SI : retorna valores da cotacao
+MVS -> SI : seleciona os fornecedores 
+MVS --> Cliente : envia orcamento 
+Cliente -> SI : aprova orcamento
+SI-
+CC-> RE :efetiva pagamento
+Cliente -> UI : faz pedido fornecedor
+RE--> UI : paga fornecedor
+Cliente -> UI : recebe produtos
+UI->CC :encaminha entrega ao cliente
+
+@enduml

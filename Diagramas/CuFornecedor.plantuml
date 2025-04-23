@@ -3,12 +3,12 @@ left to right direction
 actor "Fornecedor" as Fornecedor
 rectangle "FORNECEDOR"{
     usecase "ManterFornecedor"as UC2
-    usecase "Compra" as UC6
+    usecase "Compra" as UC8
     usecase "Pagamento" as UC7
-    usecase "Cotação" as UC5  
+    usecase "Cotacao" as UC5  
 }
 Fornecedor --> UC2
 Fornecedor --> UC5
-Fornecedor --> UC6
-UC6 --> UC7:<<include>>
+Fornecedor --> UC8
+UC8 --> UC7:<<include>>
 @enduml

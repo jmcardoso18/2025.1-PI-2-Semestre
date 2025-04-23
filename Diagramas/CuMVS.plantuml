@@ -6,14 +6,13 @@ actor "MSV" as Msv
 rectangle "MSV"{
     usecase "ManterCliente" as UC1
     usecase "ManterFornecedor"as UC2
-    usecase "PedirOrçamento" as UC3
+    usecase "PedirOrcamento" as UC3
     usecase "Compra" as UC6
     usecase "Pagamento" as UC7
     usecase "Venda" as UC8
-    usecase "Cotação" as UC5
+    usecase "Cotacao" as UC5
     usecase "ManterTransportadora" as UC9 
-    usecase "ManterProdutos" as UC4
-   
+    usecase "ManterProdutos" as UC4  
 }
 
 

@@ -5,10 +5,9 @@ actor "Cliente" as Cliente
 
 rectangle "CLIENTE"{
     usecase "ManterCliente" as UC1
-    usecase "PedirOrçamento" as UC3
     usecase "Venda" as UC8
+    usecase "PedirOrcamento" as UC3
     usecase "Pagamento" as UC7
-       
 }
 Cliente --> UC3
 Cliente --> UC1

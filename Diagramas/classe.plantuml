@@ -1,0 +1,109 @@
+@startuml
+
+class Clientes {
+    //Atributos da classe cliente
+    -cpf:varchar
+    -nomeCompleto:varchar
+    -dataNascimento:date
+    -telefone:varchar
+    -email:varchar
+    -cep:varchar
+    -logradouro:varchar
+    -numero:varchar
+    -complemento:varchar
+    -bairro:varchar
+    -cidade:varchar
+    -estado:varchar
+    //Para Pessoa Jurídica:
+    -razãoSocial:varchar
+    -nomeFantasia:varchar
+    -cnpj:varchar
+    -inscriçãoEstadual:varchar
+    -nomeResponsável:varchar
+
+    //metodo da classe cliente
+    -insereCliente()
+    -alteraCliente()
+    -leCliente()
+    -deletaCliente()
+    -pedeOrcamento()
+    -realizaVenda()
+    -pagamentoVenda()
+}
+
+class Produtos{
+    -codigoProduto:int
+    -Descrição:varchar
+    -codCategoria:int
+    -marca:varchar
+    -unidadeMedida:varchar
+    -precoCusto:double
+    -precoVenda:double
+
+    -insereProduto()
+    -alteraProduto()
+    -leProduto()
+    -deletaProduto()
+
+/*
+Outros (opcional):
+Código de barras
+Imagem do produto
+Status (ativo/inativo)
+*/
+
+}
+
+class Fornecedor{
+    -razãoSocial:varchar
+    -nomeFantasia:varchar
+    -cnpj:varchar
+    -inscricaoEstadual:varchar
+    -nomeResponsavel:varchar
+    -contatoResponsavel:varchar
+    -email:varchar
+    -cep:varchar
+    -logradouro:varchar
+    -numero:varchar
+    -complemento:varchar
+    -bairro:varchar
+    -cidade:varchar
+    -estado:varchar
+    //Dados Bancários (opcional):
+    -banco:varchar
+    -agencia:varchar
+    -contaCorrente:varchar
+    -tipoConta:varchar
+    -cnpjConta:varchar
+    -condiaoPagamento:varchar
+    -prazoEntrega:varchar
+    -insereFornecedor()
+    -alteraFornecedor()
+    -leFornecedor()
+    -deletaFornecedor()
+    -compraProduto()
+}
+
+class categoria{
+    -codCategoria:int
+    -descricao:varchar
+
+    -insereCategoria()
+    -alteraCategoria()
+    -leCategoria()
+    -deletaCategoria()
+}
+
+class venda{
+    -dataVenda:date
+    -codProduto:int
+    -preco:double
+
+    -insereVenda()
+    -alteraVenda()
+    -leVenda()
+    -deletaVenda()
+}
+Clientes "1" -- "0..*" Produtos : compra
+Fornecedor "1" -- "0..*" Produtos : vende
+@endum
