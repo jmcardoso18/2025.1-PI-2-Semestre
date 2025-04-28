@@ -33,7 +33,7 @@ class Clientes {
 
 class Produtos{
     -codigoProduto:int
-    -Descrição:varchar
+    -descricao:varchar
     -codCategoria:int
     -marca:varchar
     -unidadeMedida:varchar
@@ -44,14 +44,6 @@ class Produtos{
     -alteraProduto()
     -leProduto()
     -deletaProduto()
-
-/*
-Outros (opcional):
-Código de barras
-Imagem do produto
-Status (ativo/inativo)
-*/
-
 }
 
 class Fornecedor{
@@ -95,15 +87,33 @@ class categoria{
 }
 
 class venda{
+    -idVenda:int
     -dataVenda:date
     -codProduto:int
+    -quantidade:int
     -preco:double
 
     -insereVenda()
     -alteraVenda()
     -leVenda()
     -deletaVenda()
+    -venda()
+}
+
+class Compra{
+    -idCompra:int
+    -dataCompra:date
+    -codProduto:int
+    -quantidade:int
+    -preco:double
+
+
+    -insereCompra()
+    -alteraCompra()
+    -leCompra()
+    -deletaCompra()
+    -compra(idFornecedor)
 }
 Clientes "1" -- "0..*" Produtos : compra
 Fornecedor "1" -- "0..*" Produtos : vende
-@endum
+@enduml
