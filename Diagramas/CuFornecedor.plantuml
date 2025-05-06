@@ -4,7 +4,7 @@ actor "Fornecedor" as Fornecedor
 rectangle "FORNECEDOR"{
     usecase "ManterFornecedor"as UC2
     usecase "Compra" as UC8
-    usecase "Pagamento" as UC7
+    usecase "Realizar Pagamento " as UC7
     usecase "Cotacao" as UC5  
 }
 Fornecedor --> UC2
