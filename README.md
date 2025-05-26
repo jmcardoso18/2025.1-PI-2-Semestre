@@ -1,6 +1,6 @@
 # 🚀 **Projeto Interdisciplinar - 2° Semestre do Curso de DSM da Fatec Araras** 📦
 
-Bem-vindo ao repositório do **Projeto Interdisciplinar**! Nosso objetivo é desenvolver uma solução web para a **MVS info.** utilizando **PHP** para a interface e **MySQL** para o banco de dados. Este projeto reflete a aplicação prática dos conhecimentos adquiridos ao longo do curso de **Desenvolvimento de Sistemas Multimídia (DSM)**.
+Bem-vindo ao repositório do **Projeto Interdisciplinar**! Nosso objetivo é desenvolver uma solução web para a **MVS info.** utilizando **PHP** para a interface e **MySQL** para o banco de dados. Este projeto reflete a aplicação prática dos conhecimentos adquiridos ao longo do curso de **Desenvolvimento de Software Multiplataforma(DSM)**.
 
 ## 🛠️ **Tecnologias Utilizadas**
 - **PHP**: Para desenvolvimento da interface web
