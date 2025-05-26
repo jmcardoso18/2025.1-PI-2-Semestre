@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MVS Info</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Estilo para o carrossel estilo film strip */
+        .film-strip-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 1rem 0;
+            border: 3px solid #007bff;
+            border-radius: 20px;
+            background-color: #f8f9fab7;
+        }
+
+        .film-strip-container img {
+            display: inline-block;
+            max-height: 200px;
+            margin: 0 10px;
+            transition: transform 0.3s ease;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .film-strip-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .film-strip-wrapper {
+            display: inline-block;
+            animation: scrollFilmStrip 30s linear infinite;
+        }
+
+        @keyframes scrollFilmStrip {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        footer {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            ;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <p>Parceira em tecnologia, aliada em economia.</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#sobre" data-i18n="nav.about">Sobre nós</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#produtos" data-i18n="nav.products">Produtos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#clientes" data-i18n="nav.clients">Clientes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contato" data-i18n="nav.contact">Contato</a></li>
+                    <li class="nav-item">
+                        <button id="langToggle" class="btn btn-light btn-sm ms-3">EN</button>
+                        <button class="btn btn-light btn-sm ms-3">LOGIN</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+    <div class="d-flex justify-content-center my-0">
+        <img src="img/statuslogo.jpeg" alt="statuslogo" class="img-fluid" style="max-height: 500px;">
+    </div>
+
+    <!-- Sobre nós -->
+    <section id="sobre" class="py-5 bg-light">
+        <div class="container">
+            <div class="border border-2 border-primary-subtle rounded p-4 shadow-sm">
+                <h2 class="text-center mb-4" data-i18n="about.title">Sobre nós</h2>
+                <p class="text-start" data-i18n="about.desc">
+                    Fundada em Março de 2010, a MVS Info sempre está em busca de soluções tecnológicas
+                    e produtos de qualidade para atender a demanda dos nossos clientes.
+                    Visando atender essas necessidades construímos fortes parcerias comerciais onde o cliente se
+                    sinta à vontade para tratar do seu projeto com flexibilidade e alto poder de negociação.
+                    A MVS Info sempre preza pela transparência e qualidade nos itens ofertados para que as soluções
+                    apresentadas em nossas propostas sejam bem receptivas e, dessa forma, atender as necessidades dos
+                    nossos
+                    clientes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Produtos -->
+    <section id="produtos" class="py-5 bg-light">
+        <div class="container">
+            <!-- Bloco de introdução -->
+            <div class="border border-2 border-primary-subtle rounded p-4 shadow-sm mb-5">
+                <h2 class="text-center mb-4" data-i18n="about.title">Produtos</h2>
+                <p class="text-center" data-i18n="products.desc">
+                    Informática, Iluminação, Cabos, Tubos e PEAD, Pré-moldados
+                </p>
+                <p>
+                    Atuamos no fornecimento de soluções completas para os setores de iluminação, informática,
+                    infraestrutura elétrica e construção civil. Entre nossos principais clientes estão instaladoras,
+                    construtoras, fábricas e lojistas. Disponibilizamos uma ampla linha de materiais de informática,
+                    softwares e soluções de infraestrutura de rede. Também trabalhamos com elétrica em geral,
+                    fornecimento de cabos (comercial e industrial), pré-moldados e materiais em PEAD, sempre prezando
+                    pela
+                    qualidade, agilidade e inovação em cada entrega.
+                </p>
+            </div>
+
+            <!-- Bloco de cards -->
+            <div class="row justify-content-center g-4">
+                <!-- Card 1: Iluminação -->
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="card-produto collapsible" onclick="toggleTexto(this)">
+                        <div class="d-flex align-items-center gap-3">
+                            <svg width="40" height="40" fill="#003366" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 21h6v-1H9v1zm3-20C7.477 1 3 5.477 3 11c0 3.084 1.392 5.86 3.6 7.68L7 19h10l.4-.32A9.978 9.978 0 0 0 21 11c0-5.523-4.477-10-9-10z" />
+                            </svg>
+                            <h5 class="mb-0" data-i18n="products.lighting.title">Iluminação</h5>
+                        </div>
+                        <div class="texto-produto mt-2" data-i18n="products.lighting.desc" hidden>
+                            Contamos com um portfólio diversificado de soluções em iluminação para
+                            ambientes industriais, comerciais e residenciais. Atendemos construtoras,
+                            instaladoras e arquitetos com produtos que aliam eficiência energética,
+                            durabilidade e design moderno. Trabalhamos com marcas reconhecidas e
+                            tecnologia LED de última geração, sempre priorizando economia e
+                            sustentabilidade.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Informática -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-produto collapsible" onclick="toggleTexto(this)">
+                        <div class="d-flex align-items-center gap-3">
+                            <svg width="40" height="40" fill="#003366" viewBox="0 0 24 24">
+                                <path
+                                    d="M4 5v14h16V5H4zm0-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                            </svg>
+                            <h5 class="mb-0" data-i18n="products.it.title">Informática</h5>
+                        </div>
+                        <div class="texto-produto mt-2" data-i18n="products.it.desc" hidden>
+                            Oferecemos uma linha completa de produtos e soluções em tecnologia para
+                            empresas de todos os portes. Fornecemos equipamentos de informática,
+                            periféricos, softwares licenciados e suporte técnico especializado.
+                            Nossa atuação inclui ainda soluções em infraestrutura de rede
+                            (infra network), com cabeamento estruturado, racks, switches e
+                            roteadores, garantindo conectividade eficiente e segura.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Cabos Elétricos -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-produto collapsible" onclick="toggleTexto(this)">
+                        <div class="d-flex align-items-center gap-3">
+                            <svg width="40" height="40" fill="#003366" viewBox="0 0 24 24">
+                                <path d="M4 4h2v16H4V4zm14 0h2v16h-2V4zm-7 3h2v10h-2V7z" />
+                            </svg>
+                            <h5 class="mb-0" data-i18n="products.cables.title">Cabos Elétricos</h5>
+                        </div>
+                        <div class="texto-produto mt-2" data-i18n="products.cables.desc" hidden>
+                            Fornecemos cabos elétricos de alta qualidade para aplicações residenciais,
+                            comerciais e industriais. Nossa linha inclui cabos de baixa, média e alta tensão,
+                            além de cabos especiais para sistemas de automação, redes, segurança e
+                            telecomunicação.
+                            Garantimos produtos com certificação e alto desempenho, assegurando segurança e
+                            eficiência
+                            nas instalações elétricas.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Tubos e PEAD -->
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="card-produto collapsible" onclick="toggleTexto(this)">
+                        <div class="d-flex align-items-center gap-3">
+                            <svg width="40" height="40" fill="#003366" viewBox="0 0 24 24">
+                                <path
+                                    d="M21 16V8a1 1 0 0 0-.553-.894l-8-4a1 1 0 0 0-.894 0l-8 4A1 1 0 0 0 3 8v8a1 1 0 0 0 .553.894l8 4a1 1 0 0 0 .894 0l8-4A1 1 0 0 0 21 16z" />
+                            </svg>
+                            <h5 class="mb-0" data-i18n="products.tubes.title">Tubos e PEAD</h5>
+                        </div>
+                        <div class="texto-produto mt-2" data-i18n="products.tubes.desc" hidden>
+                            Disponibilizamos tubos e conexões em PEAD (Polietileno de Alta Densidade),
+                            ideais para sistemas hidráulicos, elétricos, saneamento e infraestrutura
+                            subterrânea.
+                            Nossos produtos oferecem alta resistência química e mecânica, com longa vida útil e
+                            facilidade
+                            na instalação. Trabalhamos com materiais normatizados, garantindo confiabilidade em
+                            projetos de
+                            pequeno e grande porte.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Pré-moldados -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-produto collapsible" onclick="toggleTexto(this)">
+                        <div class="d-flex align-items-center gap-3">
+                            <svg width="40" height="40" fill="#003366" viewBox="0 0 24 24">
+                                <path d="M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h10v2H7V7zm0 4h10v2H7v-2z" />
+                            </svg>
+                            <h5 class="mb-0" data-i18n="products.premold.title">Pré-moldados</h5>
+                        </div>
+                        <div class="texto-produto mt-2" data-i18n="products.premold.desc" hidden>
+                            Oferecemos uma ampla linha de produtos pré-moldados de concreto voltados para
+                            obras civis, industriais e urbanas. Entre nossos principais itens estão
+                            postes, blocos, canaletas, vigas, lajes e tubos de concreto.
+                            Nossos tubos de concreto são ideais para drenagem, saneamento e
+                            escoamento de águas pluviais, sendo amplamente utilizados em projetos
+                            de infraestrutura urbana, como loteamentos, construção de condomínios,
+                            vias públicas e áreas industriais.
+                            Trabalhamos com peças normatizadas e de alta durabilidade, que
+                            garantem agilidade na execução da obra, redução de custos e desempenho
+                            técnico superior. Cada produto é desenvolvido com rigoroso controle
+                            de qualidade, assegurando segurança e confiabilidade para as mais
+                            diversas aplicações.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="film-strip-container">
+        <div class="film-strip-wrapper">
+            <img src="img/produtos/AP UNIFI.jpg" alt="Produto">
+            <img src="img/produtos/CONTROLADOR DE ACESSO FACIAL FR410 10K COM SIP.jpg" alt="Produto">
+            <img src="img/produtos/CONVERSOR DE mídia WDM GIGABIT MONOMODO 20 KM KGSD 1120 B.jpg" alt="Produto">
+            <img src="img/produtos/HIGHBAY UFO.webp" alt="Produto">
+            <img src="img/produtos/INTELBRAS CAMERA IA.jpg" alt="Produto">
+            <img src="img/produtos/LUMINARIA PUBLICA.webp" alt="Produto">
+            <img src="img/produtos/MINI HUB USB 7 PORTAS 2.0 LEHMOX LEY-02.jpg" alt="Produto">
+            <img src="img/produtos/NETWORK UBIQUITI.png" alt="Produto">
+            <img src="img/produtos/NOBREAK TECH 1400 VA BIVOLT115 - STS.jpg" alt="Produto">
+            <img src="img/produtos/PECAS PC.jpg" alt="Produto">
+            <img src="img/produtos/REFLETOR MODULAR.jpg" alt="Produto">
+            <img src="img/produtos/aneis.jpg" alt="Produto">
+            <img src="img/produtos/conexao.png" alt="Produto">
+            <img src="img/produtos/estrangulador.png" alt="Produto">
+            <img src="img/produtos/irrigacao.jpg" alt="Produto">
+            <img src="img/produtos/mini_tubos_para_drenagemem_solda_pead__1_.jpg" alt="Produto">
+            <img src="img/produtos/mini_tubos_pead_gas.jpg" alt="Produto">
+            <img src="img/produtos/mini_tubos_pead_incandioo.jpg" alt="Produto">
+            <img src="img/produtos/peadsaneamento.jpg" alt="Produto">
+            <img src="img/produtos/tubopead.jpg" alt="Produto">
+            <img src="img/produtos/bitolas.jpeg" alt="Produto">
+            <img src="img/produtos/5-1.png" alt="Produto">
+            <img src="img/produtos/6-1.png" alt="Produto">
+            <img src="img/produtos/cabot3.png" alt="Produto">
+            <img src="img/produtos/Cabo-Flex3.jpg" alt="Produto">
+            <img src="img/produtos/Cabo-Flex5.jpg" alt="Produto">
+        </div>
+    </div>
+
+    </section>
+
+    </section>
+
+
+
+
+    </section>
+
+    <!-- Clientes (carrossel) -->
+    <section id="clientes" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4" data-i18n="clients.title">Nossos Clientes</h2>
+            <div id="clientesCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner text-center clientes-carousel">
+                    <div class="carousel-item active">
+                        <img src="img/clientes/brascabos.png" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Brascabos">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/caprem.jpeg" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Caprem">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/casadoconstrutor.jpg" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Casa do Construtor">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/cristofoletti.jpg" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Cristofoletti">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/delta.png" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Delta">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/durso.jpeg" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Durso">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/ecoprimos.png" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Ecoprimos">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/embramaco.png" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Embramaco">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/floridiana.jpg" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Floridiana">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/jaw.png" class="img-fluid" style="max-height: 200px;" alt="Cliente Jaw">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/korin.jpg" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Korin">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/lume.jpg" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Lume">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/mahle.png" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Mahle">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/rocontec.png" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Roncotec">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/savane.png" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Savane">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/tigre.png" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Tigre">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/clientes/verdeplan.jpeg" class="img-fluid" style="max-height: 200px;"
+                            alt="Cliente Verdeplan">
+                    </div>
+
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselClientes"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselClientes"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="contato" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4" data-i18n="contact.title">Entre em contato</h2>
+            <form id="contatoForm" action="https://formspree.io/f/mkgrazyr" method="POST" class="text-start mx-auto"
+                style="max-width: 500px;">
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="mensagem" class="form-label">Mensagem</label>
+                    <textarea class="form-control" id="mensagem" name="mensagem" rows="5" required></textarea>
+                </div>
+                <input type="hidden" name="_next" value="https://mvsinfo.com.br/obrigado.html">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/carousel.js"></script>
+
+    <script>
+        function toggleTexto(card) {
+            const texto = card.querySelector('.texto-produto');
+            if (texto) {
+                texto.hidden = !texto.hidden;
+            }
+        }
+    </script>
+    </script>
+
+    <footer>
+        Desenvolvido por <a href="https://morgandevs.com.br" target="_blank">Morgan Devs</a>
+    </footer>
+
+    <script>
+        const translations = {
+            pt: {
+                'nav.about': 'Sobre nós',
+                'nav.products': 'Produtos',
+                'nav.clients': 'Clientes',
+                'nav.contact': 'Contato',
+                'about.title': 'Sobre nós',
+                'about.desc': `Fundada em Março de 2010, a MVS Info sempre está em busca de soluções tecnológicas...`,
+                'products.desc': 'Informática, Iluminação, Cabos, Tubos e PEAD, Pré-moldados',
+                'products.lighting.title': 'Iluminação',
+                'products.lighting.desc': 'Contamos com um portfólio diversificado de soluções em iluminação...',
+                'products.it.title': 'Informática',
+                'products.it.desc': 'Oferecemos uma linha completa de produtos e soluções em tecnologia...',
+                'products.cables.title': 'Cabos Elétricos',
+                'products.cables.desc': 'Fornecemos cabos elétricos de alta qualidade para aplicações...',
+                'products.tubes.title': 'Tubos e PEAD',
+                'products.tubes.desc': 'Disponibilizamos tubos e conexões em PEAD...',
+                'products.premold.title': 'Pré-moldados',
+                'products.premold.desc': 'Oferecemos uma ampla linha de produtos pré-moldados de concreto...',
+            },
+            en: {
+                'nav.about': 'About us',
+                'nav.products': 'Products',
+                'nav.clients': 'Clients',
+                'nav.contact': 'Contact',
+                'about.title': 'About us',
+                'about.desc': `Founded in March 2010, MVS Info is always looking for technology solutions...`,
+                'products.desc': 'IT, Lighting, Cables, Tubes and PEAD, Precast Concrete',
+                'products.lighting.title': 'Lighting',
+                'products.lighting.desc': 'We offer a diverse portfolio of lighting solutions...',
+                'products.it.title': 'IT',
+                'products.it.desc': 'We offer a complete line of products and IT solutions...',
+                'products.cables.title': 'Electrical Cables',
+                'products.cables.desc': 'We provide high-quality electrical cables for...',
+                'products.tubes.title': 'Tubes and PEAD',
+                'products.tubes.desc': 'We supply PEAD pipes and fittings ideal for...',
+                'products.premold.title': 'Precast Concrete',
+                'products.premold.desc': 'We offer a wide range of precast concrete products...',
+            }
+        };
+
+        let currentLang = 'pt';
+
+        document.getElementById('langToggle').addEventListener('click', function () {
+            currentLang = currentLang === 'pt' ? 'en' : 'pt';
+            this.textContent = currentLang.toUpperCase();
+            translatePage();
+        });
+
+        function translatePage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.textContent = translations[currentLang][key];
+                }
+            });
+        }
+    </script>
+
+
+
+</body>
+
+</html>

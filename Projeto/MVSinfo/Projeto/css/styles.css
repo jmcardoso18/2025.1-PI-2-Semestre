@@ -1,0 +1,125 @@
+/* Reset básico */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Cores da marca */
+:root {
+    --primary-color: #007bc1;
+    /* azul da MVS */
+    --secondary-color: #f1f1f1;
+    --dark-color: #111;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--primary-color);
+}
+
+.navbar-brand img {
+    max-height: 50px;
+}
+
+.nav-link {
+    color: white !important;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: #dddddd !important;
+}
+
+/* Seções */
+section {
+    padding: 60px 15px;
+}
+
+section h2 {
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Imagem centralizada */
+.img-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 300px;
+}
+
+/* Carrossel de clientes */
+.clientes-carousel img {
+    max-height: 100px;
+    margin: 0 auto;
+}
+
+
+form input:focus,
+form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: none;
+}
+
+/* Footer */
+footer {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 20px 10px;
+    font-size: 0.9rem;
+}
+
+/* Alternância de idiomas */
+.lang-switch {
+    cursor: pointer;
+    color: white;
+    margin-left: auto;
+    margin-right: 10px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.lang-switch:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade extra */
+@media (max-width: 768px) {
+    .navbar-brand img {
+        max-height: 40px;
+    }
+
+    .clientes-carousel img {
+        max-height: 80px;
+    }
+
+    section {
+        padding: 40px 10px;
+    }
+}
+
+.card-produto {
+  background-color: #fff;
+  border: 2px solid #003366;
+  border-radius: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.card-produto:hover {
+  background-color: #f0f4f9;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.card-produto h5 {
+  color: #003366;
+}
+.texto-produto {
+  text-align: left;
+  color: #333;
+}
