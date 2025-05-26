@@ -13,7 +13,6 @@ Bem-vindo ao repositório do **Projeto Interdisciplinar**! Nosso objetivo é des
 
 Nosso time é composto por talentos dedicados do curso de DSM. Conheça nossos membros e seus perfis:
 
-- [Edson Henrique](https://github.com/EdsoonHenrique)
 - [Felipe Rocha](https://github.com/FlpRocha236)
 - [Jamila M. Cardoso](https://github.com/jmcardoso18)
 - [Jefferson](https://github.com/Jefferson434)
