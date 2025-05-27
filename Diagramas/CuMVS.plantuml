@@ -4,15 +4,15 @@ left to right direction
 actor "MSV" as Msv
 
 rectangle "MSV"{
-    usecase "ManterCliente" as UC1
-    usecase "ManterFornecedor"as UC2
+    usecase "CRUDCliente" as UC1
+    usecase "CRUDFornecedor"as UC2
     usecase "PedirOrcamento" as UC3
-    usecase "Compra" as UC6
+    usecase "RealizarCompra" as UC6
     usecase "Pagamento" as UC7
-    usecase "Venda" as UC8
-    usecase "Realizar Cotacao" as UC5
-    usecase "ManterTransportadora" as UC9 
-    usecase "ManterProdutos" as UC4  
+    usecase "RealizarVenda" as UC8
+    usecase "FazCotacao" as UC5
+    usecase "CRUDTransportadora" as UC9 
+    usecase "CRUDProdutos" as UC4  
 }
 
 
