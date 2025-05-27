@@ -65,6 +65,81 @@
             text-decoration: underline;
             ;
         }
+
+
+        .clientes-carousel-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 10px 40px;
+        }
+
+        .clientes-carousel-wrapper {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+
+        .clientes-carousel-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .clientes-carousel-wrapper img {
+            height: 120px;
+            width: auto;
+            object-fit: contain;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .clientes-carousel-wrapper img:hover {
+            transform: scale(1.05);
+        }
+
+        .clientes-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            font-size: 28px;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .clientes-arrow.left {
+            left: 0;
+        }
+
+        .clientes-arrow.right {
+            right: 0;
+        }
+
+        .clientes-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .clientes-carousel-wrapper img {
+                height: 90px;
+                padding: 6px;
+            }
+
+            .clientes-arrow {
+                font-size: 22px;
+                padding: 6px;
+            }
+        }
     </style>
 </head>
 
@@ -86,10 +161,25 @@
                     <li class="nav-item"><a class="nav-link" href="#contato" data-i18n="nav.contact">Contato</a></li>
                     <li class="nav-item">
                         <button id="langToggle" class="btn btn-light btn-sm ms-3">EN</button>
-                        <button class="btn btn-light btn-sm ms-3">LOGIN</button>
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-light btn-sm ms-3 dropdown-toggle" type="button" id="loginDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                LOGIN
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="loginDropdown">
+                                <li><a class="dropdown-item" href="fornecedor.html">Fornecedor</a></li>
+                                <li><a class="dropdown-item" href="admin.html">Administrador</a></li>
+                                <li><a class="dropdown-item" href="cliente.html">Cliente</a></li>
+                            </ul>
                     </li>
                 </ul>
             </div>
+            <style>
+                .dropdown:hover .dropdown-menu {
+                    display: block;
+                    margin-top: 0;
+                }
+            </style>
         </div>
 
     </nav>
@@ -256,7 +346,8 @@
     </section>
 
     <div class="film-strip-container">
-        <div class="film-strip-wrapper">
+        <button class="arrow left">&#10094;</button>
+        <div class="film-strip-wrapper" id="filmStrip">
             <img src="img/produtos/AP UNIFI.jpg" alt="Produto">
             <img src="img/produtos/CONTROLADOR DE ACESSO FACIAL FR410 10K COM SIP.jpg" alt="Produto">
             <img src="img/produtos/CONVERSOR DE mídia WDM GIGABIT MONOMODO 20 KM KGSD 1120 B.jpg" alt="Produto">
@@ -284,6 +375,7 @@
             <img src="img/produtos/Cabo-Flex3.jpg" alt="Produto">
             <img src="img/produtos/Cabo-Flex5.jpg" alt="Produto">
         </div>
+        <button class="arrow right">&#10095;</button>
     </div>
 
     </section>
@@ -299,85 +391,31 @@
     <section id="clientes" class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center mb-4" data-i18n="clients.title">Nossos Clientes</h2>
-            <div id="clientesCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner text-center clientes-carousel">
-                    <div class="carousel-item active">
-                        <img src="img/clientes/brascabos.png" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Brascabos">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/caprem.jpeg" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Caprem">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/casadoconstrutor.jpg" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Casa do Construtor">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/cristofoletti.jpg" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Cristofoletti">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/delta.png" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Delta">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/durso.jpeg" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Durso">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/ecoprimos.png" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Ecoprimos">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/embramaco.png" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Embramaco">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/floridiana.jpg" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Floridiana">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/jaw.png" class="img-fluid" style="max-height: 200px;" alt="Cliente Jaw">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/korin.jpg" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Korin">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/lume.jpg" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Lume">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/mahle.png" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Mahle">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/rocontec.png" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Roncotec">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/savane.png" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Savane">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/tigre.png" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Tigre">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/clientes/verdeplan.jpeg" class="img-fluid" style="max-height: 200px;"
-                            alt="Cliente Verdeplan">
-                    </div>
 
+            <div class="clientes-carousel-container position-relative">
+                <button class="clientes-arrow left">&#10094;</button>
+
+                <div class="clientes-carousel-wrapper" id="clientesCarousel">
+                    <img src="img/clientes/brascabos.png" alt="Cliente Brascabos">
+                    <img src="img/clientes/caprem.jpeg" alt="Cliente Caprem">
+                    <img src="img/clientes/casadoconstrutor.jpg" alt="Cliente Casa do Construtor">
+                    <img src="img/clientes/cristofoletti.jpg" alt="Cliente Cristofoletti">
+                    <img src="img/clientes/delta.png" alt="Cliente Delta">
+                    <img src="img/clientes/durso.jpeg" alt="Cliente Durso">
+                    <img src="img/clientes/ecoprimos.png" alt="Cliente Ecoprimos">
+                    <img src="img/clientes/embramaco.png" alt="Cliente Embramaco">
+                    <img src="img/clientes/floridiana.jpg" alt="Cliente Floridiana">
+                    <img src="img/clientes/jaw.png" alt="Cliente Jaw">
+                    <img src="img/clientes/korin.jpg" alt="Cliente Korin">
+                    <img src="img/clientes/lume.jpg" alt="Cliente Lume">
+                    <img src="img/clientes/mahle.png" alt="Cliente Mahle">
+                    <img src="img/clientes/rocontec.png" alt="Cliente Roncotec">
+                    <img src="img/clientes/savane.png" alt="Cliente Savane">
+                    <img src="img/clientes/tigre.png" alt="Cliente Tigre">
+                    <img src="img/clientes/verdeplan.jpeg" alt="Cliente Verdeplan">
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselClientes"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselClientes"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
+
+                <button class="clientes-arrow right">&#10095;</button>
             </div>
         </div>
     </section>
@@ -404,6 +442,28 @@
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const clienteCarousel = document.getElementById('clientesCarousel');
+            const scrollValue = 250;
+
+            const leftArrow = document.querySelector('.clientes-arrow.left');
+            const rightArrow = document.querySelector('.clientes-arrow.right');
+
+            if (clienteCarousel && leftArrow && rightArrow) {
+                leftArrow.addEventListener('click', () => {
+                    clienteCarousel.scrollBy({ left: -scrollValue, behavior: 'smooth' });
+                });
+
+                rightArrow.addEventListener('click', () => {
+                    clienteCarousel.scrollBy({ left: scrollValue, behavior: 'smooth' });
+                });
+            } else {
+                console.warn("Elementos do carrossel de clientes não encontrados.");
+            }
+        });
+    </script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
