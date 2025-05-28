@@ -160,7 +160,6 @@
                     <li class="nav-item"><a class="nav-link" href="#clientes" data-i18n="nav.clients">Clientes</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contato" data-i18n="nav.contact">Contato</a></li>
                     <li class="nav-item">
-                        <button id="langToggle" class="btn btn-light btn-sm ms-3">EN</button>
                         <div class="dropdown d-inline-block">
                             <button class="btn btn-light btn-sm ms-3 dropdown-toggle" type="button" id="loginDropdown"
                                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -376,16 +375,7 @@
             <img src="img/produtos/Cabo-Flex5.jpg" alt="Produto">
         </div>
         <button class="arrow right">&#10095;</button>
-    </div>
-
-    </section>
-
-    </section>
-
-
-
-
-    </section>
+    </div>  
 
     <!-- Clientes (carrossel) -->
     <section id="clientes" class="py-5 bg-light">
@@ -408,10 +398,10 @@
                     <img src="img/clientes/jaw.png" alt="Cliente Jaw">
                     <img src="img/clientes/korin.jpg" alt="Cliente Korin">
                     <img src="img/clientes/lume.jpg" alt="Cliente Lume">
-                    <img src="img/clientes/mahle.png" alt="Cliente Mahle">
+                    <img src="img/clientes/mahle.jpg" alt="Cliente Mahle">
                     <img src="img/clientes/rocontec.png" alt="Cliente Roncotec">
                     <img src="img/clientes/savane.png" alt="Cliente Savane">
-                    <img src="img/clientes/tigre.png" alt="Cliente Tigre">
+                    <img src="img/clientes/tigre.jpg" alt="Cliente Tigre">
                     <img src="img/clientes/verdeplan.jpeg" alt="Cliente Verdeplan">
                 </div>
 
@@ -481,71 +471,8 @@
     </script>
 
     <footer>
-        Desenvolvido por <a href="https://morgandevs.com.br" target="_blank">Morgan Devs</a>
+        Desenvolvido por <a href="img/logomorgan.png" target="_blank">Morgan Devs</a>
     </footer>
 
-    <script>
-        const translations = {
-            pt: {
-                'nav.about': 'Sobre nós',
-                'nav.products': 'Produtos',
-                'nav.clients': 'Clientes',
-                'nav.contact': 'Contato',
-                'about.title': 'Sobre nós',
-                'about.desc': `Fundada em Março de 2010, a MVS Info sempre está em busca de soluções tecnológicas...`,
-                'products.desc': 'Informática, Iluminação, Cabos, Tubos e PEAD, Pré-moldados',
-                'products.lighting.title': 'Iluminação',
-                'products.lighting.desc': 'Contamos com um portfólio diversificado de soluções em iluminação...',
-                'products.it.title': 'Informática',
-                'products.it.desc': 'Oferecemos uma linha completa de produtos e soluções em tecnologia...',
-                'products.cables.title': 'Cabos Elétricos',
-                'products.cables.desc': 'Fornecemos cabos elétricos de alta qualidade para aplicações...',
-                'products.tubes.title': 'Tubos e PEAD',
-                'products.tubes.desc': 'Disponibilizamos tubos e conexões em PEAD...',
-                'products.premold.title': 'Pré-moldados',
-                'products.premold.desc': 'Oferecemos uma ampla linha de produtos pré-moldados de concreto...',
-            },
-            en: {
-                'nav.about': 'About us',
-                'nav.products': 'Products',
-                'nav.clients': 'Clients',
-                'nav.contact': 'Contact',
-                'about.title': 'About us',
-                'about.desc': `Founded in March 2010, MVS Info is always looking for technology solutions...`,
-                'products.desc': 'IT, Lighting, Cables, Tubes and PEAD, Precast Concrete',
-                'products.lighting.title': 'Lighting',
-                'products.lighting.desc': 'We offer a diverse portfolio of lighting solutions...',
-                'products.it.title': 'IT',
-                'products.it.desc': 'We offer a complete line of products and IT solutions...',
-                'products.cables.title': 'Electrical Cables',
-                'products.cables.desc': 'We provide high-quality electrical cables for...',
-                'products.tubes.title': 'Tubes and PEAD',
-                'products.tubes.desc': 'We supply PEAD pipes and fittings ideal for...',
-                'products.premold.title': 'Precast Concrete',
-                'products.premold.desc': 'We offer a wide range of precast concrete products...',
-            }
-        };
-
-        let currentLang = 'pt';
-
-        document.getElementById('langToggle').addEventListener('click', function () {
-            currentLang = currentLang === 'pt' ? 'en' : 'pt';
-            this.textContent = currentLang.toUpperCase();
-            translatePage();
-        });
-
-        function translatePage() {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[currentLang][key]) {
-                    el.textContent = translations[currentLang][key];
-                }
-            });
-        }
-    </script>
-
-
-
 </body>
-
 </html>
