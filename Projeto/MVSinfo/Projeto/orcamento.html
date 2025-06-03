@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solicitar Orçamento - MVS Info</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+    }
+
+    header {
+      background-color: #1a73e8;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .container h2 {
+      color: #1a73e8;
+      margin-bottom: 1rem;
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #155ec4;
+    }
+
+    .success-msg {
+      margin-top: 1rem;
+      color: green;
+      font-weight: bold;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      header nav a {
+        display: block;
+        margin-top: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MVS Info - Orçamento</h1>
+    <nav>
+      <a href="perfil.html" class="btn">Perfil</a>
+      <a href="orcamento.html" class="btn">Orçamento</a>
+      <a href="pedido.html" class="btn">Pedidos</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>Solicitar Orçamento</h2>
+    <form id="formOrcamento">
+      <div>
+        <label for="produto">Produto:</label>
+        <select id="produto" name="produto" required>
+          <option value="">Selecione um produto</option>
+          <option value="painel-led">Painel de LED</option>
+          <option value="spot-led">Spot de LED</option>
+          <option value="refletor-led">Refletor de LED</option>
+          <option value="mouse">Mouse</option>
+          <option value="teclado">Teclado</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Ex: 50" required />
+      </div>
+
+      <button type="submit" class="btn">Enviar Orçamento</button>
+      <p class="success-msg" id="msgSucesso">Orçamento enviado aos fornecedores!</p>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById('formOrcamento');
+    const msgSucesso = document.getElementById('msgSucesso');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Simula envio visual
+      msgSucesso.style.display = 'block';
+      setTimeout(() => {
+        msgSucesso.style.display = 'none';
+        form.reset();
+      }, 4000);
+    });
+  </script>
+</body>
+</html>
