@@ -8,83 +8,94 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(to right, #0066cc, #3399ff);
+            background: linear-gradient(to bottom, #07253B, #0E4974, #1366A1);
+            background-repeat: no-repeat;
+            height: 100vh;
+            width: 100vw;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
+            display: flex;
+            justify-content: space-between;
+            overflow: hidden;
         }
 
         .login-container {
-            max-width: 400px;
-            margin: 80px auto;
-            background: white;
-            color: #333;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            /* background-color: white; */
+            color: #f3f3f3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+
         }
 
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #0066cc;
+        .login-container button {
+            color: #07253B;
+            font-weight: 600;
+        }
+
+        .form-check-label a {
+            color: #0080ff;
+        }
+
+        #terms {
+            cursor: pointer;
         }
 
         .form-control {
-            border-radius: 10px;
+            background-color: #1366a138;
+            color: #f3f3f3 !important;
         }
 
-        .btn-login {
-            background-color: #0066cc;
-            color: white;
-            width: 100%;
-            border-radius: 10px;
+        .form-control::placeholder {
+            color: #f3f3f3;
         }
 
-        .btn-login:hover {
-            background-color: #005bb5;
+        .form-control:focus {
+
+            background-color: #1366a138;
         }
 
-        .form-check-label {
-            font-size: 0.9rem;
-        }
-
-        a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
+        .form-control:active {
+            background-color: #1366a138;
         }
     </style>
 </head>
 
 <body>
     <div class="login-container">
-        <div class="d-flex justify-content-center my-0">
-            <img src="img/logorenderizado.png" alt="logorenderizado" class="img-fluid" style="max-height: 100px;">
+        <div style="max-width: 350px;">
+            <div style="max-width: 350px;">
+                <img src="img/logorenderizado.png" alt="logorenderizado" class="img-fluid" style="max-height: 100px;">
+            </div>
+            <br>
+            <h2>Fornecedor</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Usuário:</label>
+                    <input type="email" class="form-control" id="email" placeholder="Digite seu usuário" required />
+                </div>
+                <div class="mb-3">
+                    <label for="senha" class="form-label">Senha:</label>
+                    <input type="password" class="form-control" id="senha" placeholder="Digite sua senha" required />
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="termos" required />
+                    <label class="form-check-label" id="terms" for="termos">
+                        Estou de acordo com os <a href="politica.html">Termos e Privacidade</a>
+                    </label>
+                </div>
+                <div style="display:flex; justify-content: space-between; width: 100%;">
+                    <button type="submit" class="btn btn-login btn-warning">Confirmar</button>
+                    <a href="index.html" class="btn btn-login rounded btn-light">Voltar</a>
+                </div>
+            </form>
         </div>
-        <br>
-
-        <h2>Login Fornecedor</h2>
-        <form>
-            <div class="mb-3">
-                <label for="email" class="form-label">Usuário:</label>
-                <input type="email" class="form-control" id="email" placeholder="Digite seu usuário" required />
-            </div>
-            <div class="mb-3">
-                <label for="senha" class="form-label">Senha:</label>
-                <input type="password" class="form-control" id="senha" placeholder="Digite sua senha" required />
-            </div>
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="termos" required />
-                <label class="form-check-label" for="termos">
-                    Estou de acordo com os <a href="politica.html">Termos e Privacidade</a>
-                </label>
-            </div>
-            <button type="submit" class="btn btn-login">Confirmar</button>
-            <a href="index.html" class="btn btn-login w-100 mt-2 rounded">Voltar</a>
-        </form>
+    </div>
+    <div class="right">
+        <img src="img/bgright.png" alt="">
     </div>
 </body>
 
