@@ -2,8 +2,9 @@ CREATE DATABASE LojaSistema;
 USE LojaSistema;
 
 -- Tabela Usuario
-CREATE TABLE Usuario (
-    cnpj VARCHAR(18) PRIMARY KEY,
+CREATE TABLE usuario (
+	 id_usuario INT PRIMARY KEY,
+    cnpj VARCHAR(18),
     razao_social VARCHAR(255),
     nome_fantasia VARCHAR(255),
     inscricao_estadual VARCHAR(20),
@@ -18,7 +19,7 @@ CREATE TABLE Usuario (
     bairro VARCHAR(100),
     cidade VARCHAR(100),
     estado VARCHAR(2),
-    login VARCHAR(25),
+    login VARCHAR(100),
     senha VARCHAR(20)
 );
 
@@ -46,7 +47,7 @@ CREATE TABLE FornecedorCategoria (
     id_produto INT,
     id_fornecedor VARCHAR(18),
     FOREIGN KEY (id_produto) REFERENCES Produtos(codigo_produto),
-    FOREIGN KEY (id_fornecedor) REFERENCES Usuario(cnpj)
+    FOREIGN KEY (id_fornecedor) REFERENCES Usuario(id_usuario)
 );
 
 -- Tabela Orçamento
@@ -57,7 +58,7 @@ CREATE TABLE orcamento (
     codigo_produto INT,
     quantidade INT,
     FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto),
-    FOREIGN KEY (id_Cliente) REFERENCES Usuario(cnpj)
+    FOREIGN KEY (id_Cliente) REFERENCES Usuario(id_usuario)
 );
 
 -- Tabela Cotação
@@ -72,7 +73,7 @@ CREATE TABLE cotacao (
     prazo_entrega VARCHAR(50),
     FOREIGN KEY (id_orcamento) REFERENCES orcamento(id_orcamento),
     FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto),
-    FOREIGN KEY (id_fornecedor) REFERENCES Usuario(cnpj)
+    FOREIGN KEY (id_fornecedor) REFERENCES Usuario(id_usuario)
 );
 
 -- Tabela Compra
@@ -86,7 +87,7 @@ CREATE TABLE compra (
     valor_total_compra DOUBLE(10,2),
     prazo_entrega VARCHAR(50),
     FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto),
-    FOREIGN KEY (id_fornecedor) REFERENCES Usuario(cnpj)
+    FOREIGN KEY (id_fornecedor) REFERENCES Usuario(id_usuario)
 );
 
 -- Tabela Venda
@@ -101,7 +102,7 @@ CREATE TABLE venda (
     preco_venda DOUBLE,
     condicao_pagamento VARCHAR(100),
     prazo_entrega VARCHAR(50),
-    FOREIGN KEY (id_Cliente) REFERENCES Usuario(cnpj),
+    FOREIGN KEY (id_Cliente) REFERENCES Usuario(id_usuario),
     FOREIGN KEY (cod_produto) REFERENCES Produtos(codigo_produto)
 );
 
