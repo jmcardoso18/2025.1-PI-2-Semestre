@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Clientes</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #1976f2;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1976f2;
+            color: white;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background-color: #1976f2;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .icon-btn:hover {
+            color: #1976f2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Clientes Cadastrados</h2>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+            <a href="cadastro-cliente.html" class="btn btn-primary">+ Novo Cadastro</a>
+            <button type="button" class="btn btn-secondary" onclick="history.back()">Voltar</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Razão Social</th>
+                    <th>CNPJ</th>
+                    <th>E-mail</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Empresa Alpha</td>
+                    <td>12.345.678/0001-90</td>
+                    <td>contato@alpha.com</td>
+                    <td class="acoes">
+                        <button class="icon-btn" title="Editar">✏️</button>
+                        <button class="icon-btn" title="Excluir">🗑️</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Beta Serviços</td>
+                    <td>98.765.432/0001-11</td>
+                    <td>comercial@beta.com.br</td>
+                    <td class="acoes">
+                        <button class="icon-btn" title="Editar">✏️</button>
+                        <button class="icon-btn" title="Excluir">🗑️</button>
+                    </td>
+                </tr>
+                <!-- Adicionar mais linhas se for necessário -->
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
