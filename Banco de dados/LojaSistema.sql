@@ -10,13 +10,13 @@ CREATE TABLE tipoUsuario (
 -- Tabela Usuario
 CREATE TABLE usuario (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    cnpj VARCHAR(18),
+    cnpj VARCHAR(18), -- uma mesma empresa pode ter dois cadastro um sendo fornecedor outro como cliente
     razao_social VARCHAR(255),
     nome_fantasia VARCHAR(255),
     inscricao_estadual VARCHAR(20),
     contato VARCHAR(255),
     telefone VARCHAR(20),
-    email VARCHAR(255),
+    email VARCHAR(255) unique,
     tipo_usuario INT,
     cep VARCHAR(10),
     logradouro VARCHAR(255),
@@ -25,8 +25,8 @@ CREATE TABLE usuario (
     bairro VARCHAR(100),
     cidade VARCHAR(100),
     estado VARCHAR(2),
-    login VARCHAR(100),
-    senha VARCHAR(255), -- aumento do tamanho para hash
+    login VARCHAR(100) unique,
+    senha VARCHAR(255),
     FOREIGN KEY (tipo_usuario) REFERENCES tipoUsuario(id_tipo_usuario)
 );
 
@@ -62,65 +62,92 @@ CREATE TABLE orcamento (
     id_orcamento INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT,
     data_orcamento DATETIME,
-    codigo_produto INT,
-    quantidade INT,
-    FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto),
     FOREIGN KEY (id_cliente) REFERENCES usuario(id_usuario)
+);
+
+-- Tabela Orcamento e produto, como produto é multivalorado é necessário uma tabela ligando os dois 
+CREATE TABLE orcamentoproduto(
+	 id_orcamento INT,
+	 codigo_produto INT,
+    quantidade INT,
+    PRIMARY KEY (id_orcamento, codigo_produto),
+    FOREIGN KEY (id_orcamento) REFERENCES orcamento(id_orcamento),
+    FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto)
 );
 
 -- Tabela Cotação
 CREATE TABLE cotacao (
     id_cotacao INT AUTO_INCREMENT PRIMARY KEY,
-    id_orcamento INT,
     id_fornecedor INT,
     data_cotacao DATETIME,
-    codigo_produto INT,
-    quantidade INT,
-    valor_unitario DECIMAL(10,2),
     prazo_entrega VARCHAR(50),
-    FOREIGN KEY (id_orcamento) REFERENCES orcamento(id_orcamento),
-    FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto),
     FOREIGN KEY (id_fornecedor) REFERENCES usuario(id_usuario)
 );
 
+-- Tabela cotacao e produto
+
+CREATE TABLE cotproduto(
+	 id_cotacao INT,
+	 codigo_produto INT,
+    quantidade INT,
+    valor_unitario DECIMAL(10,2),
+    PRIMARY KEY (id_cotacao, codigo_produto),
+    FOREIGN KEY (id_cotacao) REFERENCES cotacao(id_cotacao),
+    FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto)
+);
 -- Tabela Compra
 CREATE TABLE compra (
     id_compra INT AUTO_INCREMENT PRIMARY KEY,
     id_fornecedor INT,
     data_compra DATETIME,
-    codigo_produto INT,
-    quantidade INT,
-    valor_unitario DECIMAL(10,2),
-    valor_total_compra DECIMAL(10,2),
     prazo_entrega VARCHAR(50),
     data_pagamento DATE,
     status_pagamento VARCHAR(50),
-    FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto),
     FOREIGN KEY (id_fornecedor) REFERENCES usuario(id_usuario)
 );
 
+-- Tabela produto e compra 
+CREATE TABLE produtocompra(
+	 id_compra INT,
+	 codigo_produto INT,
+    quantidade INT,
+    valor_unitario DECIMAL(10,2),
+    valor_total_compra DECIMAL(10,2),
+    PRIMARY KEY (id_compra, codigo_produto),
+	 FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
+    FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto)
+	);
+
 -- Tabela Venda
 CREATE TABLE venda (
-    id_venda VARCHAR(200) PRIMARY KEY,
+    id_venda int PRIMARY KEY,
     data_venda DATE NOT NULL,
     id_cliente INT,
-    cod_produto INT,
-    preco_compra DECIMAL(10,2),
-    margem_lucro DECIMAL(5,2),
-    impostos DECIMAL(5,2),
-    preco_venda DECIMAL(10,2),
+    valor_total_compra DECIMAL(10,2),
     condicao_pagamento VARCHAR(100),
     data_pagamento DATE,
     status_pagamento VARCHAR(50),
     prazo_entrega VARCHAR(50),
-    FOREIGN KEY (id_cliente) REFERENCES usuario(id_usuario),
-    FOREIGN KEY (cod_produto) REFERENCES Produtos(codigo_produto)
+    FOREIGN KEY (id_cliente) REFERENCES usuario(id_usuario)
 );
 
+-- tabela produto/venda
+CREATE TABLE produtovenda(
+	 id_venda INT,
+	 codigo_produto INT,
+    quantidade INT,
+    preco_compra DECIMAL(10,2),
+    margem_lucro DECIMAL(5,2),
+    impostos DECIMAL(5,2),
+    preco_venda DECIMAL(10,2),
+    PRIMARY KEY (id_venda, codigo_produto),
+    FOREIGN KEY (id_venda) REFERENCES venda(id_venda),
+    FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto)
+);
 -- Tabela Frete
 CREATE TABLE frete (
     id_frete INT AUTO_INCREMENT PRIMARY KEY,
-    id_venda VARCHAR(200),
+    id_venda int,
     data_entrega DATE,
     transportadora VARCHAR(100),
     valor DECIMAL(10,2),
