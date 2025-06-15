@@ -1,7 +1,6 @@
 <?php
-require_once '../conexao.php';
 
-class Cliente {
+class user {
     private $pdo;
 
     public function __construct($pdo) {
@@ -10,13 +9,13 @@ class Cliente {
 
     public function inserir($dados) {
         $sql = "INSERT INTO usuario (
-            id_usuario, cnpj, razao_social, nome_fantasia,
+            cnpj, razao_social, nome_fantasia,
             inscricao_estadual,
             contato, 
             telefone, email, tipo_usuario, cep, logradouro, numero, complemento, 
             bairro, cidade, estado, login, senha
         ) VALUES (
-            :id_usuario, :cnpj, :razao_social, :nome_fantasia,
+            :cnpj, :razao_social, :nome_fantasia,
             :inscricao_estadual,
             :contato, 
             :telefone, :email, :tipo_usuario, :cep, :logradouro, :numero, :complemento, 
@@ -24,8 +23,8 @@ class Cliente {
         )";
 
         $stmt = $this->pdo->prepare($sql);
+
         $stmt->execute([
-            ':id_usuario' => $dados['id_usuario'],
             ':cnpj' => $dados['cnpj'],
             ':razao_social' => $dados['razao_social'],
             ':nome_fantasia' => $dados['nome_fantasia'],

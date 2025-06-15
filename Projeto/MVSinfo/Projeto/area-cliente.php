@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] !== 'cliente') {
+    header('Location: login_view.php');
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -7,6 +14,7 @@
     <title>Perfil do Cliente - MVS Info</title>
     <link rel="stylesheet" href="style.css" />
     <style>
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f8;
@@ -99,6 +107,10 @@
             <a href="pedido.html" class="btn">Meus Pedidos</a>
         </nav>
     </header>
+
+     <h1>
+      Olá, <?= !empty($_SESSION['usuario']) ? $_SESSION['usuario'] : ''; ?>
+    </h1>
 
     <main class="container">
         <h2>Seus dados</h2>
