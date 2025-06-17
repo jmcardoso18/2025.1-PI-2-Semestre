@@ -20,7 +20,7 @@ CREATE TABLE usuario (
     tipo_usuario INT,
     cep VARCHAR(10),
     logradouro VARCHAR(255),
-    numero VARCHAR(10),
+    numero int,
     complemento VARCHAR(255),
     bairro VARCHAR(100),
     cidade VARCHAR(100),
@@ -65,7 +65,7 @@ CREATE TABLE orcamento (
     FOREIGN KEY (id_cliente) REFERENCES usuario(id_usuario)
 );
 
--- Tabela Orcamento e produto, como produto é multivalorado é necessário uma tabela ligando os dois 
+-- Tabela Orcamento e produto, como produto é multivalorado é necessário uma tabela ligando
 CREATE TABLE orcamentoproduto(
 	 id_orcamento INT,
 	 codigo_produto INT,
@@ -140,17 +140,17 @@ CREATE TABLE produtovenda(
     margem_lucro DECIMAL(5,2),
     impostos DECIMAL(5,2),
     preco_venda DECIMAL(10,2),
+    id_frete INT,
     PRIMARY KEY (id_venda, codigo_produto),
+    FOREIGN KEY (id_frete) REFERENCES frete (id_frete),
     FOREIGN KEY (id_venda) REFERENCES venda(id_venda),
     FOREIGN KEY (codigo_produto) REFERENCES Produtos(codigo_produto)
 );
 -- Tabela Frete
 CREATE TABLE frete (
     id_frete INT AUTO_INCREMENT PRIMARY KEY,
-    id_venda int,
     data_entrega DATE,
     transportadora VARCHAR(100),
     valor DECIMAL(10,2),
     tipo_transporte VARCHAR(50),
-    FOREIGN KEY (id_venda) REFERENCES venda(id_venda)
 );
