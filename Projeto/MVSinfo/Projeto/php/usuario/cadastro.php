@@ -1,4 +1,4 @@
-<?php require_once './php/conexao.php'; ?>
+<?php require_once './conexao.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -40,11 +40,11 @@
 
       <div class="form-section text-center">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="tipoUsuario" id="cliente" value="0" required checked>
+          <input class="form-check-input" type="radio" name="tipoUsuario" id="cliente" value="1" required checked>
           <label class="form-check-label" for="cliente">Cliente</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="tipoUsuario" id="fornecedor" value="1">
+          <input class="form-check-input" type="radio" name="tipoUsuario" id="fornecedor" value="2">
           <label class="form-check-label" for="fornecedor">Fornecedor</label>
         </div>
       </div>
