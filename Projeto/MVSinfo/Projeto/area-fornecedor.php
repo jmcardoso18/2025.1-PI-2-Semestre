@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] !== 'fornecedor') {
+
+    header('Location: login_view.php');
+  }
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -92,7 +99,9 @@
             <a href="status-pedido.html">Pedidos</a>
         </div>
     </div>
-
+     <h1>
+      Olá, <?= !empty($_SESSION['usuario']) ? $_SESSION['usuario'] : ''; ?>
+    </h1>
     <div class="container">
         <h2>Seus dados</h2>
         <form>

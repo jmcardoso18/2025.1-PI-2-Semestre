@@ -15,20 +15,23 @@
         <p class="slogan">Parceria em tecnologia, aliada em economia.</p>
     </header>
 
+    <a href="logout.php">SAIR</a>
+
     <main class="login-container">
         <img src="img/logorenderizado.png" alt="Logo renderizaado" class="logo-renderizado" />
 
         <h2 class="login-titulo">Login</h2>
 
-        <form id="loginForm" class="login-form">
+        <form id="loginForm" class="login-form" action="./php/login/login.php" method="POST">
+
             <div class="radio-group">
-                <label><input type="radio" name="tipo" value="cliente" required /> Cliente</label>
-                <label><input type="radio" name="tipo" value="fornecedor" required /> Fornecedor</label>
-                <label><input type="radio" name="tipo" value="admin" required /> Administrador</label>
+                <label><input type="radio" name="tipoUsuario" value="0" checked/> Cliente</label>
+                <label><input type="radio" name="tipoUsuario" value="1"  /> Fornecedor</label>
+                <label><input type="radio" name="tipoUsuario" value="2"  /> Administrador</label>
             </div>
 
-            <label for="cnpj">CNPJ</label>
-            <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required />
+            <label for="login">Login</label>
+            <input type="text" id="login" name="login" required />
 
             <label for="senha">Senha</label>
             <input type="password" id="senha" name="senha" required />
@@ -41,8 +44,9 @@
         <button type="button" class="btn btn-secondary" onclick="history.back()">Voltar</button>
         <br>
         <br>
-        <a href="cadastro.html" class="cadastro-link">Não possui cadastro? Clique aqui e cadastre-se</a> 
-
+    <form action="cadastro.php" method="post">
+        <button class="cadastro-link">Não possui cadastro? Clique aqui e cadastre-se</a> 
+    </form>
     </main>
 </body>
 

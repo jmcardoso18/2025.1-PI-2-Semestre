@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] !== 'admin') {
+
+    header('Location: login_view.php');
+  }
+
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -120,7 +128,9 @@
   </style>
 </head>
 <body>
-
+    <h1>
+      Olá, <?= !empty($_SESSION['usuario']) ? $_SESSION['usuario'] : ''; ?>
+    </h1>
   <div class="navbar">
     <div><strong>MVS Info - Área do Administrador</strong></div>
     <div>
