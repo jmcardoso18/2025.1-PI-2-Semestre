@@ -1,4 +1,5 @@
-<?php require_once './conexao.php'; ?>
+<?php require_once '../conexao.php'; ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -36,7 +37,7 @@
   <div class="container bg-white p-4 rounded shadow">
     <h2 class="text-center">Cadastro</h2>
 
-    <form id="cadastroForm" action="./php/usuario/salvar.php" method="POST">
+    <form id="cadastroForm" action="salvar.php" method="POST">
 
       <div class="form-section text-center">
         <div class="form-check form-check-inline">

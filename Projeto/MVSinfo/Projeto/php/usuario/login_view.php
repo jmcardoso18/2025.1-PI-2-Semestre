@@ -1,3 +1,7 @@
+<?php 
+require_once '../conexao.php';                          
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -5,7 +9,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - MVS Info</title>
-    <link rel="stylesheet" href="css/login.css" />
+    <link rel="stylesheet" href="../../css/login.css" />
     <script defer src="login.js"></script>
 </head>
 
@@ -15,19 +19,19 @@
         <p class="slogan">Parceria em tecnologia, aliada em economia.</p>
     </header>
 
-    <a href="logout.php">SAIR</a>
+    <a href="../../index.html">SAIR</a>
 
     <main class="login-container">
-        <img src="img/logorenderizado.png" alt="Logo renderizaado" class="logo-renderizado" />
+        <img src="../../img/logorenderizado.png" alt="Logo renderizaado" class="logo-renderizado" />
 
         <h2 class="login-titulo">Login</h2>
 
-        <form id="loginForm" class="login-form" action="./php/login/login.php" method="POST">
+        <form id="loginForm" class="login-form" action="../login/login.php" method="POST">
 
             <div class="radio-group">
-                <label><input type="radio" name="tipoUsuario" value="0" checked/> Cliente</label>
-                <label><input type="radio" name="tipoUsuario" value="1"  /> Fornecedor</label>
-                <label><input type="radio" name="tipoUsuario" value="2"  /> Administrador</label>
+                <label><input type="radio" name="tipoUsuario" value="0" checked/> Administrador</label>
+                <label><input type="radio" name="tipoUsuario" value="1"  /> Cliente</label>
+                <label><input type="radio" name="tipoUsuario" value="2"  /> Fornecedor </label>
             </div>
 
             <label for="login">Login</label>

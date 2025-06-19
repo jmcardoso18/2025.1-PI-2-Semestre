@@ -1,61 +1,62 @@
 <?php
+session_start();
 
-require('./db.php');
-require('../Conexao.php');
-
+require_once './db.php';
+require_once '../Conexao.php';
 
 $conexao = new conexao();
 $pdo = $conexao->getPdo();
-
-$tipoUsuarioId = $_POST['tipoUsuario'];
-
-switch($tipoUsuarioId){
-    case 0:
-        $tipoUsuario = 'cliente';
-        break;
-    case 1:
-        $tipoUsuario = 'fornecedor';
-        break;
-    case 2:
-        $tipoUsuario = 'admin';
-        break;
-    default:
-        return [];
-        }
-
 $db = new db($pdo);
-$users = $db->getUsers($tipoUsuario);
-$login = $_POST['login'] ?? '';
+
+$tipoUsuarioId = (int)($_POST['tipoUsuario'] ?? -1);
+$login = trim($_POST['login'] ?? '');
 $senha = $_POST['senha'] ?? '';
 
-$encontrado = false;
+if (!in_array($tipoUsuarioId, [0,1,2])) {
+    header("Location: ../usuario/login_view.php?error=tipo_usuario");
+    exit;
+}
 
+if (empty($login) || empty($senha)) {
+    header("Location: ../usuario/login_view.php?error=login_vazio");
+    exit;
+}
+
+// Buscar usuários daquele tipo
+$users = $db->getUsersByTipoUsuarioId($tipoUsuarioId);
+
+$usuarioEncontrado = null;
 foreach ($users as $user) {
-
-    if ($user['login'] === $login && $user['senha'] === $senha) {
-        $encontrado = true;
+    if ($user['login'] === $login) {
+        $usuarioEncontrado = $user;
         break;
     }
 }
 
-if ($encontrado) {
-    session_start();
-    echo "Login válido!";
-    $_SESSION['tipoUsuario'] = $tipoUsuario;
-    $_SESSION['usuario'] = $login;
-    $_SESSION['loggedin'] = true;
+if ($usuarioEncontrado) {
+    if (password_verify($senha, $usuarioEncontrado['senha'])) {
+        $_SESSION['loggedin'] = true;
+        $_SESSION['usuario'] = $login;
+        $_SESSION['tipoUsuario'] = $tipoUsuarioId;
 
-    switch($tipoUsuarioId){
-       case 0:
-            header("Location: ../../area-cliente.php");
-            exit;
-        case 1:
-            header("Location: ../../area-fornecedor.php");
-            exit;
-        case 2:
-            header("Location: ../../area-admin.php");
-            exit;
+        switch ($tipoUsuarioId) {
+            case 0:
+                header("Location: /Projeto/MVSinfo/Projeto/area-admin.php");
+                break;
+            case 1:
+                header("Location: /Projeto/MVSinfo/Projeto/area-cliente.php");
+                break;
+            case 2:
+                header("Location: /Projeto/MVSinfo/Projeto/area-fornecedor.php");
+                break;
+        }
+        exit;
+    } else {
+        header("Location: ../usuario/login_view.php?error=senha_incorreta");
+        exit;
     }
 } else {
-    echo "Login ou senha inválidos!";
+    header("Location: ../usuario/login_view.php?error=usuario_nao_encontrado");
+    exit;
 }
+?>

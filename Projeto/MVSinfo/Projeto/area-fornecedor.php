@@ -1,10 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] !== 'fornecedor') {
-
-    header('Location: login_view.php');
-  }
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] !== 2) {
+    header('Location: /Projeto/MVSinfo/Projeto/usuario/login_view.php');
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
