@@ -46,7 +46,7 @@ if ($usuarioEncontrado) {
         // Redirecionar por tipo de usuário
         switch ($usuarioEncontrado['tipo_usuario']) {
             case 0: // Admin
-                header("Location: /Projeto/MVSinfo/Projeto/area-admin.php");
+                header("Location: /Projeto/MVSinfo/Projeto/php/area admin/area-admin.php");
                 break;
             case 1: // Cliente
                 header("Location: /Projeto/MVSinfo/Projeto/php/area cliente/area-cliente.php");
