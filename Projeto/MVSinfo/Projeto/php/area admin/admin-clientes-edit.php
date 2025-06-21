@@ -86,75 +86,110 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Editar Cliente - Área Admin</title>
-    <link rel="stylesheet" href="../css/styles.css" />
     <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1976f2;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+        }
+        nav {
+            max-width: 700px;
+            margin: 20px auto 0;
+            padding: 0 1rem;
+        }
+        nav a {
+            color: #1976f2;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
         main {
-            max-width: 600px;
-            margin: 3rem auto;
+            max-width: 700px;
             background: white;
+            margin: 1rem auto 3rem;
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
         }
         h2 {
             color: #1976f2;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             text-align: center;
+            font-weight: 700;
         }
         form {
-            display: grid;
-            gap: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
         label {
             font-weight: 600;
+            margin-bottom: 0.5rem;
         }
-        input {
-            padding: 8px;
+        input[type="text"],
+        input[type="email"] {
+            padding: 10px;
             font-size: 1rem;
             border: 1px solid #ddd;
             border-radius: 6px;
             width: 100%;
+            box-sizing: border-box;
         }
         .btn {
             background-color: #1976f2;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 12px;
             font-weight: 700;
             cursor: pointer;
             border-radius: 6px;
             transition: background-color 0.3s ease;
+            width: 100%;
         }
         .btn:hover {
             background-color: #155dc1;
         }
         .errors {
+            background: #ffdddd;
+            border: 1px solid #cc0000;
             color: #cc0000;
+            padding: 1rem;
+            border-radius: 6px;
             margin-bottom: 1rem;
+        }
+        .errors ul {
+            margin: 0;
+            padding-left: 1.2rem;
         }
         .success {
+            background: #ddffdd;
+            border: 1px solid green;
             color: green;
+            padding: 1rem;
+            border-radius: 6px;
             margin-bottom: 1rem;
             font-weight: 700;
-        }
-        nav a {
-            display: inline-block;
-            margin-bottom: 1rem;
-            color: #1976f2;
-            font-weight: 600;
-            text-decoration: none;
-        }
-        nav a:hover {
-            text-decoration: underline;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 <header>
-    <h1>Área Administrador - Clientes</h1>
-    <nav>
-        <a href="admin_clientes.php">&larr; Voltar à lista</a>
-    </nav>
+    Área Administrador - Clientes
 </header>
 
 <main>
@@ -175,23 +210,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <form method="POST" action="">
-        <label for="razao_social">Razão Social *</label>
-        <input type="text" id="razao_social" name="razao_social" required value="<?= htmlspecialchars($cliente['razao_social']) ?>" />
+    <label for="razao_social">Razão Social *</label>
+    <input type="text" id="razao_social" name="razao_social" required value="<?= htmlspecialchars($cliente['razao_social']) ?>" />
 
-        <label for="nome_fantasia">Nome Fantasia</label>
-        <input type="text" id="nome_fantasia" name="nome_fantasia" value="<?= htmlspecialchars($cliente['nome_fantasia']) ?>" />
+    <label for="nome_fantasia">Nome Fantasia</label>
+    <input type="text" id="nome_fantasia" name="nome_fantasia" value="<?= htmlspecialchars($cliente['nome_fantasia']) ?>" />
 
-        <label for="email">E-mail *</label>
-        <input type="email" id="email" name="email" required value="<?= htmlspecialchars($cliente['email']) ?>" />
+    <label for="email">E-mail *</label>
+    <input type="email" id="email" name="email" required value="<?= htmlspecialchars($cliente['email']) ?>" />
 
-        <label for="telefone">Telefone</label>
-        <input type="text" id="telefone" name="telefone" value="<?= htmlspecialchars($cliente['telefone']) ?>" />
+    <label for="telefone">Telefone</label>
+    <input type="text" id="telefone" name="telefone" value="<?= htmlspecialchars($cliente['telefone']) ?>" />
 
-        <label for="login">Login *</label>
-        <input type="text" id="login" name="login" required value="<?= htmlspecialchars($cliente['login']) ?>" />
+    <label for="login">Login *</label>
+    <input type="text" id="login" name="login" required value="<?= htmlspecialchars($cliente['login']) ?>" />
 
-        <button type="submit" class="btn">Atualizar Dados</button>
-    </form>
+    <div style="display: flex; gap: 10px; margin-top: 1rem;">
+        <button type="submit" class="btn" style="flex: 1;">Atualizar Dados</button>
+        <a href="admin-clientes.php" class="btn" style="flex: 1; text-align: center; line-height: 38px; text-decoration: none; color: white; border-radius: 6px;">Voltar</a>
+    </div>
+</form>
 </main>
 </body>
 </html>

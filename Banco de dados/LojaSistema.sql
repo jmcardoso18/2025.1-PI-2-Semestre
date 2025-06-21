@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 21/06/2025 às 19:00
+-- Tempo de geração: 21/06/2025 às 23:20
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -31,6 +31,13 @@ CREATE TABLE `categoria` (
   `cod_categoria` int(11) NOT NULL,
   `descricao` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `categoria`
+--
+
+INSERT INTO `categoria` (`cod_categoria`, `descricao`) VALUES
+(1, 'Iluminação');
 
 -- --------------------------------------------------------
 
@@ -153,6 +160,13 @@ CREATE TABLE `produtos` (
   `preco_custo_unidade` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `produtos`
+--
+
+INSERT INTO `produtos` (`codigo_produto`, `descricao`, `cod_categoria`, `ncm`, `marca`, `unidade_medida`, `preco_custo_unidade`) VALUES
+(5, 'Lampada', 1, '1223646', 'Chevrolet', 'watts', 15.80);
+
 -- --------------------------------------------------------
 
 --
@@ -223,7 +237,8 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id_usuario`, `cnpj`, `razao_social`, `nome_fantasia`, `inscricao_estadual`, `contato`, `telefone`, `email`, `tipo_usuario`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `estado`, `login`, `senha`) VALUES
 (6, '32.754.123/6444-44', 'Rocha Fornecedor', 'Felipe Rafael Rocha', '12335447789955252', 'Felipe Rafael Rocha', '(19) 99976-8070', 'feliprocha196@gmail.com', 2, '13607-805', 'FRANCISCO BORGES', 1321, 'Casa', 'Jd. Santa Olivia 2', 'ARARAS', 'SP', 'Felipe Rafael Rocha', '$2y$10$kavxU8WReRXaTHKcwghJMOJCOCpZqp8m6Kufohdl1n/6DtEDRGlRa'),
-(7, '32.656.584/8848-18', 'Isabela Rocha', 'Belinha BB', '1561165154546456', 'Isabela Borsonello Rocha', '(19) 99976-9625', 'Isabela@gmail.com', 1, '13607-610', 'Rua João Antonio', 1122, 'Casa', 'Ouro Verde', 'Araras', 'SP', 'Isabela Rocha', '$2y$10$DYpvRWkTa.1G8912DeriduihMDwDlHFb4EPScLFfNsIl8ROe5nSpm');
+(14, NULL, NULL, NULL, NULL, NULL, NULL, 'admin@exemplo.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '$2y$10$K...'),
+(16, '00.000.000/0001-00', 'teste', 'teste a', '451651516', 'teste a teste b', '(19) 99975-6568', 'Isabela@gmail.com', 1, '13607-805', 'FRANCISCO BORGES', 1321, 'Casa', 'Jd. Santa Olivia 2', 'ARARAS', 'SP', 'Isabela Rocha', '$2y$10$KWxvuqK0Fp3m/3fG9BcyVuZh7BsuKbMzd38IS5ScIP4hFPk5squEu');
 
 -- --------------------------------------------------------
 
@@ -380,10 +395,16 @@ ALTER TABLE `orcamento`
   MODIFY `id_orcamento` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de tabela `produtos`
+--
+ALTER TABLE `produtos`
+  MODIFY `codigo_produto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restrições para tabelas despejadas

@@ -113,8 +113,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
         <div class="menu-grid">
             <a href="admin-clientes.php" class="menu-item">Clientes</a>
             <a href="admin_fornecedores.php" class="menu-item">Fornecedores</a>
-            <a href="admin_produtos.php" class="menu-item">Produtos</a>
-            <a href="admin_categorias.php" class="menu-item">Categorias</a>
+            <a href="./produtos/produtos.php" class="menu-item">Produtos</a>
+            <a href="./categorias/categorias.php" class="menu-item">Categorias</a>
             <a href="admin_orcamentos.php" class="menu-item">Orçamentos</a>
             <a href="admin_compras.php" class="menu-item">Compras</a>
         </div>

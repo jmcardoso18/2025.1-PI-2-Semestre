@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 }
 
 $conexao = new conexao();
-$pdo = $conexao->getPdo();
+$pdo = $conexao->getPDO();
 
 // ID do cliente logado
 $id_cliente = $_SESSION['id_usuario'] ?? null;
