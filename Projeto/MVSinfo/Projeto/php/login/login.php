@@ -12,50 +12,58 @@ $tipoUsuarioId = (int)($_POST['tipoUsuario'] ?? -1);
 $login = trim($_POST['login'] ?? '');
 $senha = $_POST['senha'] ?? '';
 
+// Validação de tipo de usuário permitido (somente Admin=0, Cliente=1 ou Fornecedor=2)
 if (!in_array($tipoUsuarioId, [0,1,2])) {
     header("Location: ../usuario/login_view.php?error=tipo_usuario");
     exit;
 }
 
+// Validação de campos obrigatórios
 if (empty($login) || empty($senha)) {
     header("Location: ../usuario/login_view.php?error=login_vazio");
     exit;
 }
 
-// Buscar usuários daquele tipo
-$users = $db->getUsersByTipoUsuarioId($tipoUsuarioId);
+// Buscar usuário específico por login e tipo de usuário
+$stmt = $pdo->prepare("SELECT id_usuario, login, senha, tipo_usuario FROM usuario WHERE login = :login AND tipo_usuario = :tipo");
+$stmt->execute([
+    ':login' => $login,
+    ':tipo' => $tipoUsuarioId
+]);
 
-$usuarioEncontrado = null;
-foreach ($users as $user) {
-    if ($user['login'] === $login) {
-        $usuarioEncontrado = $user;
-        break;
-    }
-}
+$usuarioEncontrado = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($usuarioEncontrado) {
+    // Verificar senha
     if (password_verify($senha, $usuarioEncontrado['senha'])) {
-        $_SESSION['loggedin'] = true;
-        $_SESSION['usuario'] = $login;
-        $_SESSION['tipoUsuario'] = $tipoUsuarioId;
 
-        switch ($tipoUsuarioId) {
-            case 0:
+        // Salvar informações importantes na sessão
+        $_SESSION['loggedin'] = true;
+        $_SESSION['usuario'] = $usuarioEncontrado['login'];
+        $_SESSION['tipoUsuario'] = $usuarioEncontrado['tipo_usuario'];
+        $_SESSION['id_usuario'] = $usuarioEncontrado['id_usuario'];
+
+        // Redirecionar por tipo de usuário
+        switch ($usuarioEncontrado['tipo_usuario']) {
+            case 0: // Admin
                 header("Location: /Projeto/MVSinfo/Projeto/area-admin.php");
                 break;
-            case 1:
-                header("Location: /Projeto/MVSinfo/Projeto/area-cliente.php");
+            case 1: // Cliente
+                header("Location: /Projeto/MVSinfo/Projeto/php/area cliente/area-cliente.php");
                 break;
-            case 2:
-                header("Location: /Projeto/MVSinfo/Projeto/area-fornecedor.php");
+            case 2: // Fornecedor
+                header("Location: /Projeto/MVSinfo/Projeto/php/area fornecedor/area-fornecedor.php");
                 break;
         }
         exit;
+
     } else {
+        // Senha incorreta
         header("Location: ../usuario/login_view.php?error=senha_incorreta");
         exit;
     }
 } else {
+    // Usuário não encontrado
     header("Location: ../usuario/login_view.php?error=usuario_nao_encontrado");
     exit;
 }
