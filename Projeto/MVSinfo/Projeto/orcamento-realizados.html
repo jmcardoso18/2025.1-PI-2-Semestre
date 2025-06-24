@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamentos Realizados</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #1976f2;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .filter select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1976f2;
+            color: white;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-status {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .status-aprovado {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-pendente {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .status-reprovado {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Orçamentos Realizados</h2>
+
+        <div class="filter">
+            <label for="filtroStatus">Filtrar por status:</label>
+            <select id="filtroStatus" onchange="filtrarStatus()">
+                <option value="todos">Todos</option>
+                <option value="Aprovado">Aprovado</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Reprovado">Reprovado</option>
+            </select>
+        </div>
+
+        <table id="tabelaOrcamentos">
+            <thead>
+                <tr>
+                    <th>Nome do Cliente</th>
+                    <th>Data da Solicitação</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-status="Pendente">
+                    <td>Empresa Alfa</td>
+                    <td>10/06/2025</td>
+                    <td class="status"><span class="status-pendente">Pendente</span></td>
+                    <td>
+                        <a href="status-pedido.html" class="btn btn-status">Ver Status</a>
+                        <button class="btn btn-status" onclick="atualizarStatus(this, 'Aprovado')">Aprovar</button>
+                        <button class="btn btn-status" onclick="atualizarStatus(this, 'Reprovado')">Reprovar</button>
+                    </td>
+                </tr>
+                <tr data-status="Pendente">
+                    <td>Comercial Beta</td>
+                    <td>11/06/2025</td>
+                    <td class="status"><span class="status-pendente">Pendente</span></td>
+                    <td>
+                        <a href="status-pedido.html" class="btn btn-status">Ver Status</a>
+                        <button class="btn btn-status" onclick="atualizarStatus(this, 'Aprovado')">Aprovar</button>
+                        <button class="btn btn-status" onclick="atualizarStatus(this, 'Reprovado')">Reprovar</button>
+                    </td>
+                </tr>
+                <!-- Mais linhas conforme necessário -->
+            </tbody>
+        </table>
+
+        <!-- Botão Voltar -->
+        <button type="button" class="btn btn-secondary" onclick="history.back()">Voltar</button>
+
+        <!-- Script -->
+        <script>
+            function filtrarStatus() {
+                const statusSelecionado = document.getElementById("filtroStatus").value;
+                const linhas = document.querySelectorAll("#tabelaOrcamentos tbody tr");
+
+                linhas.forEach((linha) => {
+                    const statusTexto = linha.querySelector(".status span").textContent.trim();
+                    linha.style.display = (statusSelecionado === "todos" || statusTexto === statusSelecionado) ? "" : "none";
+                });
+            }
+
+            function atualizarStatus(botao, novoStatus) {
+                const linha = botao.closest("tr");
+                const statusTd = linha.querySelector(".status");
+
+                linha.setAttribute("data-status", novoStatus);
+
+                if (novoStatus === "Aprovado") {
+                    statusTd.innerHTML = '<span class="status-aprovado">Aprovado</span>';
+                } else if (novoStatus === "Reprovado") {
+                    statusTd.innerHTML = '<span class="status-reprovado">Reprovado</span>';
+                }
+            }
+        </script>
+</body>
+
+</html>

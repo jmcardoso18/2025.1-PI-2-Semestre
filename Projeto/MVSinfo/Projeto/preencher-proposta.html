@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MVS Info - Preencher Proposta</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #1976f2;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #1976f2;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 4px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1976f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #155dc1;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div><strong>MVS Info - Área do Fornecedor</strong></div>
+        <div>
+            <a href="area-fornecedor.php">Perfil</a>
+            <a href="propostas.html">Propostas</a>
+            <a href="status-pedido.html">Pedidos</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Preencher Proposta</h2>
+        <form>
+            <label for="cliente">Cliente</label>
+            <input type="text" id="cliente" value="Loja Maria Iluminação" disabled>
+
+            <label for="produto">Produto</label>
+            <input type="text" id="produto" placeholder="Ex: Luminária LED 12W">
+
+            <label for="quantidade">Quantidade</label>
+            <input type="number" id="quantidade" min="1" placeholder="Ex: 50">
+
+            <label for="preco">Preço Unitário (R$)</label>
+            <input type="number" id="preco" step="0.01" placeholder="Ex: 29.90">
+
+            <label for="obs">Observações</label>
+            <textarea id="obs" rows="4" placeholder="Condições de entrega, garantia etc."></textarea>
+
+            <button type="submit" class="btn">Enviar Proposta</button>
+            <button type="button" class="btn btn-secondary" onclick="history.back()">Voltar</button>
+        </form>
+    </div>
+
+</body>
+
+</html>
