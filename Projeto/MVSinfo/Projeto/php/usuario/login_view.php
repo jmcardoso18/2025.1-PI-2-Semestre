@@ -18,9 +18,7 @@ require_once '../conexao.php';
         <div class="logo">MVS Info</div>
         <p class="slogan">Parceria em tecnologia, aliada em economia.</p>
     </header>
-
-    <a href="../../index.html">SAIR</a>
-
+    
     <main class="login-container">
         <img src="../../img/logorenderizado.png" alt="Logo renderizaado" class="logo-renderizado" />
 
@@ -45,7 +43,10 @@ require_once '../conexao.php';
 
         <p id="mensagem" class="mensagem"></p>
 
-        <button type="button" class="btn btn-secondary" onclick="history.back()">Voltar</button>
+        <form action="/Projeto/MVSinfo/Projeto/index.html" method="get">
+          <button type="submit" class="btn btn-secondary">Voltar</button>
+        </form>
+
         <br>
         <br>
     <form action="cadastro.php" method="post">

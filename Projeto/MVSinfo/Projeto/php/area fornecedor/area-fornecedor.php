@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 }
 
 $conexao = new conexao();
-$pdo = $conexao->getPdo();
+$pdo = $conexao->getPDO();
 
 $idUsuario = $_SESSION['id_usuario'];
 
@@ -111,6 +111,7 @@ if (!$usuario) {
             <a href="area-fornecedor.php">Perfil</a>
             <a href="propostas.php">Propostas</a>
             <a href="status-pedido.php">Pedidos</a>
+            <a href="../logout.php">Sair</a>
         </div>
     </div>
 

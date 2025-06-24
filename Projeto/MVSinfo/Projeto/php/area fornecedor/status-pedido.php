@@ -131,6 +131,7 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="area-fornecedor.php">Perfil</a>
             <a href="propostas.php">Propostas</a>
             <a href="status-pedido.php">Pedidos</a>
+            <a href="../logout.php">Sair</a>
         </div>
     </div>
 

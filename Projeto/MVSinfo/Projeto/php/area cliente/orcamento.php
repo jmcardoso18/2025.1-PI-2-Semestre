@@ -27,29 +27,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($codigoProduto > 0 && $quantidade > 0 && $idCliente) {
         try {
-            $pdo->beginTransaction();
+    $pdo->beginTransaction();
 
-            // Inserir na tabela compra
-            $sqlCompra = "INSERT INTO compra (id_cliente, data_compra, status_pagamento) VALUES (:id_cliente, NOW(), 'pendente')";
-            $stmtCompra = $pdo->prepare($sqlCompra);
-            $stmtCompra->execute([':id_cliente' => $idCliente]);
-            $idCompra = $pdo->lastInsertId();
+    // Buscar fornecedor disponível
+    $stmtFornecedor = $pdo->query("SELECT id_usuario FROM usuario WHERE tipo_usuario = 2 LIMIT 1");
+    $idFornecedor = $stmtFornecedor->fetchColumn();
 
-            // Inserir na tabela produtocompra
-            $sqlProdCompra = "INSERT INTO produtocompra (id_compra, codigo_produto, quantidade) VALUES (:id_compra, :codigo_produto, :quantidade)";
-            $stmtProdCompra = $pdo->prepare($sqlProdCompra);
-            $stmtProdCompra->execute([
-                ':id_compra' => $idCompra,
-                ':codigo_produto' => $codigoProduto,
-                ':quantidade' => $quantidade
-            ]);
+    if (!$idFornecedor) {
+        throw new Exception("Nenhum fornecedor cadastrado no sistema. Por favor, cadastre um fornecedor primeiro.");
+    }
 
-            $pdo->commit();
-            $mensagem = "Orçamento enviado com sucesso!";
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            $mensagem = "Erro ao enviar orçamento: " . $e->getMessage();
-        }
+    // Inserir na tabela compra
+    $sqlCompra = "INSERT INTO compra (id_fornecedor, data_compra, status_pagamento) VALUES (:id_fornecedor, NOW(), 'pendente')";
+    $stmtCompra = $pdo->prepare($sqlCompra);
+    $stmtCompra->execute([
+        ':id_fornecedor' => $idFornecedor
+    ]);
+    $idCompra = $pdo->lastInsertId();
+
+    // Inserir na tabela produtocompra
+    $sqlProdCompra = "INSERT INTO produtocompra (id_compra, codigo_produto, quantidade) VALUES (:id_compra, :codigo_produto, :quantidade)";
+    $stmtProdCompra = $pdo->prepare($sqlProdCompra);
+    $stmtProdCompra->execute([
+        ':id_compra' => $idCompra,
+        ':codigo_produto' => $codigoProduto,
+        ':quantidade' => $quantidade
+    ]);
+
+    $pdo->commit();
+    $mensagem = "Orçamento enviado com sucesso!";
+} catch (Exception $e) {
+    $pdo->rollBack();
+    $mensagem = "Erro ao enviar orçamento: " . $e->getMessage();
+}
+
     } else {
         $mensagem = "Preencha todos os campos corretamente.";
     }
@@ -147,6 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="area-cliente.php">Perfil</a>
             <a href="orcamento.php">Orçamento</a>
             <a href="pedido.php">Pedidos</a>
+            <a href="../logout.php">Sair</a>
         </div>
     </div>
 
@@ -170,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="number" name="quantidade" id="quantidade" min="1" required>
 
             <button type="submit" class="btn">Enviar Orçamento</button>
-            <a href="area-cliente.php" class="btn">Voltar</a>
+            <a href="./area-cliente.php" class="btn">Voltar</a>
         </form>
     </div>
 

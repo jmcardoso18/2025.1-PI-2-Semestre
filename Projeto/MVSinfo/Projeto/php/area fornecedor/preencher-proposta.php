@@ -10,19 +10,22 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 $conexao = new conexao();
 $pdo = $conexao->getPdo();
 
-$fornecedorId = $_SESSION['id_usuario'] ?? null; // Assumindo que você guarda o id_usuario na sessão
+$fornecedorId = $_SESSION['id_usuario'] ?? null;
 if (!$fornecedorId) {
     echo "Erro: Usuário não identificado.";
     exit;
 }
 
-$idOrcamento = intval($_GET['id'] ?? 0);
-if ($idOrcamento <= 0) {
-    echo "Orçamento inválido.";
+$idCompra = intval($_GET['id'] ?? 0);
+if ($idCompra <= 0) {
+    echo "Compra inválida.";
     exit;
 }
 
-// Se o formulário foi enviado, processa o POST
+$erro = '';
+$sucesso = '';
+
+// Se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prazoEntrega = trim($_POST['prazo_entrega']);
     $produtos = $_POST['produtos'] ?? [];
@@ -31,19 +34,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erro = "Preencha todos os campos.";
     } else {
         try {
-            // Inicia transação
             $pdo->beginTransaction();
 
-            // Insere na tabela cotacao
-            $stmtCotacao = $pdo->prepare("INSERT INTO cotacao (id_fornecedor, data_cotacao, prazo_entrega) VALUES (:id_fornecedor, NOW(), :prazo_entrega)");
+            // Inserir na tabela cotacao
+            $stmtCotacao = $pdo->prepare("
+                INSERT INTO cotacao (id_fornecedor, data_cotacao, prazo_entrega)
+                VALUES (:id_fornecedor, NOW(), :prazo_entrega)
+            ");
             $stmtCotacao->execute([
                 ':id_fornecedor' => $fornecedorId,
                 ':prazo_entrega' => $prazoEntrega
             ]);
             $idCotacao = $pdo->lastInsertId();
 
-            // Insere os produtos na cotproduto
-            $stmtCotProduto = $pdo->prepare("INSERT INTO cotproduto (id_cotacao, codigo_produto, quantidade, valor_unitario) VALUES (:id_cotacao, :codigo_produto, :quantidade, :valor_unitario)");
+            // Inserir os produtos na cotproduto
+            $stmtCotProduto = $pdo->prepare("
+                INSERT INTO cotproduto (id_cotacao, codigo_produto, quantidade, valor_unitario)
+                VALUES (:id_cotacao, :codigo_produto, :quantidade, :valor_unitario)
+            ");
 
             foreach ($produtos as $codigo => $dadosProduto) {
                 $quantidade = intval($dadosProduto['quantidade']);
@@ -70,18 +78,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Busca os produtos do orçamento para mostrar no formulário
+// Buscar os produtos da compra (usando tabela produtocompra)
 $stmtProdutos = $pdo->prepare("
-    SELECT op.codigo_produto, p.descricao, op.quantidade
-    FROM orcamentoproduto op
-    JOIN Produtos p ON op.codigo_produto = p.codigo_produto
-    WHERE op.id_orcamento = :id_orcamento
+    SELECT pc.codigo_produto, p.descricao, pc.quantidade
+    FROM produtocompra pc
+    JOIN produtos p ON pc.codigo_produto = p.codigo_produto
+    WHERE pc.id_compra = :id_compra
 ");
-$stmtProdutos->execute([':id_orcamento' => $idOrcamento]);
-$produtosOrcamento = $stmtProdutos->fetchAll(PDO::FETCH_ASSOC);
+$stmtProdutos->execute([':id_compra' => $idCompra]);
+$produtosCompra = $stmtProdutos->fetchAll(PDO::FETCH_ASSOC);
 
-if (!$produtosOrcamento) {
-    echo "Nenhum produto encontrado para este orçamento.";
+if (!$produtosCompra) {
+    echo "Nenhum produto encontrado para esta compra.";
     exit;
 }
 ?>
@@ -94,105 +102,23 @@ if (!$produtosOrcamento) {
     <title>Preencher Proposta - MVS Info</title>
     <link rel="stylesheet" href="/Projeto/MVSinfo/Projeto/css/styles.css" />
     <style>
-        body {
-            background-color: #f5f7fa;
-            font-family: Arial, sans-serif;
+        body { background-color: #f5f7fa; font-family: Arial, sans-serif; }
+        .navbar { background-color: #1976f2; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: white; margin-left: 15px; text-decoration: none; }
+        .container { max-width: 900px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #1976f2; margin-bottom: 20px; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input[type="text"], input[type="number"] {
+            width: 100%; padding: 8px 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box;
         }
-
-        .navbar {
-            background-color: #1976f2;
-            color: white;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar a {
-            color: white;
-            margin-left: 15px;
-            text-decoration: none;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            color: #1976f2;
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 15px;
-        }
-
-        input[type="text"],
-        input[type="number"] {
-            width: 100%;
-            padding: 8px 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f0f0f0;
-        }
-
-        .btn {
-            background-color: #1976f2;
-            color: white;
-            padding: 10px 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background-color: #155dc1;
-        }
-
-        .alert {
-            padding: 12px;
-            margin-top: 15px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .btn { background-color: #1976f2; color: white; padding: 10px 18px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; text-decoration: none; display: inline-block; }
+        .btn:hover { background-color: #155dc1; }
+        .alert { padding: 12px; margin-top: 15px; border-radius: 5px; font-weight: bold; }
+        .alert-success { background-color: #d4edda; color: #155724; }
+        .alert-error { background-color: #f8d7da; color: #721c24; }
     </style>
 </head>
 
@@ -203,11 +129,12 @@ if (!$produtosOrcamento) {
             <a href="area-fornecedor.php">Perfil</a>
             <a href="propostas.php">Propostas</a>
             <a href="status-pedido.php">Pedidos</a>
+            <a href="../logout.php">Sair</a>
         </div>
     </div>
 
     <div class="container">
-        <h2>Preencher Proposta para Orçamento #<?= htmlspecialchars($idOrcamento) ?></h2>
+        <h2>Preencher Proposta para Compra #<?= htmlspecialchars($idCompra) ?></h2>
 
         <?php if (!empty($erro)) : ?>
             <div class="alert alert-error"><?= htmlspecialchars($erro) ?></div>
@@ -217,7 +144,7 @@ if (!$produtosOrcamento) {
             <div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div>
         <?php endif; ?>
 
-        <form method="post" action="preencher-proposta.php?id=<?= htmlspecialchars($idOrcamento) ?>">
+        <form method="post" action="preencher-proposta.php?id=<?= htmlspecialchars($idCompra) ?>">
             <label for="prazo_entrega">Prazo de Entrega:</label>
             <input type="text" id="prazo_entrega" name="prazo_entrega" required placeholder="Ex: 10 dias">
 
@@ -231,7 +158,7 @@ if (!$produtosOrcamento) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($produtosOrcamento as $produto) : ?>
+                    <?php foreach ($produtosCompra as $produto) : ?>
                         <tr>
                             <td><?= htmlspecialchars($produto['descricao']) ?></td>
                             <td><?= intval($produto['quantidade']) ?></td>

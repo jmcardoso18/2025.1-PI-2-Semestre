@@ -112,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="area-fornecedor.php">Perfil</a>
             <a href="propostas.html">Propostas</a>
             <a href="status-pedido.html">Pedidos</a>
+            <a href="../logout.php">Sair</a>
         </div>
     </div>
 

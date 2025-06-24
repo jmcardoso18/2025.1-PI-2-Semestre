@@ -13,7 +13,7 @@ $pdo = $conexao->getPDO();
 // ID do cliente logado
 $id_cliente = $_SESSION['id_usuario'] ?? null;
 
-if (!$id_cliente) {
+if (!$id_cliente) { 
     echo "Erro: Cliente não identificado.";
     exit;
 }
@@ -131,6 +131,7 @@ $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="area-cliente.php" class="btn">Perfil</a>
             <a href="orcamento.php" class="btn">Orçamento</a>
             <a href="pedido.php" class="btn">Pedidos</a>
+            <a href="../logout.php">Sair</a>
         </nav>
     </header>
 

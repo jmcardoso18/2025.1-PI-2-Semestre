@@ -114,12 +114,13 @@ if (!$usuario) {
             <a href="area-cliente.php">Perfil</a>
             <a href="orcamento.php">Orçamento</a>
             <a href="pedido.php">Pedidos</a>
+            <a href="../logout.php">Sair</a>
         </div>
     </div>
 
     <div class="container">
         <h2>Seus dados</h2>
-        <form action="atualizar_cliente.php" method="POST">
+        <form action="atualizar-cliente.php" method="POST">
             <input type="hidden" name="id_usuario" value="<?= $idUsuario ?>">
 
             <label for="nome">Nome completo:</label>
