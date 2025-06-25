@@ -35,8 +35,8 @@ $usuarioEncontrado = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($usuarioEncontrado) {
     // Verificar senha
-    if ($senha === $usuarioEncontrado['senha']) {
-
+    if (password_verify($senha, $usuarioEncontrado['senha'])) {
+    
         // Salvar informações importantes na sessão
         $_SESSION['loggedin'] = true;
         $_SESSION['usuario'] = $usuarioEncontrado['login'];
@@ -46,13 +46,13 @@ if ($usuarioEncontrado) {
         // Redireciona por tipo de usuário
         switch ($usuarioEncontrado['tipo_usuario']) {
             case 0: // Admin
-                header("Location: /Projeto/MVSinfo/Projeto/php/area admin/area-admin.php");
+                header("Location: ../area-admin/area-admin.php");
                 break;
             case 1: // Cliente
-                header("Location: /Projeto/MVSinfo/Projeto/php/area cliente/area-cliente.php");
+                header("Location: ../area-cliente/area-cliente.php");
                 break;
             case 2: // Fornecedor
-                header("Location: /Projeto/MVSinfo/Projeto/php/area fornecedor/area-fornecedor.php");
+                header("Location: ../area-fornecedor/area-fornecedor.php");
                 break;
         }
         exit;
