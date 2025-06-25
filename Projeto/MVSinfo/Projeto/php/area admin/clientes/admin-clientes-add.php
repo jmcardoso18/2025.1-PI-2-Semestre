@@ -155,7 +155,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary px-4">Salvar Cliente</button>
-                <button type="button" class="btn btn-secondary ms-2 px-4" onclick="history.back()">Voltar</button>
+                <button type="button" class="btn btn-primary ms-2 px-4" onclick="history.back()">Voltar</button>
             </div>
         </form>
     </div>

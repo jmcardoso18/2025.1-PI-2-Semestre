@@ -129,6 +129,28 @@
         </div>
       </div>
 
+     <!-- Campo de Categoria do Fornecedor (aparece apenas se fornecedor estiver selecionado) -->
+<div class="row g-3 form-section" id="categoriaFornecedor" style="display: none;">
+  <div class="col-md-6 offset-md-3">
+    <label for="categoriaTemp" class="form-label">Categorias do Fornecedor</label>
+    <div class="input-group">
+      <select class="form-select" id="categoriaTemp">
+        <option value="">Selecione uma categoria</option>
+        <option value="Informática">Informática</option>
+        <option value="Iluminação">Iluminação</option>
+        <option value="Cabos">Cabos</option>
+        <option value="Tubos e PEAD">Tubos e PEAD</option>
+        <option value="Pré-moldados">Pré-moldados</option>
+      </select>
+      <button type="button" class="btn btn-outline-primary" id="adicionarCategoria">Adicionar</button>
+    </div>
+    <!-- Lista visual de categorias -->
+    <ul class="list-group mt-2" id="listaCategorias"></ul>
+    <!-- Campo oculto que será enviado com o formulário -->
+    <input type="hidden" name="categoriasSelecionadas" id="categoriasSelecionadas">
+  </div>
+</div>
+
       <div class="text-center mt-4">
         <button type="submit" class="btn btn-primary px-4">Salvar</button>
         <button type="button" class="btn btn-primary ms-2 px-4" onclick="history.back()">Voltar</button>
@@ -137,11 +159,55 @@
   </div>
 
   <script>
-    $(document).ready(function () {
-      $('#cnpj_empresa').mask('00.000.000/0000-00');
-      $('#telefone').mask('(00) 00000-0000');
-      $('#cep').mask('00000-000');
-    });
+   let categoriasSelecionadas = [];
+
+function atualizarListaCategorias() {
+  const lista = $('#listaCategorias');
+  lista.empty();
+  categoriasSelecionadas.forEach((cat, index) => {
+    lista.append(`
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        ${cat}
+        <button type="button" class="btn btn-sm btn-danger" onclick="removerCategoria(${index})">Remover</button>
+      </li>
+    `);
+  });
+  $('#categoriasSelecionadas').val(categoriasSelecionadas.join(','));
+}
+
+function removerCategoria(index) {
+  categoriasSelecionadas.splice(index, 1);
+  atualizarListaCategorias();
+}
+
+$(document).ready(function () {
+  $('#cnpj_empresa').mask('00.000.000/0000-00');
+  $('#telefone').mask('(00) 00000-0000');
+  $('#cep').mask('00000-000');
+
+  function toggleCategoria() {
+    if ($('#fornecedor').is(':checked')) {
+      $('#categoriaFornecedor').show();
+    } else {
+      $('#categoriaFornecedor').hide();
+      categoriasSelecionadas = [];
+      atualizarListaCategorias();
+    }
+  }
+
+  $('input[name="tipoUsuario"]').change(toggleCategoria);
+  toggleCategoria();
+
+  $('#adicionarCategoria').on('click', function () {
+    const novaCategoria = $('#categoriaTemp').val();
+    if (novaCategoria && !categoriasSelecionadas.includes(novaCategoria)) {
+      categoriasSelecionadas.push(novaCategoria);
+      atualizarListaCategorias();
+    }
+    $('#categoriaTemp').val('');
+  });
+  });
+
   </script>
 </body>
 
