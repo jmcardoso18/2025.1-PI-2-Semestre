@@ -113,6 +113,7 @@ if (!$usuario) {
         <div>
             <a href="area-cliente.php">Perfil</a>
             <a href="orcamento.php">Orçamento</a>
+            <a href="minhas-operacoes.php">Minhas operações</a>
             <a href="pedido.php">Pedidos</a>
             <a href="../logout.php">Sair</a>
         </div>
