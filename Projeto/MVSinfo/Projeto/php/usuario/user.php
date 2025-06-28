@@ -9,17 +9,38 @@ class user {
 
     public function inserir($dados) {
         $sql = "INSERT INTO usuario (
-            cnpj, razao_social, nome_fantasia,
+            cnpj, 
+            razao_social, 
             inscricao_estadual,
             contato, 
-            telefone, email, tipo_usuario, cep, logradouro, numero, complemento, 
-            bairro, cidade, estado, login, senha
+            telefone,
+            email, 
+            tipo_usuario, 
+            cep, logradouro, 
+            numero, 
+            complemento, 
+            bairro, 
+            cidade, 
+            estado, 
+            login, 
+            senha
         ) VALUES (
-            :cnpj, :razao_social, :nome_fantasia,
+            :cnpj,
+            :razao_social, 
             :inscricao_estadual,
             :contato, 
-            :telefone, :email, :tipo_usuario, :cep, :logradouro, :numero, :complemento, 
-            :bairro, :cidade, :estado, :login, :senha
+            :telefone, 
+            :email, 
+            :tipo_usuario, 
+            :cep, 
+            :logradouro, 
+            :numero, 
+            :complemento, 
+            :bairro, 
+            :cidade, 
+            :estado, 
+            :login, 
+            :senha
         )";
 
         $stmt = $this->pdo->prepare($sql);
@@ -27,7 +48,6 @@ class user {
         $stmt->execute([
             ':cnpj' => $dados['cnpj'],
             ':razao_social' => $dados['razao_social'],
-            ':nome_fantasia' => $dados['nome_fantasia'],
             ':inscricao_estadual' => $dados['inscricao_estadual'],
             ':contato' => $dados['contato'],
             ':telefone' => $dados['telefone'],

@@ -19,7 +19,7 @@ if (!$idUsuario) {
 }
 
 // Busca os dados atuais do cliente
-$sql = "SELECT razao_social, email, telefone, nome_fantasia FROM usuario WHERE id_usuario = :id";
+$sql = "SELECT razao_social, email, telefone FROM usuario WHERE id_usuario = :id";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([':id' => $idUsuario]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -136,10 +136,6 @@ if (!$usuario) {
       <label for="telefone">Telefone</label>
       <input type="text" id="telefone" name="telefone"
            value="<?= htmlspecialchars($usuario['telefone']) ?>">
-
-      <label for="nome_fantasia">Nome Fantasia (empresa)</label>
-      <input type="text" id="nome_fantasia" name="nome_fantasia"
-           value="<?= htmlspecialchars($usuario['nome_fantasia']) ?>">
 
       <button type="submit" class="btn btn-primary">Atualizar Dados</button>
       <a href="orcamento.php" class="btn btn-primary right-button">Ir para Orçamento</a><br><br>
