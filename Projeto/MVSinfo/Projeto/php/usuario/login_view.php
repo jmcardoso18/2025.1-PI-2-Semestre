@@ -27,7 +27,7 @@ require_once '../conexao.php';
         <form id="loginForm" class="login-form" action="../login/login.php" method="POST">
 
             <div class="radio-group">
-                <label><input type="radio" name="tipoUsuario" value="0" checked/> Administrador</label>
+                <label><input type="radio" name="tipoUsuario" value="3" checked/> Administrador</label>
                 <label><input type="radio" name="tipoUsuario" value="1"  /> Cliente</label>
                 <label><input type="radio" name="tipoUsuario" value="2"  /> Fornecedor </label>
             </div>

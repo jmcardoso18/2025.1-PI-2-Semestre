@@ -13,7 +13,7 @@ $login = trim($_POST['login'] ?? '');
 $senha = $_POST['senha'] ?? '';
 
 // Validação de tipo de usuário permitido (somente Admin=0, Cliente=1 ou Fornecedor=2)
-if (!in_array($tipoUsuarioId, [0,1,2])) {
+if (!in_array($tipoUsuarioId, [1,2,3])) {
     header("Location: ../usuario/login_view.php?error=tipo_usuario");
     exit;
 }
@@ -45,14 +45,16 @@ if ($usuarioEncontrado) {
 
         // Redireciona por tipo de usuário
         switch ($usuarioEncontrado['tipo_usuario']) {
-            case 0: // Admin
-                header("Location: ../area-admin/area-admin.php");
-                break;
+
             case 1: // Cliente
                 header("Location: ../area-cliente/area-cliente.php");
-                break;
+                    break;
             case 2: // Fornecedor
                 header("Location: ../area-fornecedor/area-fornecedor.php");
+                break;
+
+            case 3: // Admin
+                header("Location: ../area-admin/area-admin");
                 break;
         }
         exit;
@@ -60,11 +62,13 @@ if ($usuarioEncontrado) {
     } else {
         // Senha incorreta
         header("Location: ../usuario/login_view.php?error=senha_incorreta");
+        echo "Senha incorreta";
         exit;
     }
 } else {
     // Usuário não encontrado
     header("Location: ../usuario/login_view.php?error=usuario_nao_encontrado");
+    echo "Usuario incorreto";
     exit;
 }
 ?>

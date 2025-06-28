@@ -15,7 +15,7 @@ class user {
             contato, 
             telefone,
             email, 
-            tipo_usuario, 
+            tipo_usuario, /*1 Cliente, 2 Fornecedor, 3 Administrador*/
             cep, logradouro, 
             numero, 
             complemento, 
