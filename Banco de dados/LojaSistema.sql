@@ -111,7 +111,7 @@ CREATE TABLE operacao_produto (
 INSERT INTO tipoUsuario (descricao) VALUES
 ('Cliente'),
 ('Fornecedor'),
-('Administrador'),
+('Administrador');
 
 -- Inserções: categoria
 INSERT INTO categoria (descricao) VALUES

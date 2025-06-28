@@ -119,25 +119,32 @@ if (!$usuario) {
     </div>
 
     <div class="container">
-        <h2>Seus dados</h2>
-        <form action="atualizar-cliente.php" method="POST">
-            <input type="hidden" name="id_usuario" value="<?= $idUsuario ?>">
+       <!-- trecho já autenticado no início -->
+<h2>Seus dados</h2>
+    <form action="atualizar-cliente.php" method="POST">
+      <input type="hidden" name="id_usuario" value="<?= $idUsuario ?>">
 
-            <label for="nome">Nome completo:</label>
-            <input type="text" id="nome" name="nome" value="<?= htmlspecialchars($usuario['razao_social']) ?>">
+      <label for="razao_social">Razão Social *</label>
+      <input type="text" id="razao_social" name="razao_social" required
+           value="<?= htmlspecialchars($usuario['razao_social']) ?>">
 
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>">
+      <label for="email">E-mail *</label>
+      <input type="email" id="email" name="email" required
+           value="<?= htmlspecialchars($usuario['email']) ?>">
 
-            <label for="telefone">Telefone:</label>
-            <input type="text" id="telefone" name="telefone" value="<?= htmlspecialchars($usuario['telefone']) ?>">
+      <label for="telefone">Telefone</label>
+      <input type="text" id="telefone" name="telefone"
+           value="<?= htmlspecialchars($usuario['telefone']) ?>">
 
-            <label for="empresa">Empresa:</label>
-            <input type="text" id="empresa" name="empresa" value="<?= htmlspecialchars($usuario['nome_fantasia']) ?>">
+      <label for="nome_fantasia">Nome Fantasia (empresa)</label>
+      <input type="text" id="nome_fantasia" name="nome_fantasia"
+           value="<?= htmlspecialchars($usuario['nome_fantasia']) ?>">
 
-            <button type="submit" class="btn btn-primary">Atualizar Dados</button>
-            <a href="orcamento.php" class="btn btn-primary right-button">Ir para Orçamento</a>
-        </form>
+      <button type="submit" class="btn btn-primary">Atualizar Dados</button>
+      <a href="orcamento.php" class="btn btn-primary right-button">Ir para Orçamento</a><br><br>
+      <a href="minhas-operacoes.php" class="btn btn-secondary">Ver Histórico de Operações</a>
+    </form>
+
     </div>
 
 </body>
