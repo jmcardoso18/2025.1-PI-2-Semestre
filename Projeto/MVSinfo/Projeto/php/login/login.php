@@ -12,7 +12,7 @@ $tipoUsuarioId = (int)($_POST['tipoUsuario'] ?? -1);
 $login = trim($_POST['login'] ?? '');
 $senha = $_POST['senha'] ?? '';
 
-// Validação de tipo de usuário permitido (somente Admin=0, Cliente=1 ou Fornecedor=2)
+// Validação de tipo de usuário permitido (somente Cliente=1, Fornecedor=2 ou Admin=3, )
 if (!in_array($tipoUsuarioId, [1,2,3])) {
     header("Location: ../usuario/login_view.php?error=tipo_usuario");
     exit;
