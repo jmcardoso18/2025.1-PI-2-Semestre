@@ -11,10 +11,19 @@ $mensagem = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idUsuario = intval($_POST['id_usuario']);
-    $razaoSocial = $_POST['razao_social'];
-    $cnpj = $_POST['cnpj'];
-    $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
+    $razaoSocial = trim($_POST['razao_social']);
+    $cnpj = trim($_POST['cnpj']);
+    $inscricaoEstadual = trim($_POST['inscricao_estadual'] ?? '');
+    $contato = trim($_POST['contato'] ?? '');
+    $email = trim($_POST['email']);
+    $telefone = trim($_POST['telefone']);
+    $cep = trim($_POST['cep'] ?? '');
+    $logradouro = trim($_POST['logradouro'] ?? '');
+    $numero = trim($_POST['numero'] ?? '');
+    $complemento = trim($_POST['complemento'] ?? '');
+    $bairro = trim($_POST['bairro'] ?? '');
+    $cidade = trim($_POST['cidade'] ?? '');
+    $estado = trim($_POST['estado'] ?? '');
 
     $conexao = new conexao();
     $pdo = $conexao->getPdo();
@@ -23,16 +32,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "UPDATE usuario SET 
                     razao_social = :razao_social,
                     cnpj = :cnpj,
+                    inscricao_estadual = :inscricao_estadual,
+                    contato = :contato,
                     email = :email,
-                    telefone = :telefone
+                    telefone = :telefone,
+                    cep = :cep,
+                    logradouro = :logradouro,
+                    numero = :numero,
+                    complemento = :complemento,
+                    bairro = :bairro,
+                    cidade = :cidade,
+                    estado = :estado
                 WHERE id_usuario = :id";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':razao_social' => $razaoSocial,
             ':cnpj' => $cnpj,
+            ':inscricao_estadual' => $inscricaoEstadual,
+            ':contato' => $contato,
             ':email' => $email,
             ':telefone' => $telefone,
+            ':cep' => $cep,
+            ':logradouro' => $logradouro,
+            ':numero' => $numero,
+            ':complemento' => $complemento,
+            ':bairro' => $bairro,
+            ':cidade' => $cidade,
+            ':estado' => $estado,
             ':id' => $idUsuario
         ]);
 
@@ -110,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div><strong>MVS Info - Área do Fornecedor</strong></div>
         <div>
             <a href="area-fornecedor.php">Perfil</a>
-            <a href="propostas.html">Propostas</a>
-            <a href="status-pedido.html">Pedidos</a>
+            <a href="propostas.php">Propostas</a>
+            <a href="status-pedido.php">Pedidos</a>
             <a href="../logout.php">Sair</a>
         </div>
     </div>

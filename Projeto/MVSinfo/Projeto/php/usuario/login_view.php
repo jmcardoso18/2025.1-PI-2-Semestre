@@ -43,7 +43,7 @@ require_once '../conexao.php';
 
         <p id="mensagem" class="mensagem"></p>
 
-        <form action="/Projeto/MVSinfo/Projeto/index.html" method="get">
+        <form action="../../index.html" method="get">
           <button type="submit" class="btn btn-secondary">Voltar</button>
         </form>
 

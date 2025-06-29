@@ -19,7 +19,11 @@ if (!$idUsuario) {
 }
 
 // Busca os dados atuais do cliente
-$sql = "SELECT razao_social, email, telefone FROM usuario WHERE id_usuario = :id";
+$sql = "SELECT 
+            cnpj, razao_social, inscricao_estadual, contato, telefone, email, 
+            cep, logradouro, numero, complemento, bairro, cidade, estado, login
+        FROM usuario 
+        WHERE id_usuario = :id";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([':id' => $idUsuario]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -100,6 +104,11 @@ if (!$usuario) {
             color: white;
         }
 
+        .btn-secondary {
+            background-color: #555;
+            color: white;
+        }
+
         .right-button {
             float: right;
         }
@@ -109,39 +118,79 @@ if (!$usuario) {
 <body>
 
     <div class="navbar">
-        <div><strong>MVS Info - Área do Cliente</strong></div>
-        <div>
-            <a href="area-cliente.php">Perfil</a>
-            <a href="orcamento.php">Orçamento</a>
-            <a href="minhas-operacoes.php">Minhas operações</a>
-            <a href="pedido.php">Pedidos</a>
-            <a href="../logout.php">Sair</a>
-        </div>
+    <div><strong>MVS Info - Área do Cliente</strong></div>
+    <div>
+        <a href="area-cliente.php">Perfil</a>
+        <a href="orcamento.php">Orçamento</a>
+        <a href="pedido.php">Pedidos</a>
+        <a href="minhas-operacoes.php">Minhas operações</a>
+        <a href="../logout.php">Sair</a>
+    </div>
     </div>
 
     <div class="container">
-       <!-- trecho já autenticado no início -->
-<h2>Seus dados</h2>
-    <form action="atualizar-cliente.php" method="POST">
-      <input type="hidden" name="id_usuario" value="<?= $idUsuario ?>">
+        <h2>Seus dados</h2>
+        <form action="atualizar-cliente.php" method="POST">
+            <input type="hidden" name="id_usuario" value="<?= htmlspecialchars($idUsuario) ?>">
 
-      <label for="razao_social">Razão Social *</label>
-      <input type="text" id="razao_social" name="razao_social" required
-           value="<?= htmlspecialchars($usuario['razao_social']) ?>">
+            <label for="cnpj">CNPJ</label>
+            <input type="text" id="cnpj" name="cnpj" maxlength="18" 
+                value="<?= htmlspecialchars($usuario['cnpj']) ?>">
 
-      <label for="email">E-mail *</label>
-      <input type="email" id="email" name="email" required
-           value="<?= htmlspecialchars($usuario['email']) ?>">
+            <label for="razao_social">Razão Social *</label>
+            <input type="text" id="razao_social" name="razao_social" required
+                value="<?= htmlspecialchars($usuario['razao_social']) ?>">
 
-      <label for="telefone">Telefone</label>
-      <input type="text" id="telefone" name="telefone"
-           value="<?= htmlspecialchars($usuario['telefone']) ?>">
+            <label for="inscricao_estadual">Inscrição Estadual</label>
+            <input type="text" id="inscricao_estadual" name="inscricao_estadual" maxlength="20"
+                value="<?= htmlspecialchars($usuario['inscricao_estadual']) ?>">
 
-      <button type="submit" class="btn btn-primary">Atualizar Dados</button>
-      <a href="orcamento.php" class="btn btn-primary right-button">Ir para Orçamento</a><br><br>
-      <a href="minhas-operacoes.php" class="btn btn-secondary">Ver Histórico de Operações</a>
-    </form>
+            <label for="contato">Contato</label>
+            <input type="text" id="contato" name="contato" maxlength="100"
+                value="<?= htmlspecialchars($usuario['contato']) ?>">
 
+            <label for="telefone">Telefone</label>
+            <input type="text" id="telefone" name="telefone" maxlength="20"
+                value="<?= htmlspecialchars($usuario['telefone']) ?>">
+
+            <label for="email">E-mail *</label>
+            <input type="email" id="email" name="email" required maxlength="100"
+                value="<?= htmlspecialchars($usuario['email']) ?>">
+
+            <label for="cep">CEP</label>
+            <input type="text" id="cep" name="cep" maxlength="10"
+                value="<?= htmlspecialchars($usuario['cep']) ?>">
+
+            <label for="logradouro">Logradouro</label>
+            <input type="text" id="logradouro" name="logradouro" maxlength="100"
+                value="<?= htmlspecialchars($usuario['logradouro']) ?>">
+
+            <label for="numero">Número</label>
+            <input type="number" id="numero" name="numero" min="0"
+                value="<?= htmlspecialchars($usuario['numero']) ?>">
+
+            <label for="complemento">Complemento</label>
+            <input type="text" id="complemento" name="complemento" maxlength="50"
+                value="<?= htmlspecialchars($usuario['complemento']) ?>">
+
+            <label for="bairro">Bairro</label>
+            <input type="text" id="bairro" name="bairro" maxlength="50"
+                value="<?= htmlspecialchars($usuario['bairro']) ?>">
+
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" name="cidade" maxlength="50"
+                value="<?= htmlspecialchars($usuario['cidade']) ?>">
+
+            <label for="estado">Estado</label>
+            <input type="text" id="estado" name="estado" maxlength="2"
+                value="<?= htmlspecialchars($usuario['estado']) ?>">
+
+            <label for="login">Login</label>
+            <input type="text" id="login" name="login" readonly
+                value="<?= htmlspecialchars($usuario['login']) ?>">
+
+            <button type="submit" class="btn btn-primary">Atualizar Dados</button>
+        </form>
     </div>
 
 </body>
