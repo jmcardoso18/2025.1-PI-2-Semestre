@@ -151,7 +151,7 @@ $operacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p>Você ainda não fez nenhuma operação.</p>
         <?php endif; ?>
 
-        <a href="area-cliente.php" class="btn">Voltar ao Perfil</a>
+        <button type="button" class="btn btn-secondary" onclick="history.back()">Voltar</button>
     </div>
 </body>
 </html>

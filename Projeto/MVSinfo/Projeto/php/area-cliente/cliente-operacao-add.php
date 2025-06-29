@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="d-flex gap-2">
       <button type="submit" class="btn btn-primary">Enviar</button>
-      <a href="../cliente/area-cliente.php" class="btn btn-secondary">Voltar</a>
+      <button type="button" class="btn btn-secondary" onclick="history.back()">Voltar</button>
     </div>
   </form>
 </main>
