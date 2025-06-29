@@ -3,7 +3,7 @@ session_start();
 require_once '../../Conexao.php';
 
 // Verifica se é admin
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 0) {
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 3) {
     header('Location: ../../usuario/login_view.php');
     exit;
 }

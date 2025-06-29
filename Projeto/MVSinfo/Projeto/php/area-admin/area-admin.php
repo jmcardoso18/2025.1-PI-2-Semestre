@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 0) { 
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 3) { 
     
     header('Location: ../usuario/login_view.php');
     exit;
@@ -115,7 +115,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
             <a href="./fornecedores/admin-fornecedores.php" class="menu-item">Fornecedores</a>
             <a href="./produtos/produtos.php" class="menu-item">Produtos</a>
             <a href="./categorias/categorias.php" class="menu-item">Categorias</a>
-            <a href="admin-orcamentos.php" class="menu-item">Orçamentos</a>
+            <a href="./transportadora/admin-transportadora-list.php" class="menu-item">Transportadora</a>
             <a href="admin-compras.php" class="menu-item">Compras</a>
             <a href="admin-cotações.php" class="menu-item">Cotações</a>
             <a href="admin-vendas.php" class="menu-item">Vendas</a>

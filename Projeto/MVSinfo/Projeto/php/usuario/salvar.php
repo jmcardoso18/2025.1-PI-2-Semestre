@@ -23,7 +23,7 @@ if ($senha !== $confirmarSenha) {
     die('As senhas não conferem.');
 }
 
-if (!in_array($tipoUsuarioId, [0, 1, 2])) {
+if (!in_array($tipoUsuarioId, [1, 2, 3])) {
     die('Tipo de usuário inválido.');
 }
 

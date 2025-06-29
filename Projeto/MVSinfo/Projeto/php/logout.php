@@ -58,7 +58,7 @@ session_destroy();
     </header>
 
     <div class="logout-box">
-        <img src="imagem/statuslogo.jpeg" alt="Logo MVS Info" class="img-fluid">
+        <img src="../img/statuslogo.jpeg" alt="Logo MVS Info" class="img-fluid">
         <h3 class="text-primary mt-3">Você saiu com sucesso!</h3>
         <p>Obrigado por utilizar nosso sistema.</p>
         <a href="./login/login.php" class="btn btn-primary mt-3">Voltar para o Login</a>
