@@ -8,21 +8,21 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 }
 
 $conexao = new conexao();
-$pdo = $conexao->getPDO();
+$pdo = $conexao->getPdo();
 
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) {
-    header('Location: admin-fornecedores.php');
+    header('Location: admin_clientes.php');
     exit;
 }
 
 // Busca dados atuais
-$stmt = $pdo->prepare("SELECT * FROM usuario WHERE id_usuario = :id AND tipo_usuario = 2");
+$stmt = $pdo->prepare("SELECT * FROM usuario WHERE id_usuario = :id AND tipo_usuario = 1");
 $stmt->execute([':id' => $id]);
-$fornecedor = $stmt->fetch(PDO::FETCH_ASSOC);
+$cliente = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$fornecedor) {
-    header('Location: admin-fornecedores.php');
+if (!$cliente) {
+    header('Location: admin_clientes.php');
     exit;
 }
 
@@ -31,7 +31,6 @@ $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $razao_social = trim($_POST['razao_social'] ?? '');
-    $nome_fantasia = trim($_POST['nome_fantasia'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $telefone = trim($_POST['telefone'] ?? '');
     $login = trim($_POST['login'] ?? '');
@@ -50,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $sql = "UPDATE usuario SET 
             razao_social = :razao_social,
-            nome_fantasia = :nome_fantasia,
             email = :email,
             telefone = :telefone,
             login = :login
@@ -59,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':razao_social' => $razao_social,
-            ':nome_fantasia' => $nome_fantasia,
             ':email' => $email,
             ':telefone' => $telefone,
             ':login' => $login,
@@ -68,10 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $success = true;
 
-        // Atualiza a variável fornecedor para refletir as mudanças no formulário
+    
         $fornecedor = array_merge($fornecedor, [
             'razao_social' => $razao_social,
-            'nome_fantasia' => $nome_fantasia,
             'email' => $email,
             'telefone' => $telefone,
             'login' => $login,
@@ -85,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Editar fornecedor - Área Admin</title>
+    <title>Editar Cliente - Área Admin</title>
     <style>
         body {
             background-color: #f5f7fa;
@@ -189,11 +185,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <header>
-    Área Administrador - Fornecedores
+    Área Administrador - Fornecedor
 </header>
 
 <main>
-    <h2>Editar Fornecedor</h2>
+    <h2>Editar Cliente</h2>
 
     <?php if (!empty($errors)): ?>
         <div class="errors">
@@ -213,9 +209,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label for="razao_social">Razão Social *</label>
     <input type="text" id="razao_social" name="razao_social" required value="<?= htmlspecialchars($fornecedor['razao_social']) ?>" />
 
-    <label for="nome_fantasia">Nome Fantasia</label>
-    <input type="text" id="nome_fantasia" name="nome_fantasia" value="<?= htmlspecialchars($fornecedor['nome_fantasia']) ?>" />
-
     <label for="email">E-mail *</label>
     <input type="email" id="email" name="email" required value="<?= htmlspecialchars($fornecedor['email']) ?>" />
 
@@ -227,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div style="display: flex; gap: 10px; margin-top: 1rem;">
         <button type="submit" class="btn" style="flex: 1;">Atualizar Dados</button>
-        <a href="admin-fornecedores.php" class="btn" style="flex: 1; text-align: center; line-height: 38px; text-decoration: none; color: white; border-radius: 6px;">Voltar</a>
+        <a href="admin-clientes.php" class="btn" style="flex: 1; text-align: center; line-height: 38px; text-decoration: none; color: white; border-radius: 6px;">Voltar</a>
     </div>
 </form>
 </main>

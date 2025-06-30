@@ -19,40 +19,104 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-    <style>
-        body {
-            background-color: #f4f6f8;
-        }
+  <style>
+    /* Variáveis CSS */
+    :root {
+        --azul-principal: #1976f2;
+        --azul-escuro: #1565c0;
+        --fundo-cinza: #f4f6f8;
+        --branco: #ffffff;
+        --texto: #333333;
+        --borda-arredondada: 6px;
+        --sombra: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilos Base */
+    body {
+        background-color: var(--fundo-cinza);
+        font-family: 'Segoe UI', Arial, sans-serif;
+        color: var(--texto);
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Cabeçalho - Layout Flexível */
+    header {
+        background-color: var(--azul-principal);
+        color: var(--branco);
+        padding: 1rem 2rem;
+        margin-bottom: 20px;
+        box-shadow: var(--sombra);
+        display: flex;
+        justify-content: space-between; /* Separa título e nav */
+        align-items: center; /* Alinha verticalmente */
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    /* Navbar no canto direito */
+    header nav {
+        display: flex;
+        gap: 15px;
+    }
+
+    header nav a {
+        color: var(--branco);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+    }
+
+    header nav a:hover {
+        text-decoration: underline;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Container Principal (MANTIDO IGUAL) */
+    .container {
+        background-color: var(--branco);
+        padding: 2rem;
+        border-radius: var(--borda-arredondada);
+        box-shadow: var(--sombra);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* Títulos (MANTIDO IGUAL) */
+    h2 {
+        color: var(--azul-principal);
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    h3 {
+        color: var(--azul-principal);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #eee;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
         header {
-            background-color: #1976f2;
-            color: white;
-            padding: 1rem 2rem;
-            margin-bottom: 20px;
+            flex-direction: column;
+            text-align: center;
+            padding: 1rem;
         }
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
+        
+        header nav {
+            margin-top: 1rem;
+            justify-content: center;
         }
-        nav a {
-            color: white;
-            margin-left: 1rem;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            max-width: 900px;
-        }
-        h2, h3 {
-            color: #1976f2;
-            margin-bottom: 20px;
-        }
-        .form-section {
-            margin-bottom: 30px;
-        }
-    </style>
+    }
+</style>
 </head>
 
 <body>
@@ -103,10 +167,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
                     <input type="text" class="form-control" id="razaoSocial" name="razao_social">
                 </div>
                 <div class="col-md-6">
-                    <label for="nomeFantasia" class="form-label">Nome Fantasia</label>
-                    <input type="text" class="form-control" id="nomeFantasia" name="nome_fantasia">
-                </div>
-                <div class="col-md-6">
                     <label for="cnpj_empresa" class="form-label">CNPJ</label>
                     <input type="text" class="form-control" id="cnpj_empresa" name="cnpj">
                 </div>
@@ -114,7 +174,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
                     <label for="inscricaoEstadual" class="form-label">Inscrição Estadual</label>
                     <input type="text" class="form-control" id="inscricaoEstadual" name="inscricao_estadual">
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="nomeResponsavel" class="form-label">Nome do Responsável</label>
                     <input type="text" class="form-control" id="nomeResponsavel" name="contato">
                 </div>

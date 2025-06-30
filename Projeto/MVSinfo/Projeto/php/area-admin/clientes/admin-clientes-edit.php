@@ -31,7 +31,6 @@ $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $razao_social = trim($_POST['razao_social'] ?? '');
-    $nome_fantasia = trim($_POST['nome_fantasia'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $telefone = trim($_POST['telefone'] ?? '');
     $login = trim($_POST['login'] ?? '');
@@ -50,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $sql = "UPDATE usuario SET 
             razao_social = :razao_social,
-            nome_fantasia = :nome_fantasia,
             email = :email,
             telefone = :telefone,
             login = :login
@@ -59,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':razao_social' => $razao_social,
-            ':nome_fantasia' => $nome_fantasia,
             ':email' => $email,
             ':telefone' => $telefone,
             ':login' => $login,
@@ -71,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Atualiza a variável cliente para refletir as mudanças no formulário
         $cliente = array_merge($cliente, [
             'razao_social' => $razao_social,
-            'nome_fantasia' => $nome_fantasia,
             'email' => $email,
             'telefone' => $telefone,
             'login' => $login,
@@ -212,9 +208,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="POST" action="">
     <label for="razao_social">Razão Social *</label>
     <input type="text" id="razao_social" name="razao_social" required value="<?= htmlspecialchars($cliente['razao_social']) ?>" />
-
-    <label for="nome_fantasia">Nome Fantasia</label>
-    <input type="text" id="nome_fantasia" name="nome_fantasia" value="<?= htmlspecialchars($cliente['nome_fantasia']) ?>" />
 
     <label for="email">E-mail *</label>
     <input type="email" id="email" name="email" required value="<?= htmlspecialchars($cliente['email']) ?>" />

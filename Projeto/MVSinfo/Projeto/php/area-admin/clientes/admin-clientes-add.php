@@ -103,10 +103,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
                     <input type="text" class="form-control" id="razaoSocial" name="razao_social">
                 </div>
                 <div class="col-md-6">
-                    <label for="nomeFantasia" class="form-label">Nome Fantasia</label>
-                    <input type="text" class="form-control" id="nomeFantasia" name="nome_fantasia">
-                </div>
-                <div class="col-md-6">
                     <label for="cnpj_empresa" class="form-label">CNPJ</label>
                     <input type="text" class="form-control" id="cnpj_empresa" name="cnpj">
                 </div>
@@ -114,7 +110,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
                     <label for="inscricaoEstadual" class="form-label">Inscrição Estadual</label>
                     <input type="text" class="form-control" id="inscricaoEstadual" name="inscricao_estadual">
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="nomeResponsavel" class="form-label">Nome do Responsável</label>
                     <input type="text" class="form-control" id="nomeResponsavel" name="contato">
                 </div>
