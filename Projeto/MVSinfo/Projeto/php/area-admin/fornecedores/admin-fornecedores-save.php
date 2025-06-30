@@ -9,18 +9,16 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conexao = new conexao();
-    $pdo = $conexao->getPDO();
+    $pdo = $conexao->getPdo();
 
-    // Captura de campos
+    // Captura de campos do formulário
     $login = trim($_POST['login'] ?? '');
     $senha = $_POST['senha'] ?? '';
     $confirmarSenha = $_POST['confirmarSenha'] ?? '';
 
-    // Dados extras
     $telefone = $_POST['telefone'] ?? '';
     $email = $_POST['email'] ?? '';
     $razao_social = $_POST['razao_social'] ?? '';
-    $nome_fantasia = $_POST['nome_fantasia'] ?? '';
     $cnpj = $_POST['cnpj'] ?? '';
     $inscricao_estadual = $_POST['inscricao_estadual'] ?? '';
     $contato = $_POST['contato'] ?? '';
@@ -42,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $sql = "INSERT INTO usuario 
-        (login, senha, tipo_usuario, telefone, email, razao_social, nome_fantasia, cnpj, inscricao_estadual, contato, cep, logradouro, numero, complemento, bairro, cidade, estado)
-        VALUES
-        (:login, :senha, 2, :telefone, :email, :razao_social, :nome_fantasia, :cnpj, :inscricao_estadual, :contato, :cep, :logradouro, :numero, :complemento, :bairro, :cidade, :estado)";
+            (login, senha, tipo_usuario, telefone, email, razao_social, cnpj, inscricao_estadual, contato, cep, logradouro, numero, complemento, bairro, cidade, estado)
+            VALUES
+            (:login, :senha, 2, :telefone, :email, :razao_social, :cnpj, :inscricao_estadual, :contato, :cep, :logradouro, :numero, :complemento, :bairro, :cidade, :estado)";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -53,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':telefone' => $telefone,
             ':email' => $email,
             ':razao_social' => $razao_social,
-            ':nome_fantasia' => $nome_fantasia,
             ':cnpj' => $cnpj,
             ':inscricao_estadual' => $inscricao_estadual,
             ':contato' => $contato,
@@ -66,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':estado' => $estado
         ]);
 
-        header('Location: admin-fornecedor.php?status=adicionado');
+        header('Location: admin-fornecedores.php?status=adicionado');
         exit;
 
     } catch (PDOException $e) {
@@ -76,4 +73,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "Método inválido.";
     exit;
 }
-?>

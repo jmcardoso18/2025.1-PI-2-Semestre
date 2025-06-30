@@ -2,7 +2,12 @@
 require_once '../../Conexao.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $descricao = trim($_POST['descricao']);
+    $descricao = trim($_POST['descricao'] ?? '');
+
+    if (empty($descricao)) {
+        echo "O campo descrição é obrigatório.";
+        exit;
+    }
 
     try {
         $conexao = new Conexao();
@@ -13,12 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':descricao', $descricao);
         $stmt->execute();
 
-        header('Location: categorias.php');
+        header('Location: categorias.php?status=sucesso');
         exit;
     } catch (PDOException $e) {
-        echo "Erro ao salvar: " . $e->getMessage();
+        echo "Erro ao salvar categoria: " . $e->getMessage();
+        exit;
     }
 } else {
     echo "Método inválido.";
+    exit;
 }
-?>

@@ -10,7 +10,7 @@ if ($id === false || $id === null) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM categoria WHERE cod_categoria = :id");
+$stmt = $pdo->prepare("SELECT * FROM categoria WHERE id_categoria = :id");
 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
 $categoria = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -80,14 +80,13 @@ if (!$categoria) {
         .btn-primary:hover {
             background-color: #155dc1;
         }
-        
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Editar Categoria</h2>
         <form action="categorias-update.php" method="POST">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($categoria['cod_categoria']) ?>">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($categoria['id_categoria']) ?>">
 
             <label for="descricao">Nome da Categoria:</label>
             <input type="text" name="descricao" id="descricao" required value="<?= htmlspecialchars($categoria['descricao']) ?>">

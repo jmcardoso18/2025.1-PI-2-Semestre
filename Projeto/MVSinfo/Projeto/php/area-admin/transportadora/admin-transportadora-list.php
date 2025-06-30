@@ -28,10 +28,13 @@ $lista = $pdo->query("SELECT * FROM transportadora ORDER BY descricao ASC")->fet
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-  <header class="bg-primary text-white p-3">
-    <h2 class="text-center">Transportadoras Cadastradas</h2>
+  <header class="bg-primary text-white p-3 mb-4">
+    <h2 class="text-center mb-3">Transportadoras Cadastradas</h2>
+    <div class="text-center">
+      <a href="../area-admin.php" class="btn btn-primary">Voltar ao Menu Principal</a>
+    </div>
   </header>
-  <main class="container mt-4">
+  <main class="container">
     <?= $mensagem ?>
     <div class="mb-3">
       <a href="admin-transportadora-add.php" class="btn btn-success">Nova Transportadora</a>

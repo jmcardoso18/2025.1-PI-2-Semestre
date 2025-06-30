@@ -8,10 +8,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 }
 
 $conexao = new conexao();
-$pdo = $conexao->getPDO();
+$pdo = $conexao->getPdo();
 
 // Buscar fornecedores (tipo_usuario = 2)
-$sql = "SELECT id_usuario, razao_social, nome_fantasia, email, telefone FROM usuario WHERE tipo_usuario = 2 ORDER BY razao_social ASC";
+$sql = "SELECT id_usuario, razao_social, email, telefone FROM usuario WHERE tipo_usuario = 2 ORDER BY razao_social ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -24,7 +24,7 @@ switch ($status) {
     case 'excluido':
         $mensagem = '<p class="msg sucesso">✅ Fornecedor excluído com sucesso!</p>';
         break;
-    case 'cliente_nao_encontrado':
+    case 'fornecedor_nao_encontrado':
         $mensagem = '<p class="msg erro">❌ Fornecedor não encontrado.</p>';
         break;
     case 'erro_id':
@@ -40,10 +40,9 @@ switch ($status) {
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fornecedor - Área Administrador</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fornecedores - Área Administrador</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,6 +68,7 @@ switch ($status) {
             color: white;
             text-decoration: none;
             font-weight: bold;
+            margin-left: 15px;
         }
 
         nav a:hover {
@@ -147,6 +147,12 @@ switch ($status) {
         .add-btn {
             background-color: #28a745;
             margin-bottom: 1rem;
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
         }
 
         .add-btn:hover {
@@ -161,52 +167,50 @@ switch ($status) {
 
 <body>
     <header>
-        <h1>Área Administrador - Fornecedor</h1>
+        <h1>Área Administrador - Fornecedores</h1>
         <nav>
-            <a href="../area-admin.php"> Menu</a>
-            <a href="admin-fornecedores-add.php"> Adicionar fornecedor</a>
-            <a href="../../logout.php"> Sair</a>
+            <a href="../area-admin.php">Menu</a>
+            <a href="admin-fornecedores-add.php">Adicionar Fornecedor</a>
+            <a href="../../logout.php">Sair</a>
         </nav>
     </header>
 
     <main>
-        <h2>Lista de fornecedor</h2>
+        <h2>Lista de Fornecedores</h2>
 
         <?php if ($mensagem): ?>
             <?= $mensagem ?>
         <?php endif; ?>
 
-    <?php if (count($fornecedores) > 0): ?>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Razão Social</th>
-                <th>Nome Fantasia</th>
-                <th>Email</th>
-                <th>Telefone</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($fornecedores as $fornecedor): ?>
-                <tr>
-                    <td><?= htmlspecialchars($fornecedor['id_usuario']) ?></td>
-                    <td><?= htmlspecialchars($fornecedor['razao_social']) ?></td>
-                    <td><?= htmlspecialchars($fornecedor['nome_fantasia']) ?></td>
-                    <td><?= htmlspecialchars($fornecedor['email']) ?></td>
-                    <td><?= htmlspecialchars($fornecedor['telefone']) ?></td>
-                    <td class="actions">
-                        <a href="admin-fornecedores-edit.php?id=<?= $fornecedor['id_usuario'] ?>" class="btn">Editar</a>
-                        <a href="admin-fornecedores-delete.php?id=<?= $fornecedor['id_usuario'] ?>" class="btn" onclick="return confirm('Confirma exclusão deste fornecedor?')">Excluir</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <p>Nenhum fornecedor cadastrado.</p>
-<?php endif; ?>
+        <?php if (count($fornecedores) > 0): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Razão Social</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($fornecedores as $fornecedor): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($fornecedor['id_usuario']) ?></td>
+                            <td><?= htmlspecialchars($fornecedor['razao_social']) ?></td>
+                            <td><?= htmlspecialchars($fornecedor['email']) ?></td>
+                            <td><?= htmlspecialchars($fornecedor['telefone']) ?></td>
+                            <td class="actions">
+                                <a href="admin-fornecedores-edit.php?id=<?= $fornecedor['id_usuario'] ?>" class="btn">Editar</a>
+                                <a href="admin-fornecedores-delete.php?id=<?= $fornecedor['id_usuario'] ?>" class="btn" onclick="return confirm('Confirma exclusão deste fornecedor?')">Excluir</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>Nenhum fornecedor cadastrado.</p>
+        <?php endif; ?>
     </main>
 </body>
 

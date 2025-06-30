@@ -31,7 +31,6 @@ $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $razao_social = trim($_POST['razao_social'] ?? '');
-    $nome_fantasia = trim($_POST['nome_fantasia'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $telefone = trim($_POST['telefone'] ?? '');
     $login = trim($_POST['login'] ?? '');
@@ -50,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $sql = "UPDATE usuario SET 
             razao_social = :razao_social,
-            nome_fantasia = :nome_fantasia,
             email = :email,
             telefone = :telefone,
             login = :login
@@ -59,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':razao_social' => $razao_social,
-            ':nome_fantasia' => $nome_fantasia,
             ':email' => $email,
             ':telefone' => $telefone,
             ':login' => $login,
@@ -68,10 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $success = true;
 
-        // Atualiza a variável fornecedor para refletir as mudanças no formulário
+        // Atualiza os dados no array para manter no formulário
         $fornecedor = array_merge($fornecedor, [
             'razao_social' => $razao_social,
-            'nome_fantasia' => $nome_fantasia,
             'email' => $email,
             'telefone' => $telefone,
             'login' => $login,
@@ -85,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Editar fornecedor - Área Admin</title>
+    <title>Editar Fornecedor - Área Admin</title>
     <style>
         body {
             background-color: #f5f7fa;
@@ -210,26 +206,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <form method="POST" action="">
-    <label for="razao_social">Razão Social *</label>
-    <input type="text" id="razao_social" name="razao_social" required value="<?= htmlspecialchars($fornecedor['razao_social']) ?>" />
+        <label for="razao_social">Razão Social *</label>
+        <input type="text" id="razao_social" name="razao_social" required value="<?= htmlspecialchars($fornecedor['razao_social']) ?>" />
 
-    <label for="nome_fantasia">Nome Fantasia</label>
-    <input type="text" id="nome_fantasia" name="nome_fantasia" value="<?= htmlspecialchars($fornecedor['nome_fantasia']) ?>" />
+        <label for="email">E-mail *</label>
+        <input type="email" id="email" name="email" required value="<?= htmlspecialchars($fornecedor['email']) ?>" />
 
-    <label for="email">E-mail *</label>
-    <input type="email" id="email" name="email" required value="<?= htmlspecialchars($fornecedor['email']) ?>" />
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" name="telefone" value="<?= htmlspecialchars($fornecedor['telefone']) ?>" />
 
-    <label for="telefone">Telefone</label>
-    <input type="text" id="telefone" name="telefone" value="<?= htmlspecialchars($fornecedor['telefone']) ?>" />
+        <label for="login">Login *</label>
+        <input type="text" id="login" name="login" required value="<?= htmlspecialchars($fornecedor['login']) ?>" />
 
-    <label for="login">Login *</label>
-    <input type="text" id="login" name="login" required value="<?= htmlspecialchars($fornecedor['login']) ?>" />
-
-    <div style="display: flex; gap: 10px; margin-top: 1rem;">
-        <button type="submit" class="btn" style="flex: 1;">Atualizar Dados</button>
-        <a href="admin-fornecedores.php" class="btn" style="flex: 1; text-align: center; line-height: 38px; text-decoration: none; color: white; border-radius: 6px;">Voltar</a>
-    </div>
-</form>
+        <div style="display: flex; gap: 10px; margin-top: 1rem;">
+            <button type="submit" class="btn" style="flex: 1;">Atualizar Dados</button>
+            <a href="admin-fornecedores.php" class="btn" style="flex: 1; text-align: center; line-height: 38px; text-decoration: none; color: white; border-radius: 6px;">Voltar</a>
+        </div>
+    </form>
 </main>
 </body>
 </html>

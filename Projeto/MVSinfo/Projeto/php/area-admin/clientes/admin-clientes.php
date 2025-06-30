@@ -11,7 +11,7 @@ $conexao = new conexao();
 $pdo = $conexao->getPdo();
 
 // Buscar clientes (tipo_usuario = 1)
-$sql = "SELECT id_usuario, razao_social, nome_fantasia, email, telefone FROM usuario WHERE tipo_usuario = 1 ORDER BY razao_social ASC";
+$sql = "SELECT id_usuario, razao_social, email, telefone FROM usuario WHERE tipo_usuario = 1 ORDER BY razao_social ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -35,7 +35,6 @@ switch ($status) {
         break;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -44,6 +43,7 @@ switch ($status) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Clientes - Área Administrador</title>
     <link rel="stylesheet" href="../css/styles.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,8 +67,9 @@ switch ($status) {
 
         nav a {
             color: white;
+            margin-left: 1rem;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         nav a:hover {
@@ -144,15 +145,6 @@ switch ($status) {
             background-color: #155dc1;
         }
 
-        .add-btn {
-            background-color: #28a745;
-            margin-bottom: 1rem;
-        }
-
-        .add-btn:hover {
-            background-color: #218838;
-        }
-
         .actions a {
             margin-right: 6px;
         }
@@ -163,9 +155,9 @@ switch ($status) {
     <header>
         <h1>Área Administrador - Clientes</h1>
         <nav>
-            <a href="../area-admin.php"> Menu</a>
-            <a href="admin-clientes-add.php"> Adicionar Cliente</a>
-            <a href="../../logout.php"> Sair</a>
+            <a href="../area-admin.php">Menu</a>
+            <a href="admin-clientes-add.php">Adicionar Cliente</a>
+            <a href="../../logout.php">Sair</a>
         </nav>
     </header>
 
@@ -182,7 +174,6 @@ switch ($status) {
                     <tr>
                         <th>ID</th>
                         <th>Razão Social</th>
-                        <th>Nome Fantasia</th>
                         <th>Email</th>
                         <th>Telefone</th>
                         <th>Ações</th>
@@ -193,12 +184,11 @@ switch ($status) {
                         <tr>
                             <td><?= htmlspecialchars($cliente['id_usuario']) ?></td>
                             <td><?= htmlspecialchars($cliente['razao_social']) ?></td>
-                            <td><?= htmlspecialchars($cliente['nome_fantasia']) ?></td>
                             <td><?= htmlspecialchars($cliente['email']) ?></td>
                             <td><?= htmlspecialchars($cliente['telefone']) ?></td>
                             <td class="actions">
-                                <a href="admin-clientes-edit.php?id=<?= $cliente['id_usuario'] ?>" class="btn"> Editar</a>
-                                <a href="admin-clientes-delete.php?id=<?= $cliente['id_usuario'] ?>" class="btn" onclick="return confirm('Confirma exclusão deste cliente?')"> Excluir</a>
+                                <a href="admin-clientes-edit.php?id=<?= $cliente['id_usuario'] ?>" class="btn">Editar</a>
+                                <a href="admin-clientes-delete.php?id=<?= $cliente['id_usuario'] ?>" class="btn" onclick="return confirm('Confirma exclusão deste cliente?')">Excluir</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -57,7 +57,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 
 <body>
     <header>
-        <h1>Área Administrador - Adicionar fornecedor</h1>
+        <h1>Área Administrador - Adicionar Fornecedor</h1>
         <nav>
             <a href="area-admin.php">Menu</a>
             <a href="admin-fornecedores.php">Fornecedor</a>
@@ -69,7 +69,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
         <h2 class="text-center">Cadastro de novo fornecedor</h2>
 
         <form id="cadastroForm" action="admin-fornecedores-save.php" method="POST">
-            <input type="hidden" name="tipoUsuario" value="2">
+            <input type="hidden" name="tipo_usuario" value="2">
 
             <!-- Dados de Login -->
             <div class="row g-3 form-section">
@@ -101,10 +101,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
                 <div class="col-md-6">
                     <label for="razaoSocial" class="form-label">Razão Social</label>
                     <input type="text" class="form-control" id="razaoSocial" name="razao_social">
-                </div>
-                <div class="col-md-6">
-                    <label for="nomeFantasia" class="form-label">Nome Fantasia</label>
-                    <input type="text" class="form-control" id="nomeFantasia" name="nome_fantasia">
                 </div>
                 <div class="col-md-6">
                     <label for="cnpj_empresa" class="form-label">CNPJ</label>
@@ -149,13 +145,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
                 </div>
                 <div class="col-md-2">
                     <label for="estado" class="form-label">Estado</label>
-                    <input type="text" class="form-control" id="estado" name="estado">
+                    <input type="text" class="form-control" id="estado" name="estado" maxlength="2">
                 </div>
             </div>
 
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary px-4">Salvar Fornecedor</button>
-                <button type="button" class="btn btn-primary ms-2 px-4" onclick="history.back()">Voltar</button>
+                <button type="button" class="btn btn-primary px-4" onclick="history.back()">Voltar</button>
             </div>
         </form>
     </div>

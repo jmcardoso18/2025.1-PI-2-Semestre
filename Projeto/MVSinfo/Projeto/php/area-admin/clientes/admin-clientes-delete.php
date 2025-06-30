@@ -12,12 +12,12 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($id <= 0) {
-    header('Location: area-admin.php?status=erro_id');
+    header('Location: admin-clientes.php?status=erro_id');
     exit;
 }
 
 $conexao = new conexao();
-$pdo = $conexao->getPDO();
+$pdo = $conexao->getPdo();  // corrigido getPdo
 
 // Excluir cliente
 try {
@@ -25,15 +25,15 @@ try {
     $stmt->execute([':id' => $id]);
 
     if ($stmt->rowCount() > 0) {
-        header('Location: area-admin.php?status=excluido');
+        header('Location: admin-clientes.php?status=excluido');
         exit;
     } else {
-        header('Location: area-admin.php?status=cliente_nao_encontrado');
+        header('Location: admin-clientes.php?status=cliente_nao_encontrado');
         exit;
     }
 
 } catch (PDOException $e) {
-    header('Location: area-admin.php?status=erro_delete');
+    header('Location: admin-clientes.php?status=erro_delete');
     exit;
 }
 ?>
