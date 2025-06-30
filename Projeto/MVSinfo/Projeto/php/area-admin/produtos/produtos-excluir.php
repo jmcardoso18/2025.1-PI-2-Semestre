@@ -7,18 +7,19 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
     exit;
 }
 
+// Validação do ID
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) {
     header('Location: produtos.php?status=erro_id');
     exit;
 }
 
-$conexao = new conexao();
+$conexao = new Conexao();
 $pdo = $conexao->getPDO();
 
-$sql = "DELETE FROM produtos WHERE codigo_produto = :id";
+$sql = "DELETE FROM produtos WHERE id_produto = :id";
 $stmt = $pdo->prepare($sql);
-$stmt->bindValue(':id', $id);
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
 if ($stmt->execute()) {
     header('Location: produtos.php?status=excluido');

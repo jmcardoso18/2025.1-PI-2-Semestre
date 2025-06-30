@@ -111,19 +111,17 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
     <main>
         <h2>Menu Principal</h2>
         <div class="menu-grid">
-            <a href="./clientes/admin-clientes.php" class="menu-item">Clientes</a>
-            <a href="./fornecedores/admin-fornecedores.php" class="menu-item">Fornecedores</a>
-            <a href="./produtos/produtos.php" class="menu-item">Produtos</a>
-            <a href="./categorias/categorias.php" class="menu-item">Categorias</a>
-            <a href="./transportadora/admin-transportadora-list.php" class="menu-item">Transportadora</a>
-            <a href="admin-compras.php" class="menu-item">Compras</a>
-            <a href="admin-cotações.php" class="menu-item">Cotações</a>
-            <a href="admin-vendas.php" class="menu-item">Vendas</a>
-            <a href="admin-relatorios.php" class="menu-item">Relatórios</a>
-            <a href="frete.html" class="menu-item">Frete</a>
-            <a href="relatorios.html" class="menu-item">Relatorios</a>
-            <a href="vendas.html" class="menu-item">Vendas</a>
-        </div>
+          <a href="./clientes/admin-clientes.php" class="menu-item">Clientes</a>
+          <a href="./fornecedores/admin-fornecedores.php" class="menu-item">Fornecedores</a>
+          <a href="./produtos/produtos.php" class="menu-item">Produtos</a>
+          <a href="./categorias/categorias.php" class="menu-item">Categorias</a>
+          <a href="./transportadora/admin-transportadora-list.php" class="menu-item">Transportadoras</a>
+          <a href="./operações/admin-operacoes.php?tipo=compra" class="menu-item">Compras</a>
+          <a href="./operações/admin-operacoes.php?tipo=cotacao" class="menu-item">Cotações</a>
+          <a href="./operações/admin-operacoes.php?tipo=venda" class="menu-item">Vendas</a>
+          <a href="admin-relatorios.php" class="menu-item">Relatórios</a>
+      </div>
+
     </main>
 </body>
 

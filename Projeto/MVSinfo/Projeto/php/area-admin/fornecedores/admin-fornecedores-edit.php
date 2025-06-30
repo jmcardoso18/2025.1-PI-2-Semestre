@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div style="display: flex; gap: 10px; margin-top: 1rem;">
         <button type="submit" class="btn" style="flex: 1;">Atualizar Dados</button>
-        <a href="admin-clientes.php" class="btn" style="flex: 1; text-align: center; line-height: 38px; text-decoration: none; color: white; border-radius: 6px;">Voltar</a>
+        <a href="admin-fornecedores.php" class="btn" style="flex: 1; text-align: center; line-height: 38px; text-decoration: none; color: white; border-radius: 6px;">Voltar</a>
     </div>
 </form>
 </main>

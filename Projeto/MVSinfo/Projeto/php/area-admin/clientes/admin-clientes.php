@@ -44,6 +44,7 @@ switch ($status) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes - Área Administrador</title>
     <link rel="stylesheet" href="../css/styles.css">
+
     <style>
         /* Estrutura Principal */
         body {
@@ -81,6 +82,7 @@ switch ($status) {
         
         nav a {
             color: white;
+            margin-left: 1rem;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;

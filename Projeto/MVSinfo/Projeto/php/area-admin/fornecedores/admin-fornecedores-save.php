@@ -10,8 +10,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conexao = new conexao();
     $pdo = $conexao->getPdo();
+    $pdo = $conexao->getPdo();
 
-    // Captura de campos
+    // Captura de campos do formulário
     $login = trim($_POST['login'] ?? '');
     $senha = $_POST['senha'] ?? '';
     $confirmarSenha = $_POST['confirmarSenha'] ?? '';
@@ -48,6 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([
             ':cnpj' => $cnpj,
             ':razao_social' => $razao_social,
+            ':nome_fantasia' => $nome_fantasia,
+            ':cnpj' => $cnpj,
             ':inscricao_estadual' => $inscricao_estadual,
             ':contato' => $contato,
             ':telefone' => $telefone,
@@ -64,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':senha' => $senhaHash
         ]);
 
-        header('Location: admin-clientes.php?status=adicionado');
+        header('Location: admin-fornecedores.php?status=adicionado');
         exit;
 
     } catch (PDOException $e) {

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../../conexao.php';
+require_once '../../Conexao.php';
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 3) {
     header('Location: ../usuario/login_view.php');
@@ -11,10 +11,9 @@ try {
     $conexao = new Conexao();
     $pdo = $conexao->getPDO();
 
-    // Consulta com JOIN para trazer a descrição da categoria
-    $sql = "SELECT p.codigo_produto, p.descricao, c.descricao AS categoria_nome, p.ncm, p.marca, p.unidade_medida, p.preco_custo_unidade
+    $sql = "SELECT p.id_produto, p.descricao, c.descricao AS categoria_nome, p.ncm, p.marca, p.unidade_medida
             FROM produtos p
-            LEFT JOIN categoria c ON p.cod_categoria = c.cod_categoria
+            LEFT JOIN categoria c ON p.fk_categoria_id_categoria = c.id_categoria
             ORDER BY p.descricao ASC";
 
     $stmt = $pdo->prepare($sql);
@@ -32,27 +31,74 @@ try {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Produtos</title>
+<title>Produtos - Área Administrador</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 <style>
-    body { background-color: #f5f7fa; font-family: Arial, sans-serif; }
-    .container { max-width: 1000px; margin: 50px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
-    h2 { color: #1976f2; text-align: center; margin-bottom: 20px;}
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
-    th { background-color: #1976f2; color: white; }
-    .btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; margin-right: 10px; }
-    .btn-primary { background-color: #1976f2; color: white; }
-    .acoes { display: flex; gap: 10px; }
-    .icon-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; }
-    .icon-btn:hover { color: #1976f2; }
+    body {
+        background-color: #f4f6f8;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+        color: #1976f2;
+        text-align: center;
+        margin-bottom: 25px;
+        font-weight: 700;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    th, td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+    th {
+        background-color: #1976f2;
+        color: white;
+        font-weight: 600;
+    }
+    tr:hover {
+        background-color: #f1f7ff;
+    }
+    .btn-primary {
+        background-color: #1976f2;
+        border: none;
+    }
+    .btn-primary:hover {
+        background-color: #155dc1;
+    }
+    .acoes a {
+        font-size: 1.2rem;
+        margin-right: 10px;
+        text-decoration: none;
+        color: #1976f2;
+    }
+    .acoes a:hover {
+        color: #0b3a75;
+    }
+    .top-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
 </style>
 </head>
 <body>
 <div class="container">
     <h2>Produtos</h2>
-    <div style="display:flex; justify-content:space-between; margin-bottom: 15px;">
+    <div class="top-actions">
         <a href="produtos-add.php" class="btn btn-primary">+ Novo Produto</a>
-        <a href="../area-admin.php" class="btn btn-primary">Voltar</a>
+        <a href="../area-admin.php" class="btn btn-primary">Voltar ao Menu Principal</a>
     </div>
     <table>
         <thead>
@@ -63,28 +109,28 @@ try {
                 <th>NCM</th>
                 <th>Marca</th>
                 <th>Unidade</th>
-                <th>Preço Custo</th>
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
             <?php if(count($produtos) === 0): ?>
-                <tr><td colspan="8">Nenhum produto cadastrado.</td></tr>
+                <tr>
+                    <td colspan="7" class="text-center">Nenhum produto cadastrado.</td>
+                </tr>
             <?php else: ?>
                 <?php foreach($produtos as $produto): ?>
-                <tr>
-                    <td><?= htmlspecialchars($produto['codigo_produto']) ?></td>
-                    <td><?= htmlspecialchars($produto['descricao']) ?></td>
-                    <td><?= htmlspecialchars($produto['categoria_nome'] ?? 'Sem categoria') ?></td>
-                    <td><?= htmlspecialchars($produto['ncm']) ?></td>
-                    <td><?= htmlspecialchars($produto['marca']) ?></td>
-                    <td><?= htmlspecialchars($produto['unidade_medida']) ?></td>
-                    <td>R$ <?= number_format($produto['preco_custo_unidade'], 2, ',', '.') ?></td>
-                    <td class="acoes">
-                        <a href="produtos-editar.php?id=<?= $produto['codigo_produto'] ?>" class="icon-btn" title="Editar">✏️</a>
-                        <a href="produtos-excluir.php?id=<?= $produto['codigo_produto'] ?>" class="icon-btn" title="Excluir" onclick="return confirm('Confirma exclusão deste produto?')">🗑️</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td><?= htmlspecialchars($produto['id_produto']) ?></td>
+                        <td><?= htmlspecialchars($produto['descricao']) ?></td>
+                        <td><?= htmlspecialchars($produto['categoria_nome'] ?? 'Sem categoria') ?></td>
+                        <td><?= htmlspecialchars($produto['ncm']) ?></td>
+                        <td><?= htmlspecialchars($produto['marca']) ?></td>
+                        <td><?= htmlspecialchars($produto['unidade_medida']) ?></td>
+                        <td class="acoes">
+                            <a href="produtos-editar.php?id=<?= $produto['id_produto'] ?>" title="Editar"></a>
+                            <a href="produtos-excluir.php?id=<?= $produto['id_produto'] ?>" title="Excluir" onclick="return confirm('Confirma exclusão deste produto?')"></a>
+                        </td>
+                    </tr>
                 <?php endforeach; ?>
             <?php endif; ?>
         </tbody>

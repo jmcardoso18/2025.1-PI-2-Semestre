@@ -7,65 +7,96 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Adicionar Cliente - Área Administrador</title>
+
+    <!-- Bootstrap e jQuery -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <!-- Estilo customizado igual às outras páginas -->
+    <link rel="stylesheet" href="../css/styles.css">
+
     <style>
         body {
             background-color: #f4f6f8;
+            font-family: Arial, sans-serif;
+            margin: 0;
         }
+
         header {
             background-color: #1976f2;
             color: white;
             padding: 1rem 2rem;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
         header h1 {
             margin: 0;
             font-size: 1.8rem;
         }
+
         nav a {
             color: white;
             margin-left: 1rem;
             text-decoration: none;
             font-weight: 600;
         }
+
         nav a:hover {
             text-decoration: underline;
         }
+
         .container {
             max-width: 900px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
         }
+
         h2, h3 {
             color: #1976f2;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
         }
+
         .form-section {
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            background-color: #1976f2;
+            border-color: #1976f2;
+        }
+
+        .btn-primary:hover {
+            background-color: #145ca8;
         }
     </style>
 </head>
 
 <body>
+
     <header>
         <h1>Área Administrador - Adicionar Cliente</h1>
         <nav>
-            <a href="area-admin.php">Menu</a>
+            <a href="../area-admin.php">Menu</a>
             <a href="admin-clientes.php">Clientes</a>
-            <a href="../logout.php">Sair</a>
+            <a href="../../logout.php">Sair</a>
         </nav>
     </header>
 
-    <div class="container bg-white p-4 rounded shadow">
+    <div class="container">
         <h2 class="text-center">Cadastro de Novo Cliente</h2>
 
         <form id="cadastroForm" action="admin-clientes-save.php" method="POST">
@@ -116,53 +147,27 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
                 </div>
             </div>
 
-            <!-- Endereço -->
-            <h3>Endereço</h3>
-            <div class="row g-3 form-section">
-                <div class="col-md-4">
-                    <label for="cep" class="form-label">CEP</label>
-                    <input type="text" class="form-control" id="cep" name="cep">
-                </div>
-                <div class="col-md-8">
-                    <label for="logradouro" class="form-label">Logradouro</label>
-                    <input type="text" class="form-control" id="logradouro" name="logradouro">
-                </div>
-                <div class="col-md-4">
-                    <label for="numero" class="form-label">Número</label>
-                    <input type="text" class="form-control" id="numero" name="numero">
-                </div>
-                <div class="col-md-8">
-                    <label for="complemento" class="form-label">Complemento</label>
-                    <input type="text" class="form-control" id="complemento" name="complemento">
-                </div>
-                <div class="col-md-6">
-                    <label for="bairro" class="form-label">Bairro</label>
-                    <input type="text" class="form-control" id="bairro" name="bairro">
-                </div>
-                <div class="col-md-4">
-                    <label for="cidade" class="form-label">Cidade</label>
-                    <input type="text" class="form-control" id="cidade" name="cidade">
-                </div>
-                <div class="col-md-2">
-                    <label for="estado" class="form-label">Estado</label>
-                    <input type="text" class="form-control" id="estado" name="estado">
-                </div>
-            </div>
-
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary px-4">Salvar Cliente</button>
-                <button type="button" class="btn btn-primary ms-2 px-4" onclick="history.back()">Voltar</button>
+                <button type="button" class="btn btn-secondary ms-2 px-4" onclick="history.back()">Voltar</button>
             </div>
         </form>
     </div>
 
     <script>
         $(document).ready(function () {
-            $('#cnpj_empresa').mask('00.000.000/0000-00');
             $('#telefone').mask('(00) 00000-0000');
-            $('#cep').mask('00000-000');
+
+            // Validação de senha
+            $('#cadastroForm').on('submit', function (e) {
+                const senha = $('#senha').val();
+                const confirmar = $('#confirmarSenha').val();
+                if (senha !== confirmar) {
+                    e.preventDefault();
+                    alert('❌ As senhas não coincidem!');
+                }
+            });
         });
     </script>
 </body>
-
 </html>

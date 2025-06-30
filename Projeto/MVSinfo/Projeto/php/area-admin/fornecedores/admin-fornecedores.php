@@ -8,9 +8,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 }
 
 $conexao = new conexao();
-$pdo = $conexao->getPDO();
+$pdo = $conexao->getPdo();
 
 $sql = "SELECT id_usuario, razao_social, contato, email, telefone FROM usuario WHERE tipo_usuario = 2 ORDER BY razao_social ASC";
+// Buscar fornecedores (tipo_usuario = 2)
+$sql = "SELECT id_usuario, razao_social, email, telefone FROM usuario WHERE tipo_usuario = 2 ORDER BY razao_social ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -246,7 +248,7 @@ switch ($status) {
         <h1>Área Administrador - Fornecedores</h1>
         <nav>
             <a href="../area-admin.php">Menu</a>
-            <a href="admin-fornecedores-add.php">Adicionar Fornecedor</a> <!-- Mantido na navbar -->
+            <a href="admin-fornecedores-add.php">Adicionar Fornecedor</a> 
             <a href="../../logout.php">Sair</a>
         </nav>
     </header>
@@ -255,9 +257,6 @@ switch ($status) {
         <h2>Lista de Fornecedores</h2>
 
         <?= $mensagem ?>
-
-        <!-- REMOVIDO APENAS O BOTÃO VERDE QUE FICAVA AQUI -->
-        
         <?php if (count($fornecedores) > 0): ?>
             <table>
                 <thead>

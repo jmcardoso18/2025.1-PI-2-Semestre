@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conexao = new conexao();
     $pdo = $conexao->getPdo();
 
-    // Captura de campos
+    // Captura de campos do formulário
     $login = trim($_POST['login'] ?? '');
     $senha = $_POST['senha'] ?? '';
     $confirmarSenha = $_POST['confirmarSenha'] ?? '';
@@ -32,8 +32,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $estado = $_POST['estado'] ?? '';
 
     // Validação básica
-    if (empty($login) || empty($senha) || ($senha !== $confirmarSenha)) {
-        header('Location: admin-clientes-add.php?error=senha');
+    if (empty($login) || empty($senha) || empty($confirmarSenha) || empty($email) || empty($razao_social)) {
+        header('Location: admin-clientes-add.php?error=campos_obrigatorios');
+        exit;
+    }
+
+    if ($senha !== $confirmarSenha) {
+        header('Location: admin-clientes-add.php?error=senha_incorreta');
+        exit;
+    }
+
+    // Verificar se login ou email já existe
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuario WHERE login = :login OR email = :email");
+    $stmt->execute([':login' => $login, ':email' => $email]);
+    if ($stmt->fetchColumn() > 0) {
+        header('Location: admin-clientes-add.php?error=login_email_existente');
         exit;
     }
 
