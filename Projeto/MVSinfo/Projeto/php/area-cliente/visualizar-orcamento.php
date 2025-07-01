@@ -42,9 +42,9 @@ if (!$orcamento) {
     exit;
 }
 
-// Busca os produtos do orçamento com detalhes usando a view ou tabela operacao_produto
+// Busca apenas os campos necessários
 $sqlProdutos = "
-    SELECT p.descricao AS produto, op.quantidade, op.valor_unitario, op.valor_total_produtos, op.imposto, op.preco_venda
+    SELECT p.descricao AS produto, op.quantidade, op.valor_total_produtos
     FROM operacao_produto op
     JOIN produtos p ON p.id_produto = op.id_produto
     WHERE op.id_operacao = :id_orcamento
@@ -142,9 +142,6 @@ $produtos = $stmtProdutos->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <th>Produto</th>
                 <th>Quantidade</th>
-                <th>Valor Unitário (R$)</th>
-                <th>Imposto (%)</th>
-                <th>Preço Venda (R$)</th>
                 <th>Valor Total (R$)</th>
             </tr>
         </thead>
@@ -153,9 +150,6 @@ $produtos = $stmtProdutos->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <td><?= htmlspecialchars($p['produto']) ?></td>
                 <td><?= (int)$p['quantidade'] ?></td>
-                <td><?= number_format($p['valor_unitario'], 2, ',', '.') ?></td>
-                <td><?= number_format($p['imposto'], 2, ',', '.') ?></td>
-                <td><?= number_format($p['preco_venda'], 2, ',', '.') ?></td>
                 <td><?= number_format($p['valor_total_produtos'], 2, ',', '.') ?></td>
             </tr>
             <?php endforeach; ?>
