@@ -16,7 +16,7 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48,6 +48,7 @@ nav a:hover {
   flex-direction: column;
   cursor: pointer;
 }
+
 .menu-toggle span {
   background: var(--text-light);
   height: 3px;
@@ -66,7 +67,8 @@ section {
   margin: 0 auto;
 }
 
-h1, h2 {
+h1,
+h2 {
   font-family: 'Orbitron', sans-serif;
   color: var(--accent);
   text-align: center;
@@ -79,7 +81,7 @@ footer {
   font-size: 0.9rem;
 }
 
-/* RESPONSIVO */
+
 @media (max-width: 768px) {
   nav {
     position: absolute;
@@ -94,9 +96,11 @@ footer {
     border-left: 2px solid var(--accent);
     z-index: 999;
   }
+
   nav.active {
     display: flex !important;
   }
+
   .menu-toggle {
     display: flex;
   }
