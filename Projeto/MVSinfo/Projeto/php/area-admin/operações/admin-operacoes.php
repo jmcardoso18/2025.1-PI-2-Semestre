@@ -7,7 +7,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
     exit;
 }
 
-$conexao = new conexao();
+$conexao = new Conexao();
 $pdo = $conexao->getPdo();
 
 $tipo = strtolower($_GET['tipo'] ?? '');
@@ -29,19 +29,28 @@ if (!$tipoId) {
     exit;
 }
 
-// Buscar operações com base no tipo
 $sqlOperacoes = "
     SELECT o.id_operacao, o.data_operacao, o.prazo_entrega, o.status_pagamento, o.valor_total_compra,
-           u.razao_social AS cliente_fornecedor, t.descricao AS transportadora
+           u.razao_social AS cliente_fornecedor, u.tipo_usuario, t.descricao AS transportadora
     FROM operacao o
     JOIN usuario u ON o.fk_usuario_id_usuario = u.id_usuario
     LEFT JOIN transportadora t ON o.fk_transportadora_id_transportadora = t.id_transportadora
     WHERE o.fk_tipo_operacao_id_tipo_operacao = :tipoId
-    ORDER BY o.data_operacao DESC
 ";
+
+if ($tipo === 'cotacao') {
+    // Debug: verificar se existe filtro e se está certo
+    $sqlOperacoes .= " AND u.tipo_usuario = 1";
+}
+
+$sqlOperacoes .= " ORDER BY o.data_operacao DESC";
+
 $stmt = $pdo->prepare($sqlOperacoes);
 $stmt->execute([':tipoId' => $tipoId]);
 $operacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// DEBUG - descomente para verificar dados retornados
+// echo '<pre>'; print_r($operacoes); echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +92,7 @@ $operacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead>
                     <tr>
                         <th>Cliente / Fornecedor</th>
+                        <th>Tipo Usuário</th>
                         <th>Data</th>
                         <th>Prazo</th>
                         <th>Status</th>
@@ -94,6 +104,7 @@ $operacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($operacoes as $op): ?>
                         <tr>
                             <td><?= htmlspecialchars($op['cliente_fornecedor']) ?></td>
+                            <td><?= htmlspecialchars($op['tipo_usuario']) ?></td>
                             <td><?= date('d/m/Y', strtotime($op['data_operacao'])) ?></td>
                             <td><?= htmlspecialchars($op['prazo_entrega']) ?></td>
                             <td class="status <?= htmlspecialchars($op['status_pagamento']) ?>"><?= htmlspecialchars($op['status_pagamento']) ?></td>

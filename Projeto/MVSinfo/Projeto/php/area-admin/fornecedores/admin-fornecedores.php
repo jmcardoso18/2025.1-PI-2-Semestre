@@ -278,10 +278,11 @@ switch ($status) {
                             <td><?= htmlspecialchars($fornecedor['email']) ?></td>
                             <td><?= htmlspecialchars($fornecedor['telefone']) ?></td>
                             <td class="actions">
-                               <a href="admin-fornecedor-edit.php?id=<?= $cliente['id_usuario'] ?>" class="btn btn-primary">Editar</a>
-                                <a href="admin-fornecedor-delete.php?id=<?= $cliente['id_usuario'] ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')">Excluir</a>
+                               <a href="admin-fornecedores-edit.php?id=<?= $fornecedor['id_usuario'] ?>" class="btn btn-primary">Editar</a>
+                                <a href="admin-fornecedores-delete.php?id=<?= $fornecedor['id_usuario'] ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')">Excluir</a>
                             </td>
                         </tr>
+
                     <?php endforeach; ?>
                 </tbody>
             </table>

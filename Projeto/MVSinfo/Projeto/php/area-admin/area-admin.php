@@ -119,7 +119,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
           <a href="./operações/admin-operacoes.php?tipo=compra" class="menu-item">Compras</a>
           <a href="./operações/admin-operacoes.php?tipo=cotacao" class="menu-item">Cotações</a>
           <a href="./operações/admin-operacoes.php?tipo=venda" class="menu-item">Vendas</a>
-          <a href="admin-relatorios.php" class="menu-item">Relatórios</a>
+          <a href="./relatórios/relatorios.html" class="menu-item">Relatórios</a>
       </div>
 
     </main>

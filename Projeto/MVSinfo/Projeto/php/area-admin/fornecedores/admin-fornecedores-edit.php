@@ -12,17 +12,17 @@ $pdo = $conexao->getPdo();
 
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) {
-    header('Location: admin_clientes.php');
+    header('Location: admin-fornecedores.php');
     exit;
 }
 
 // Busca dados atuais
-$stmt = $pdo->prepare("SELECT * FROM usuario WHERE id_usuario = :id AND tipo_usuario = 1");
+$stmt = $pdo->prepare("SELECT * FROM usuario WHERE id_usuario = :id AND tipo_usuario = 2");
 $stmt->execute([':id' => $id]);
-$cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+$fornecedor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$cliente) {
-    header('Location: admin_clientes.php');
+if (!$fornecedor) {
+    header('Location: admin-fornecedores.php');
     exit;
 }
 
@@ -189,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </header>
 
 <main>
-    <h2>Editar Cliente</h2>
+    <h2>Editar fornecedor</h2>
 
     <?php if (!empty($errors)): ?>
         <div class="errors">
