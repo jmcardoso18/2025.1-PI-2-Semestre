@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Morgan Devs | Apresentação Acadêmica</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #111;
+      --accent: #00eaff;
+      --text-light: #f0f0f0;
+    }
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      scroll-behavior: smooth;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 2rem;
+      z-index: 1000;
+    }
+    header img {
+      height: 50px;
+    }
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+    }
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      background: var(--text-light);
+      height: 3px;
+      width: 25px;
+      margin: 4px 0;
+      transition: 0.4s;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: #000;
+        flex-direction: column;
+        width: 200px;
+        display: none;
+        text-align: right;
+        padding: 1rem;
+        border-left: 2px solid var(--accent);
+      }
+      nav.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+    }
+
+    section {
+      padding: 100px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    h1, h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent);
+    }
+
+    .equipe {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .equipe img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      transition: transform 0.3s;
+    }
+    .equipe img:hover {
+      transform: scale(1.1);
+    }
+    .card {
+      padding: 1rem;
+      background: #222;
+      border-radius: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #000;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="imagem/logomorgan.png" alt="Morgan Devs Logo">
+    <div class="menu-toggle" id="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav id="navbar">
+      <a href="#sobre">Sobre</a>
+      <a href="#equipe">Equipe</a>
+      <a href="#projeto">Projeto</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </header>
+  <section id="sobre">
+    <h1> Sobre a Morgan Devs</h1>
+    <p>
+      A <strong>Morgan Devs</strong> foi criada por sua equipe de desenvolvedores nerds, altamente qualificados
+      (e modestos, claro), que encontraram a inspiração perfeita no gênio mais carismático da franquia MARVEL: 
+      <strong>Homem de Ferro</strong>.
+    </p>
+    <p>
+      <strong>Tony Stark</strong>, o bilionário filantropo — e tão modesto quanto nós —, termina sua jornada nos cinemas
+      deixando um legado: sua filha, <strong>Morgan Stark</strong>.
+      Pois é, numa mistura de lágrimas e amor por tecnologia, nossa equipe decidiu homenagear o maior cérebro (e ego) da Marvel,
+      dando o nome de <strong>Morgan Devs</strong> para nosso time.
+    </p>
+    <br>
+    <br>
+    <br>
+    <h2> Bem-vindo à Morgan Devs!</h2>
+    <p>
+      Aqui você encontra <strong>soluções práticas, dinâmicas e tão poderosas quanto a Mark LXXXV</strong>
+      (aquela armadura lindona do Tony, caso tenha esquecido).<br>
+      Nós ajudamos o seu negócio a crescer, inovar e dominar o mundo... ou pelo menos o seu segmento de mercado. 
+    </p>
+    <p class="ps">
+      P.S.: Se você <em>não entendeu a referência</em>, por favor...<br>
+      <strong>MARATONE OS FILMES AGORA MESMO.</strong><br>
+      Sério. Você está vivendo errado.
+    </p>
+  </section>
+
+  <section id="equipe">
+    <h2>Nossa Equipe</h2>
+    <div class="equipe">
+      <div class="card">
+        <a href="https://github.com/LemesdeMorais" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/179150582?s=400&u=a8849480918fbb4a0f0a5308c1eb2192ebcfe9b7&v=4" alt="Rafaela Morais"/>
+        </a>
+        <p>Rafaela Morais - Desenvolvedora Front-end e auxílio na documentação</p>
+      </div>
+      <div class="card">
+        <a href="https://github.com/jmcardoso18" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/12092301?v=4" alt="Jamila Cardoso"/>
+        </a>
+        <p>Jamila Cardoso - PO, Desenvolvedora do Banco de Dados e responsável pela documentação</p>
+      </div>
+      <div class="card">
+        <a href="https://github.com/FlpRocha236" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/109861866?v=4" alt="Felipe Rocha"/>
+        </a>
+        <p>Felipe Rocha - Desenvolvedor Back-end</p>
+      </div>
+      <div class="card">
+        <a href="https://github.com/Jefferson434" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/179768830?v=4" alt="Jefferson"/>
+        </a>
+        <p>Jefferson - Desenvolvedor Full Stack</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="projeto">
+    <h2>Projeto Integrador 2º Semestre </h2>
+    <p>O Projeto da MVS Info consiste em facilitar o dia a dia do cliente, visto que somente ele é responsável 
+      por todas as etapas do processo, desde captar cliente, até o último passo, que é a entrega do produto.
+      Sendo assim, nós desenvolvemos um sistema que faz a ponte entre cliente / fornecedor, a qual era feitra somente 
+      com intermediação do responsável pela MVS. 
+      Agora os clientes irão solicitar o orçamento através do sistema e, ao escolher a categoria, o fornecedor referente
+      irá ter acesso ao orçamento em aberto, irá preencher e a partir daí somente que, a pedido do cliente, será
+      feito manualmente, que é a revisão do orçamento enviado pelo fornecedor, envio para o cliente e aprovação da proposta.
+    </p>
+    <br>
+    <br>
+    <br>
+    <p>Proposta MVS Info</p>
+    <img src="imagem/propostaMVS.jpg" alt="Proposta MVS Info">
+    <br>
+    <p>Modelo Conceitual</p>
+    <img src="imagem/conceitual.png" alt="Conceitual">
+    <br>
+    <p>Fluxograma</p>
+    <img src="imagem/fluxograma-orcamento-compras.png" alt="Fluxograma">
+    <br>
+    <p>Diagrama de sequencia</p>
+    <img src="#" alt="Diagrama de Sequencia">
+    <br>
+    <p>Diagrama de classes</p>
+    <img src="#" alt="Diagrama de Classes">
+
+
+
+    <h2>Segue as funcionalidades principais do sistema</h2>
+    ✅ Clientes 
+    <br>
+    - Cadastro e login
+    <br>
+    - Solicitação de orçamentos com múltiplos produtos
+    <br>
+    - Acompanhamento de status de pedidos
+    <br>
+    <br>
+    ✅ Fornecedores
+    <br>
+    - Cadastro e login
+    <br>
+    - Preenchimento de propostas para orçamentos
+    <br>
+    - Atualização de preços e produtos
+    <br>
+    - Visualização do status dos pedidos
+    <br>
+    <br>
+    ✅ Admin
+    <br>
+    - Cadastro/edição de clientes, fornecedores, produtos, categorias, transportadoras
+    <br>
+    - Visualização de operações, relatórios de vendas, orçamentos e fretes
+    <br>
+    - Aprovação ou reprovação de orçamentos
+    <br>
+    <br>
+    ✅ Relatórios
+    <br>
+    - Vendas detalhadas por produto, valor de compra, venda, imposto e lucro
+    <br>
+    - Situação de orçamentos (aprovados / reprovados)
+    <br>
+    <br>
+    <br>
+ 
+      <a class="navbar-brand" href="../index.html">
+        Apresentar o Sistema MVS INFO
+      </a>
+  </section>
+
+  <section id="contato">
+    <h2>Contato</h2>
+    <p>Entre em contato conosco pelos perfis do GitHub</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Morgan Devs | Projeto Integrador 2º Semestre - Fatec Araras
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const navbar = document.getElementById('navbar');
+      navbar.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>
