@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Morgan Devs | Apresentação Acadêmica</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Open+Sans&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --bg-dark: #111;
       --accent: #00eaff;
       --text-light: #f0f0f0;
     }
+
     body {
       margin: 0;
       font-family: 'Open Sans', sans-serif;
@@ -18,29 +21,34 @@
       color: var(--text-light);
       scroll-behavior: smooth;
     }
+
     header {
       position: fixed;
       top: 0;
       width: 100%;
-      background: rgba(0,0,0,0.9);
+      background: rgba(0, 0, 0, 0.9);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0.7rem 2rem;
       z-index: 1000;
     }
+
     header img {
       height: 50px;
     }
+
     nav {
       display: flex;
       gap: 1.5rem;
     }
+
     nav a {
       color: var(--text-light);
       text-decoration: none;
       font-family: 'Orbitron', sans-serif;
     }
+
     nav a:hover {
       color: var(--accent);
     }
@@ -50,6 +58,7 @@
       flex-direction: column;
       cursor: pointer;
     }
+
     .menu-toggle span {
       background: var(--text-light);
       height: 3px;
@@ -71,9 +80,11 @@
         padding: 1rem;
         border-left: 2px solid var(--accent);
       }
+
       nav.active {
         display: flex;
       }
+
       .menu-toggle {
         display: flex;
       }
@@ -84,7 +95,9 @@
       max-width: 1000px;
       margin: 0 auto;
     }
-    h1, h2 {
+
+    h1,
+    h2 {
       font-family: 'Orbitron', sans-serif;
       color: var(--accent);
     }
@@ -96,6 +109,7 @@
       text-align: center;
       margin-top: 2rem;
     }
+
     .equipe img {
       width: 120px;
       height: 120px;
@@ -103,22 +117,37 @@
       border: 3px solid var(--accent);
       transition: transform 0.3s;
     }
+
     .equipe img:hover {
       transform: scale(1.1);
     }
+
     .card {
       padding: 1rem;
       background: #222;
       border-radius: 10px;
     }
+
     footer {
       text-align: center;
       padding: 2rem;
       background: #000;
       font-size: 0.9rem;
     }
+
+    .imagem-centralizada {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .imagem-centralizada img {
+      width: 250px;
+      /* ou ajuste como quiser */
+      height: auto;
+    }
   </style>
 </head>
+
 <body>
   <header>
     <img src="imagem/logomorgan.png" alt="Morgan Devs Logo">
@@ -134,17 +163,24 @@
       <a href="#contato">Contato</a>
     </nav>
   </header>
+
+  <div class="imagem-centralizada">
+    <img src="imagem/logomorgan.png" alt="Morgan Devs Logo">
+  </div>
   <section id="sobre">
     <h1> Sobre a Morgan Devs</h1>
     <p>
       A <strong>Morgan Devs</strong> foi criada por sua equipe de desenvolvedores nerds, altamente qualificados
-      (e modestos, claro), que encontraram a inspiração perfeita no gênio mais carismático da franquia MARVEL: 
+      (e modestos, claro), que encontraram a inspiração perfeita no gênio mais carismático da franquia MARVEL:
       <strong>Homem de Ferro</strong>.
     </p>
     <p>
-      <strong>Tony Stark</strong>, o bilionário filantropo — e tão modesto quanto nós —, termina sua jornada nos cinemas
+      <strong>Tony Stark</strong>, o bilionário filantropo — e tão modesto quanto nós —, termina sua jornada nos
+      cinemas
       deixando um legado: sua filha, <strong>Morgan Stark</strong>.
-      Pois é, numa mistura de lágrimas e amor por tecnologia, nossa equipe decidiu homenagear o maior cérebro (e ego) da Marvel,
+      Pois é, numa mistura de lágrimas e amor por tecnologia, nossa equipe decidiu homenagear o maior cérebro (e ego)
+      da
+      Marvel,
       dando o nome de <strong>Morgan Devs</strong> para nosso time.
     </p>
     <br>
@@ -154,7 +190,7 @@
     <p>
       Aqui você encontra <strong>soluções práticas, dinâmicas e tão poderosas quanto a Mark LXXXV</strong>
       (aquela armadura lindona do Tony, caso tenha esquecido).<br>
-      Nós ajudamos o seu negócio a crescer, inovar e dominar o mundo... ou pelo menos o seu segmento de mercado. 
+      Nós ajudamos o seu negócio a crescer, inovar e dominar o mundo... ou pelo menos o seu segmento de mercado.
     </p>
     <p class="ps">
       P.S.: Se você <em>não entendeu a referência</em>, por favor...<br>
@@ -168,25 +204,29 @@
     <div class="equipe">
       <div class="card">
         <a href="https://github.com/LemesdeMorais" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/179150582?s=400&u=a8849480918fbb4a0f0a5308c1eb2192ebcfe9b7&v=4" alt="Rafaela Morais"/>
+          <img
+            src="https://avatars.githubusercontent.com/u/179150582?s=400&u=a8849480918fbb4a0f0a5308c1eb2192ebcfe9b7&v=4"
+            alt="Rafaela Morais" />
         </a>
-        <p>Rafaela Morais - Desenvolvedora Front-end e auxílio na documentação, as vezes se aventura no back-end e sempre está acompanhada de um café ❤️</p>
+        <p>Rafaela Morais - Desenvolvedora Front-end e auxílio na documentação, as vezes se aventura no back-end e
+          sempre está acompanhada de um café ❤️</p>
       </div>
       <div class="card">
         <a href="https://github.com/jmcardoso18" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/12092301?v=4" alt="Jamila Cardoso"/>
+          <img src="https://avatars.githubusercontent.com/u/12092301?v=4" alt="Jamila Cardoso" />
         </a>
-        <p>Jamila M. Cardoso - PO, DBA e responsável pela documentação. Da turma do café,  adora ouvir música para se concentrar no código.</p>
+        <p>Jamila M. Cardoso - PO, DBA e responsável pela documentação. Da turma do café, adora ouvir música para se
+          concentrar no código.</p>
       </div>
       <div class="card">
         <a href="https://github.com/FlpRocha236" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/109861866?v=4" alt="Felipe Rocha"/>
+          <img src="https://avatars.githubusercontent.com/u/109861866?v=4" alt="Felipe Rocha" />
         </a>
         <p>Felipe Rocha - Desenvolvedor Back-end</p>
       </div>
       <div class="card">
         <a href="https://github.com/Jefferson434" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/179768830?v=4" alt="Jefferson"/>
+          <img src="https://avatars.githubusercontent.com/u/179768830?v=4" alt="Jefferson" />
         </a>
         <p>Jefferson - Desenvolvedor Full Stack</p>
       </div>
@@ -195,13 +235,15 @@
 
   <section id="projeto">
     <h2>Projeto Integrador 2º Semestre </h2>
-    <p>O Projeto da MVS Info consiste em facilitar o dia a dia do cliente, visto que somente ele é responsável 
+    <p>O Projeto da MVS Info consiste em facilitar o dia a dia do cliente, visto que somente ele é responsável
       por todas as etapas do processo, desde captar cliente, até o último passo, que é a entrega do produto.
-      Sendo assim, nós desenvolvemos um sistema que faz a ponte entre cliente / fornecedor, a qual era feitra somente 
-      com intermediação do responsável pela MVS. 
-      Agora os clientes irão solicitar o orçamento através do sistema e, ao escolher a categoria, o fornecedor referente
+      Sendo assim, nós desenvolvemos um sistema que faz a ponte entre cliente / fornecedor, a qual era feitra somente
+      com intermediação do responsável pela MVS.
+      Agora os clientes irão solicitar o orçamento através do sistema e, ao escolher a categoria, o fornecedor
+      referente
       irá ter acesso ao orçamento em aberto, irá preencher e a partir daí somente que, a pedido do cliente, será
-      feito manualmente, que é a revisão do orçamento enviado pelo fornecedor, envio para o cliente e aprovação da proposta.
+      feito manualmente, que é a revisão do orçamento enviado pelo fornecedor, envio para o cliente e aprovação da
+      proposta.
     </p>
     <br>
     <br>
@@ -215,16 +257,16 @@
     <p>Fluxograma</p>
     <img src="imagem/fluxograma-orcamento-compras.png" alt="Fluxograma">
     <br>
-    <p>Diagrama de sequencia</p>
-    <img src="#" alt="Diagrama de Sequencia">
+    <p>Diagrama de Sequencia</p>
+    <img src="imagem/sequencia.jpg" alt="Diagrama de Sequencia">
     <br>
-    <p>Diagrama de classes</p>
-    <img src="#" alt="Diagrama de Classes">
+    <p>Diagrama de Classes</p>
+    <img src="imagem/classes.jpeg" alt="Diagrama de Classes">
 
 
 
     <h2>Segue as funcionalidades principais do sistema</h2>
-    ✅ Clientes 
+    ✅ Clientes
     <br>
     - Cadastro e login
     <br>
@@ -261,15 +303,16 @@
     <br>
     <br>
     <br>
- 
-      <a class="navbar-brand" href="../index.html">
-        Apresentar o Sistema MVS INFO
-      </a>
+
+    <a class="navbar-brand" href="../index.html">
+      Apresentar o Sistema MVS INFO
+    </a>
   </section>
 
   <section id="contato">
     <h2>Contato</h2>
     <p>Entre em contato conosco pelos perfis do GitHub</p>
+
   </section>
 
   <footer>
@@ -283,4 +326,5 @@
     }
   </script>
 </body>
+
 </html>
