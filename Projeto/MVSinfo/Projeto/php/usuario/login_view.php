@@ -27,7 +27,7 @@ require_once '../conexao.php';
         <form id="loginForm" class="login-form" action="../login/login.php" method="POST">
 
             <div class="radio-group">
-                <label><input type="radio" name="tipoUsuario" value="0" checked/> Administrador</label>
+                <label><input type="radio" name="tipoUsuario" value="3" checked/> Administrador</label>
                 <label><input type="radio" name="tipoUsuario" value="1"  /> Cliente</label>
                 <label><input type="radio" name="tipoUsuario" value="2"  /> Fornecedor </label>
             </div>
@@ -43,7 +43,7 @@ require_once '../conexao.php';
 
         <p id="mensagem" class="mensagem"></p>
 
-        <form action="/Projeto/MVSinfo/Projeto/index.html" method="get">
+        <form action="../../index.html" method="get">
           <button type="submit" class="btn btn-secondary">Voltar</button>
         </form>
 

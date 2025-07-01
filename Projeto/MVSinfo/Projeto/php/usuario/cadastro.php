@@ -80,10 +80,6 @@
           <input type="text" class="form-control" id="razaoSocial" name="razaoSocial">
         </div>
         <div class="col-md-6">
-          <label for="nomeFantasia" class="form-label">Nome Fantasia</label>
-          <input type="text" class="form-control" id="nomeFantasia" name="nomeFantasia">
-        </div>
-        <div class="col-md-6">
           <label for="cnpj_empresa" class="form-label">CNPJ</label>
           <input type="text" class="form-control" id="cnpj_empresa" name="cnpj_empresa">
         </div>
@@ -91,7 +87,7 @@
           <label for="inscricaoEstadual" class="form-label">Inscrição Estadual</label>
           <input type="text" class="form-control" id="inscricaoEstadual" name="inscricaoEstadual">
         </div>
-        <div class="col-md-12">
+        <div class="col-md-6">
           <label for="nomeResponsavel" class="form-label">Nome do Responsável</label>
           <input type="text" class="form-control" id="nomeResponsavel" name="nomeResponsavel">
         </div>

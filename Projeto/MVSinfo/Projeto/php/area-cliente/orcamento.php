@@ -2,9 +2,8 @@
 session_start();
 require_once '../Conexao.php';
 
-// Verifica se é um cliente logado
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 1) {
-    header('Location: /Projeto/MVSinfo/Projeto/usuario/login_view.php');
+    header('Location: ../usuario/login_view.php');
     exit;
 }
 
@@ -12,195 +11,76 @@ $conexao = new conexao();
 $pdo = $conexao->getPdo();
 
 $idCliente = $_SESSION['id_usuario'] ?? null;
-
-if (!isset($_SESSION['orcamento'])) {
-    $_SESSION['orcamento'] = [];
+if (!$idCliente) {
+    echo "Usuário não identificado.";
+    exit;
 }
 
-// Carrega produtos do banco
-$sqlProdutos = "SELECT codigo_produto, descricao FROM produtos";
-$stmtProdutos = $pdo->query($sqlProdutos);
-$produtos = $stmtProdutos->fetchAll(PDO::FETCH_ASSOC);
+// Filtros recebidos por GET
+$dataInicio = $_GET['dataInicio'] ?? '';
+$dataFim = $_GET['dataFim'] ?? '';
+$status = $_GET['status'] ?? '';
 
-// Processamento
-$mensagem = '';
+// Montagem das condições SQL
+$condicoes = "o.fk_usuario_id_usuario = :idCliente
+    AND o.fk_tipo_operacao_id_tipo_operacao = (
+        SELECT id_tipo_operacao FROM tipo_operacao WHERE descricao = 'Orçamento' LIMIT 1
+    )";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $acao = $_POST['acao'] ?? '';
-    $codigoProduto = intval($_POST['produto'] ?? 0);
-    $quantidade = intval($_POST['quantidade'] ?? 0);
-    $remover = intval($_POST['remover'] ?? 0);
+$params = [':idCliente' => $idCliente];
 
-    if ($acao === 'adicionar') {
-        if ($codigoProduto > 0 && $quantidade > 0) {
-            $produtoExistente = false;
-            foreach ($_SESSION['orcamento'] as &$item) {
-                if ($item['codigo_produto'] === $codigoProduto) {
-                    $item['quantidade'] += $quantidade;
-                    $produtoExistente = true;
-                    break;
-                }
-            }
-            unset($item);
-
-            if (!$produtoExistente) {
-                $_SESSION['orcamento'][] = [
-                    'codigo_produto' => $codigoProduto,
-                    'quantidade' => $quantidade
-                ];
-            }
-
-            $mensagem = "Produto adicionado à lista.";
-        } else {
-            $mensagem = "Preencha os campos corretamente.";
-        }
-    } elseif ($acao === 'enviar') {
-        if (empty($_SESSION['orcamento'])) {
-            $mensagem = "Lista vazia. Adicione produtos antes de enviar.";
-        } elseif ($idCliente) {
-            try {
-                $pdo->beginTransaction();
-
-                $stmtFornecedor = $pdo->query("SELECT id_usuario FROM usuario WHERE tipo_usuario = 2 LIMIT 1");
-                $idFornecedor = $stmtFornecedor->fetchColumn();
-                if (!$idFornecedor) {
-                    throw new Exception("Nenhum fornecedor cadastrado.");
-                }
-
-                $stmtCompra = $pdo->prepare("INSERT INTO compra (id_fornecedor, data_compra, status_pagamento) VALUES (:id_fornecedor, NOW(), 'pendente')");
-                $stmtCompra->execute([':id_fornecedor' => $idFornecedor]);
-                $idCompra = $pdo->lastInsertId();
-
-                $stmtProdCompra = $pdo->prepare("INSERT INTO produtocompra (id_compra, codigo_produto, quantidade) VALUES (:id_compra, :codigo_produto, :quantidade)");
-                foreach ($_SESSION['orcamento'] as $item) {
-                    $stmtProdCompra->execute([
-                        ':id_compra' => $idCompra,
-                        ':codigo_produto' => $item['codigo_produto'],
-                        ':quantidade' => $item['quantidade']
-                    ]);
-                }
-
-                $pdo->commit();
-                $_SESSION['orcamento'] = [];
-                $mensagem = "Orçamento enviado com sucesso!";
-            } catch (Exception $e) {
-                $pdo->rollBack();
-                $mensagem = "Erro ao enviar orçamento: " . $e->getMessage();
-            }
-        }
-    } elseif ($acao === 'limpar') {
-        $_SESSION['orcamento'] = [];
-        $mensagem = "Lista de produtos limpa.";
-    } elseif ($acao === 'remover' && $remover > 0) {
-        foreach ($_SESSION['orcamento'] as $index => $item) {
-            if ($item['codigo_produto'] === $remover) {
-                unset($_SESSION['orcamento'][$index]);
-                $_SESSION['orcamento'] = array_values($_SESSION['orcamento']); // reorganiza
-                $mensagem = "Produto removido da lista.";
-                break;
-            }
-        }
-    }
+if (!empty($dataInicio)) {
+    $condicoes .= " AND o.data_operacao >= :dataInicio";
+    $params[':dataInicio'] = $dataInicio;
 }
+if (!empty($dataFim)) {
+    $condicoes .= " AND o.data_operacao <= :dataFim";
+    $params[':dataFim'] = $dataFim;
+}
+if (!empty($status)) {
+    $condicoes .= " AND o.status_pagamento = :status";
+    $params[':status'] = $status;
+}
+
+// Consulta SQL
+$sql = "
+    SELECT 
+        o.id_operacao,
+        o.data_operacao,
+        o.prazo_entrega,
+        o.valor_total_compra,
+        o.status_pagamento
+    FROM operacao o
+    WHERE $condicoes
+    ORDER BY o.data_operacao DESC
+";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$orcamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Solicitar Orçamento - MVS Info</title>
-    <link rel="stylesheet" href="/Projeto/MVSinfo/Projeto/css/styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Orçamentos - MVS Info</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
-        body {
-            background-color: #f5f7fa;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar {
-            background-color: #1976f2;
-            color: white;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar a {
-            color: white;
-            margin-left: 15px;
-            text-decoration: none;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h2, h3 {
-            color: #1976f2;
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            margin-top: 20px;
-            margin-right: 10px;
-            cursor: pointer;
-            background-color: #1976f2;
-            color: white;
-        }
-
-        .btn:hover {
-            background-color: #155dc1;
-        }
-
-        .mensagem {
-            margin-top: 15px;
-            font-weight: bold;
-            color: green;
-        }
-
-        .erro {
-            color: red;
-        }
-
-        ul {
-            margin-top: 15px;
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 10px;
-            background-color: #f0f0f0;
-            padding: 8px;
-            border-radius: 5px;
-        }
-
-        .remover-form {
-            display: inline;
-        }
+        body { background-color: #f5f7fa; }
+        .navbar { background-color: #1976f2; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: white; margin-left: 15px; text-decoration: none; }
+        .container { max-width: 1000px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #1976f2; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .btn { padding: 8px 14px; border: none; border-radius: 5px; background-color: #1976f2; color: white; text-decoration: none; cursor: pointer; }
+        .btn:hover { background-color: #155dc1; }
+        .status-pago { color: green; font-weight: bold; }
+        .status-pendente { color: orange; font-weight: bold; }
+        .status-cancelado { color: red; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -209,63 +89,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div><strong>MVS Info - Área do Cliente</strong></div>
     <div>
         <a href="area-cliente.php">Perfil</a>
-        <a href="orcamento.php">Orçamento</a>
-        <a href="pedido.php">Pedidos</a>
         <a href="../logout.php">Sair</a>
     </div>
 </div>
 
 <div class="container">
-    <h2>Solicitar Orçamento</h2>
+    <h2>Meus Orçamentos</h2>
 
-    <?php if (!empty($mensagem)) : ?>
-        <p class="mensagem <?= strpos($mensagem, 'Erro') !== false ? 'erro' : '' ?>"><?= $mensagem ?></p>
+    <!-- Filtros -->
+    <div class="d-flex justify-content-between align-items-end mb-3">
+  <form class="row g-3" method="GET" action="">
+    <div class="col-md-3">
+      <label for="dataInicio" class="form-label">Data Início</label>
+      <input type="date" name="dataInicio" class="form-control" value="<?= htmlspecialchars($dataInicio) ?>">
+    </div>
+    <div class="col-md-3">
+      <label for="dataFim" class="form-label">Data Fim</label>
+      <input type="date" name="dataFim" class="form-control" value="<?= htmlspecialchars($dataFim) ?>">
+    </div>
+    <div class="col-md-3">
+      <label for="status" class="form-label">Status</label>
+      <select name="status" class="form-select">
+        <option value="">Todos</option>
+        <option value="Pago" <?= $status == 'Pago' ? 'selected' : '' ?>>Pago</option>
+        <option value="Pendente" <?= $status == 'Pendente' ? 'selected' : '' ?>>Pendente</option>
+        <option value="Cancelado" <?= $status == 'Cancelado' ? 'selected' : '' ?>>Cancelado</option>
+      </select>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+    </div>
+  </form>
+
+  <a href="criar-orcamento.php" class="btn btn-success ms-4" style="height: 42px;">
+    Novo Orçamento
+  </a>
+</div>
+
+
+    <?php if (isset($_GET['success'])): ?>
+        <div style="background-color:#d4edda; color:#155724; padding: 10px 15px; border-radius: 5px; margin-bottom: 15px;">
+            Orçamento criado com sucesso!
+        </div>
     <?php endif; ?>
 
-    <form method="POST">
-        <label for="produto">Produto:</label>
-        <select name="produto" id="produto" required>
-            <option value="">Selecione um produto</option>
-            <?php foreach ($produtos as $produto) : ?>
-                <option value="<?= $produto['codigo_produto'] ?>"><?= htmlspecialchars($produto['descricao']) ?></option>
-            <?php endforeach; ?>
-        </select>
-
-        <label for="quantidade">Quantidade:</label>
-        <input type="number" name="quantidade" id="quantidade" min="1" required>
-
-        <button type="submit" name="acao" value="adicionar" class="btn">Adicionar à Lista</button>
-        <a href="./area-cliente.php" class="btn">Voltar</a>
-    </form>
-
-    <?php if (!empty($_SESSION['orcamento'])) : ?>
-        <h3>Produtos na Lista:</h3>
-        <ul>
-            <?php foreach ($_SESSION['orcamento'] as $item) : ?>
-                <li>
-                    <?php
-                    $descricao = '';
-                    foreach ($produtos as $p) {
-                        if ($p['codigo_produto'] == $item['codigo_produto']) {
-                            $descricao = $p['descricao'];
-                            break;
-                        }
-                    }
-                    ?>
-                    <?= htmlspecialchars($descricao) ?> - Quantidade: <?= $item['quantidade'] ?>
-                    <form method="POST" class="remover-form">
-                        <input type="hidden" name="remover" value="<?= $item['codigo_produto'] ?>">
-                        <button type="submit" name="acao" value="remover" class="btn" style="background-color: red;">Remover</button>
-                    </form>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-
-        <form method="POST">
-            <button type="submit" name="acao" value="enviar" class="btn">Enviar Lista</button>
-            <button type="submit" name="acao" value="limpar" class="btn" style="background-color: gray;">Limpar Lista</button>
-        </form>
+    <?php if (count($orcamentos) > 0): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Prazo de Entrega</th>
+                    <th>Status</th>
+                    <th>Valor Total (R$)</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($orcamentos as $orc): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($orc['id_operacao']) ?></td>
+                        <td><?= date('d/m/Y', strtotime($orc['data_operacao'])) ?></td>
+                        <td><?= htmlspecialchars($orc['prazo_entrega'] ?? '-') ?></td>
+                        <td class="<?= 'status-' . strtolower($orc['status_pagamento']) ?>">
+                            <?= htmlspecialchars($orc['status_pagamento']) ?>
+                        </td>
+                        <td><?= number_format($orc['valor_total_compra'], 2, ',', '.') ?></td>
+                        <td>
+                            <a href="visualizar-orcamento.php?id=<?= $orc['id_operacao'] ?>" class="btn btn-sm">Ver Detalhes</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>Nenhum orçamento encontrado com os critérios selecionados.</p>
     <?php endif; ?>
+
+    <a href="area-cliente.php" class="btn">Voltar ao Perfil</a>
 </div>
 
 </body>

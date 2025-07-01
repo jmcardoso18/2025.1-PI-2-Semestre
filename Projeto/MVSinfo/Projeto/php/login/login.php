@@ -12,8 +12,8 @@ $tipoUsuarioId = (int)($_POST['tipoUsuario'] ?? -1);
 $login = trim($_POST['login'] ?? '');
 $senha = $_POST['senha'] ?? '';
 
-// Validação de tipo de usuário permitido (somente Admin=0, Cliente=1 ou Fornecedor=2)
-if (!in_array($tipoUsuarioId, [0,1,2])) {
+// Validação de tipo de usuário permitido (somente Cliente=1, Fornecedor=2 ou Admin=3)
+if (!in_array($tipoUsuarioId, [1, 2, 3])) {
     header("Location: ../usuario/login_view.php?error=tipo_usuario");
     exit;
 }
@@ -33,10 +33,11 @@ $stmt->execute([
 
 $usuarioEncontrado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($usuarioEncontrado) {
-    // Verificar senha
-    if (password_verify($senha, $usuarioEncontrado['senha'])) {
-    
+if ($usuarioEncontrado) {  // Verifica se usuário foi encontrado
+
+    // Verificar senha - aceita texto puro ou hash
+    if ($usuarioEncontrado['senha'] === $senha || password_verify($senha, $usuarioEncontrado['senha'])) {
+
         // Salvar informações importantes na sessão
         $_SESSION['loggedin'] = true;
         $_SESSION['usuario'] = $usuarioEncontrado['login'];
@@ -45,14 +46,14 @@ if ($usuarioEncontrado) {
 
         // Redireciona por tipo de usuário
         switch ($usuarioEncontrado['tipo_usuario']) {
-            case 0: // Admin
-                header("Location: ../area-admin/area-admin.php");
-                break;
             case 1: // Cliente
                 header("Location: ../area-cliente/area-cliente.php");
                 break;
             case 2: // Fornecedor
                 header("Location: ../area-fornecedor/area-fornecedor.php");
+                break;
+            case 3: // Admin
+                header("Location: ../area-admin/area-admin.php");
                 break;
         }
         exit;
@@ -62,9 +63,9 @@ if ($usuarioEncontrado) {
         header("Location: ../usuario/login_view.php?error=senha_incorreta");
         exit;
     }
+
 } else {
     // Usuário não encontrado
     header("Location: ../usuario/login_view.php?error=usuario_nao_encontrado");
     exit;
 }
-?>

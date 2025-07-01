@@ -10,7 +10,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 $conexao = new conexao();
 $pdo = $conexao->getPdo();
 
-// Id do fornecedor logado
 $fornecedorId = $_SESSION['id_usuario'] ?? null;
 
 if (!$fornecedorId) {
@@ -18,15 +17,24 @@ if (!$fornecedorId) {
     exit;
 }
 
-// Buscar pedidos (compras) relacionados a esse fornecedor
 $sql = "
-    SELECT c.id_compra, c.data_compra, c.status_pagamento, u.razao_social AS cliente, p.descricao AS produto, pc.quantidade
-    FROM compra c
-    JOIN usuario u ON c.id_fornecedor = :id_fornecedor
-    JOIN produtocompra pc ON c.id_compra = pc.id_compra
-    JOIN Produtos p ON pc.codigo_produto = p.codigo_produto
-    ORDER BY c.data_compra DESC
+    SELECT
+      o.id_operacao,
+      o.data_operacao,
+      o.status_pagamento,
+      u.razao_social AS cliente,
+      p.descricao AS produto,
+      op.quantidade
+    FROM operacao o
+    JOIN usuario u ON o.fk_usuario_id_usuario = u.id_usuario
+    JOIN operacao_produto op ON o.id_operacao = op.id_operacao
+    JOIN produtos p ON op.id_produto = p.id_produto
+    JOIN fornecedor_categoria fc ON p.fk_categoria_id_categoria = fc.id_categoria
+    WHERE fc.id_fornecedor = :id_fornecedor
+      AND o.fk_tipo_operacao_id_tipo_operacao IN (1, 2) -- 1=Venda, 2=Compra (ajuste se quiser outro filtro)
+    ORDER BY o.data_operacao DESC
 ";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute([':id_fornecedor' => $fornecedorId]);
 $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -36,10 +44,10 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>MVS Info - Status do Pedido</title>
-    <link rel="stylesheet" href="/Projeto/MVSinfo/Projeto/css/styles.css">
+    <link rel="stylesheet" href="/Projeto/MVSinfo/Projeto/css/styles.css" />
     <style>
         body {
             background-color: #f5f7fa;
@@ -81,7 +89,8 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin-top: 10px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             border-bottom: 1px solid #ddd;
             text-align: left;
@@ -119,7 +128,6 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .btn:hover {
             background-color: #155dc1;
         }
-        
     </style>
 </head>
 
@@ -143,7 +151,7 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead>
                     <tr>
                         <th>Cliente</th>
-                        <th>Data da Compra</th>
+                        <th>Data da Operação</th>
                         <th>Produto</th>
                         <th>Quantidade</th>
                         <th>Status</th>
@@ -154,6 +162,7 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php
                         $statusClass = '';
                         switch (strtolower($compra['status_pagamento'])) {
+                            case 'pago':
                             case 'aprovado':
                                 $statusClass = 'status-aprovado';
                                 break;
@@ -161,6 +170,7 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 $statusClass = 'status-pendente';
                                 break;
                             case 'rejeitado':
+                            case 'cancelado':
                                 $statusClass = 'status-rejeitado';
                                 break;
                             default:
@@ -169,7 +179,7 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                         <tr>
                             <td><?= htmlspecialchars($compra['cliente']) ?></td>
-                            <td><?= date('d/m/Y', strtotime($compra['data_compra'])) ?></td>
+                            <td><?= date('d/m/Y', strtotime($compra['data_operacao'])) ?></td>
                             <td><?= htmlspecialchars($compra['produto']) ?></td>
                             <td><?= intval($compra['quantidade']) ?></td>
                             <td class="<?= $statusClass ?>"><?= htmlspecialchars($compra['status_pagamento']) ?></td>

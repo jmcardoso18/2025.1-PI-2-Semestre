@@ -11,7 +11,6 @@
     input[type="text"] { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; }
     .btn { padding: 8px 16px; border-radius: 5px; text-decoration: none; }
     .btn-primary { background-color: #1976f2; color: white; }
-    .btn-secondary { background-color: #6c757d; color: white; }
   </style>
 </head>
 <body>
@@ -21,7 +20,7 @@
       <label for="descricao">Nome da Categoria:</label>
       <input type="text" name="descricao" id="descricao" required>
       <button type="submit" class="btn btn-primary">Salvar</button>
-      <a href="categorias.php" class="btn btn-secondary">Cancelar</a>
+      <a href="categorias.php" class="btn btn-primary">Cancelar</a>
     </form>
   </div>
 </body>

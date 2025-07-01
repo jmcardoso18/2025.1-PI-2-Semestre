@@ -2,40 +2,42 @@
 session_start();
 require_once '../../conexao.php';
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 0) {
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 3) {
     header('Location: ../usuario/login_view.php');
     exit;
 }
 
-$conexao = new conexao();
+$conexao = new Conexao();
 $pdo = $conexao->getPDO();
 
 // Receber dados do formulário
-$descricao = $_POST['descricao'] ?? '';
-$cod_categoria = $_POST['cod_categoria'] ?? null;
-$ncm = $_POST['ncm'] ?? null;
-$marca = $_POST['marca'] ?? null;
-$unidade_medida = $_POST['unidade_medida'] ?? null;
-$preco_custo_unidade = $_POST['preco_custo_unidade'] ?? 0;
+$descricao = trim($_POST['descricao'] ?? '');
+$fk_categoria_id_categoria = (int)($_POST['fk_categoria_id_categoria'] ?? 0);
+$ncm = trim($_POST['ncm'] ?? '');
+$marca = trim($_POST['marca'] ?? '');
+$unidade_medida = trim($_POST['unidade_medida'] ?? '');
 
-// Validar obrigatoriedade
-if (empty($descricao) || empty($cod_categoria) || empty($preco_custo_unidade)) {
+// Validação básica
+if (empty($descricao) || $fk_categoria_id_categoria <= 0) {
     die("Por favor, preencha os campos obrigatórios.");
 }
 
-// Inserir no banco
 try {
-    $stmt = $pdo->prepare("INSERT INTO produtos (descricao, cod_categoria, ncm, marca, unidade_medida, preco_custo_unidade) VALUES (:descricao, :cod_categoria, :ncm, :marca, :unidade_medida, :preco_custo_unidade)");
+    $sql = "INSERT INTO produtos (descricao, fk_categoria_id_categoria, ncm, marca, unidade_medida)
+            VALUES (:descricao, :fk_categoria_id_categoria, :ncm, :marca, :unidade_medida)";
+    
+    $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':descricao', $descricao);
-    $stmt->bindValue(':cod_categoria', $cod_categoria, PDO::PARAM_INT);
+    $stmt->bindValue(':fk_categoria_id_categoria', $fk_categoria_id_categoria, PDO::PARAM_INT);
     $stmt->bindValue(':ncm', $ncm);
     $stmt->bindValue(':marca', $marca);
     $stmt->bindValue(':unidade_medida', $unidade_medida);
-    $stmt->bindValue(':preco_custo_unidade', $preco_custo_unidade);
+    
     $stmt->execute();
 
-    header('Location: produtos.php?msg=Produto cadastrado com sucesso!');
+    header('Location: produtos.php?status=adicionado');
     exit;
+
 } catch (PDOException $e) {
     die("Erro ao salvar produto: " . $e->getMessage());
 }

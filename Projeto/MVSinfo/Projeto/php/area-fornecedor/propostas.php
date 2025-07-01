@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 require_once '../Conexao.php';
 
@@ -16,16 +16,23 @@ if (!$fornecedorId) {
     exit;
 }
 
-// Buscar todas as compras realizadas pelos clientes (exemplo básico)
-$sqlCompras = "
-    SELECT c.id_compra, u.razao_social AS cliente, c.data_compra
-    FROM compra c
-    JOIN usuario u ON c.id_fornecedor = u.id_usuario
-    ORDER BY c.data_compra DESC
+// Buscar todas as propostas (operacoes tipo 3) do fornecedor logado
+$sqlPropostas = "
+    SELECT 
+        o.id_operacao,
+        o.data_operacao,
+        o.prazo_entrega,
+        o.status_pagamento,
+        o.valor_total_compra
+    FROM operacao o
+    WHERE o.fk_usuario_id_usuario = :fornecedorId
+      AND o.fk_tipo_operacao_id_tipo_operacao = 3
+    ORDER BY o.data_operacao DESC
 ";
 
-$stmt = $pdo->query($sqlCompras);
-$compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $pdo->prepare($sqlPropostas);
+$stmt->execute([':fornecedorId' => $fornecedorId]);
+$propostas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -61,29 +68,39 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <div class="container">
-    <h2>Propostas Solicitadas</h2>
+    <h2>Propostas Enviadas</h2>
 
-    <?php if (count($compras) > 0): ?>
+    <?php if (count($propostas) > 0): ?>
         <table>
             <thead>
                 <tr>
-                    <th>Cliente</th>
-                    <th>Data da Compra</th>
+                    <th>ID da Proposta</th>
+                    <th>Data da Proposta</th>
+                    <th>Prazo de Entrega</th>
+                    <th>Status</th>
+                    <th>Valor Total (R$)</th>
                     <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($compras as $compra): ?>
+                <?php foreach ($propostas as $proposta): ?>
                     <tr>
-                        <td><?= htmlspecialchars($compra['cliente']) ?></td>
-                        <td><?= date('d/m/Y', strtotime($compra['data_compra'])) ?></td>
-                        <td><a href="preencher-proposta.php?id=<?= intval($compra['id_compra']) ?>" class="btn">Preencher Proposta</a></td>
+                        <td><?= htmlspecialchars($proposta['id_operacao']) ?></td>
+                        <td><?= date('d/m/Y', strtotime($proposta['data_operacao'])) ?></td>
+                        <td><?= htmlspecialchars($proposta['prazo_entrega'] ?: '-') ?></td>
+                        <td><?= htmlspecialchars($proposta['status_pagamento']) ?></td>
+                        <td><?= number_format($proposta['valor_total_compra'], 2, ',', '.') ?></td>
+                        <td>
+                            <a href="preencher-proposta.php?id=<?= intval($proposta['id_operacao']) ?>" class="btn">
+                                <?= $proposta['valor_total_compra'] > 0 ? 'Editar Proposta' : 'Preencher Proposta' ?>
+                            </a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     <?php else: ?>
-        <p>Nenhuma proposta disponível no momento.</p>
+        <p>Nenhuma proposta enviada até o momento.</p>
     <?php endif; ?>
 
     <a href="area-fornecedor.php" class="btn">Voltar ao Perfil</a>

@@ -23,7 +23,7 @@ if ($senha !== $confirmarSenha) {
     die('As senhas não conferem.');
 }
 
-if (!in_array($tipoUsuarioId, [0, 1, 2])) {
+if (!in_array($tipoUsuarioId, [1, 2, 3])) {
     die('Tipo de usuário inválido.');
 }
 
@@ -39,11 +39,11 @@ foreach ($usuariosDoTipo as $userExistente) {
 $dados = [
     'cnpj' => $_POST['cnpj_empresa'] ?? null,
     'razao_social' => $_POST['razaoSocial'] ?? null,
-    'nome_fantasia' => $_POST['nomeFantasia'] ?? null,
     'inscricao_estadual' => $_POST['inscricaoEstadual'] ?? null,
     'contato' => $_POST['nomeResponsavel'] ?? null,
     'telefone' => $_POST['telefone'] ?? null,
     'email' => $_POST['email'] ?? null,
+    'tipo_usuario' => $tipoUsuarioId,
     'cep' => $_POST['cep'] ?? null,
     'logradouro' => $_POST['logradouro'] ?? null,
     'numero' => $_POST['numero'] ?? null,
@@ -52,14 +52,13 @@ $dados = [
     'cidade' => $_POST['cidade'] ?? null,
     'estado' => $_POST['estado'] ?? null,
     'login' => $login,
-    'senha' => password_hash($senha, PASSWORD_DEFAULT),
-    'tipo_usuario' => $tipoUsuarioId
+    'senha' => password_hash($senha, PASSWORD_DEFAULT)
 ];
 
 // Inserir
 try {
     $usuario->inserir($dados);
-    header('Location: ../usuario/login_view.php');
+    header('Location: ./sucesso.php');
     exit;
 } catch (PDOException $e) {
     die("Erro ao inserir usuário: " . $e->getMessage());
