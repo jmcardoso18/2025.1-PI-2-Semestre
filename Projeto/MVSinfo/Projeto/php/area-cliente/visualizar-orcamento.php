@@ -2,70 +2,121 @@
 session_start();
 require_once '../Conexao.php';
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 1) {
-    header('Location: ../usuario/login_view.php');
+if (!isset($_SESSION['loggedin']) || $_SESSION['tipoUsuario'] != 1) {
+    header("Location: ../usuario/login_view.php");
+    exit;
+}
+
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    echo "ID do orçamento inválido.";
+    exit;
+}
+
+$id_orcamento = (int) $_GET['id'];
+$id_cliente = $_SESSION['id_usuario'] ?? null;
+
+if (!$id_cliente) {
+    echo "Usuário não identificado.";
     exit;
 }
 
 $conexao = new conexao();
 $pdo = $conexao->getPdo();
 
-$idUsuario = $_SESSION['id_usuario'] ?? null;
-$idOrcamento = intval($_GET['id'] ?? 0);
-
-if (!$idUsuario || $idOrcamento <= 0) {
-    echo "Erro: Parâmetros inválidos.";
-    exit;
-}
-
-// Buscar orçamento principal
-$sqlOrcamento = "
-    SELECT o.*, t.descricao AS tipo_operacao
+// Verifica se o orçamento pertence ao cliente logado e é do tipo 'Orçamento'
+$sqlCheck = "
+    SELECT o.*
     FROM operacao o
-    JOIN tipo_operacao t ON o.fk_tipo_operacao_id_tipo_operacao = t.id_tipo_operacao
-    WHERE o.id_operacao = :id AND o.fk_cliente_id_cliente = :cliente AND t.descricao = 'Orçamento'
+    WHERE o.id_operacao = :id_orcamento
+      AND o.fk_usuario_id_usuario = :id_cliente
+      AND o.fk_tipo_operacao_id_tipo_operacao = (
+          SELECT id_tipo_operacao FROM tipo_operacao WHERE descricao = 'Orçamento' LIMIT 1
+      )
 ";
-$stmt = $pdo->prepare($sqlOrcamento);
-$stmt->execute([':id' => $idOrcamento, ':cliente' => $idUsuario]);
-$orcamento = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmtCheck = $pdo->prepare($sqlCheck);
+$stmtCheck->execute([':id_orcamento' => $id_orcamento, ':id_cliente' => $id_cliente]);
+$orcamento = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
 if (!$orcamento) {
-    echo "Orçamento não encontrado.";
+    echo "Orçamento não encontrado ou acesso negado.";
     exit;
 }
 
-// Buscar produtos do orçamento
+// Busca os produtos do orçamento com detalhes usando a view ou tabela operacao_produto
 $sqlProdutos = "
-    SELECT p.descricao, op.quantidade, op.valor_unitario, op.valor_total_produtos
+    SELECT p.descricao AS produto, op.quantidade, op.valor_unitario, op.valor_total_produtos, op.imposto, op.preco_venda
     FROM operacao_produto op
-    JOIN produtos p ON op.id_produto = p.id_produto
-    WHERE op.id_operacao = :id
+    JOIN produtos p ON p.id_produto = op.id_produto
+    WHERE op.id_operacao = :id_orcamento
 ";
 $stmtProdutos = $pdo->prepare($sqlProdutos);
-$stmtProdutos->execute([':id' => $idOrcamento]);
+$stmtProdutos->execute([':id_orcamento' => $id_orcamento]);
 $produtos = $stmtProdutos->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Detalhes do Orçamento</title>
-    <link rel="stylesheet" href="/Projeto/MVSinfo/Projeto/css/styles.css">
-    <style>
-        body { background-color: #f5f7fa; font-family: Arial, sans-serif; }
-        .navbar { background-color: #1976f2; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .navbar a { color: white; margin-left: 15px; text-decoration: none; }
-        .container { max-width: 900px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { color: #1976f2; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
-        th { background-color: #f0f0f0; }
-        .btn { padding: 10px 18px; background-color: #1976f2; color: white; border: none; border-radius: 5px; text-decoration: none; cursor: pointer; }
-        .btn:hover { background-color: #155dc1; }
-        .info-box { margin-top: 15px; background-color: #eef2f7; padding: 15px; border-radius: 5px; }
-        .info-box span { font-weight: bold; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Detalhes do Orçamento - MVS Info</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    body {
+        background-color: #f5f7fa;
+        font-family: Arial, sans-serif;
+    }
+    .navbar {
+        background-color: #1976f2;
+        color: white;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .navbar a {
+        color: white;
+        margin-left: 15px;
+        text-decoration: none;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        color: #1976f2;
+        margin-bottom: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+    th {
+        background-color: #f0f0f0;
+    }
+    .btn {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 5px;
+        background-color: #1976f2;
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .btn:hover {
+        background-color: #155dc1;
+    }
+</style>
 </head>
 <body>
 
@@ -73,47 +124,48 @@ $produtos = $stmtProdutos->fetchAll(PDO::FETCH_ASSOC);
     <div><strong>MVS Info - Área do Cliente</strong></div>
     <div>
         <a href="area-cliente.php">Perfil</a>
-        <a href="orcamento.php">Orçamentos</a>
         <a href="../logout.php">Sair</a>
     </div>
 </div>
 
 <div class="container">
     <h2>Detalhes do Orçamento #<?= htmlspecialchars($orcamento['id_operacao']) ?></h2>
+    <p><strong>Data:</strong> <?= date('d/m/Y', strtotime($orcamento['data_operacao'])) ?></p>
+    <p><strong>Prazo de Entrega:</strong> <?= htmlspecialchars($orcamento['prazo_entrega'] ?? '-') ?></p>
+    <p><strong>Status do Pagamento:</strong> <?= htmlspecialchars($orcamento['status_pagamento']) ?></p>
+    <p><strong>Valor Total:</strong> R$ <?= number_format($orcamento['valor_total_compra'], 2, ',', '.') ?></p>
 
-    <div class="info-box">
-        <p><span>Data:</span> <?= date('d/m/Y', strtotime($orcamento['data_operacao'])) ?></p>
-        <p><span>Status:</span> <?= htmlspecialchars($orcamento['status_pagamento'] ?? 'Pendente') ?></p>
-        <p><span>Prazo de Entrega:</span> <?= htmlspecialchars($orcamento['prazo_entrega'] ?? '-') ?></p>
-        <p><span>Valor Total:</span> R$ <?= number_format($orcamento['valor_total_compra'], 2, ',', '.') ?></p>
-    </div>
-
-    <h3>Produtos Solicitados</h3>
+    <h4 class="mt-4">Produtos</h4>
+    <?php if (count($produtos) > 0): ?>
     <table>
         <thead>
             <tr>
-                <th>Descrição</th>
+                <th>Produto</th>
                 <th>Quantidade</th>
                 <th>Valor Unitário (R$)</th>
-                <th>Subtotal (R$)</th>
+                <th>Imposto (%)</th>
+                <th>Preço Venda (R$)</th>
+                <th>Valor Total (R$)</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($produtos as $prod): ?>
-                <tr>
-                    <td><?= htmlspecialchars($prod['descricao']) ?></td>
-                    <td><?= htmlspecialchars($prod['quantidade']) ?></td>
-                    <td><?= number_format($prod['valor_unitario'], 2, ',', '.') ?></td>
-                    <td><?= number_format($prod['valor_total_produtos'], 2, ',', '.') ?></td>
-                </tr>
+            <?php foreach ($produtos as $p): ?>
+            <tr>
+                <td><?= htmlspecialchars($p['produto']) ?></td>
+                <td><?= (int)$p['quantidade'] ?></td>
+                <td><?= number_format($p['valor_unitario'], 2, ',', '.') ?></td>
+                <td><?= number_format($p['imposto'], 2, ',', '.') ?></td>
+                <td><?= number_format($p['preco_venda'], 2, ',', '.') ?></td>
+                <td><?= number_format($p['valor_total_produtos'], 2, ',', '.') ?></td>
+            </tr>
             <?php endforeach; ?>
-            <?php if (count($produtos) === 0): ?>
-                <tr><td colspan="4">Nenhum produto vinculado a este orçamento.</td></tr>
-            <?php endif; ?>
         </tbody>
     </table>
+    <?php else: ?>
+    <p>Nenhum produto encontrado neste orçamento.</p>
+    <?php endif; ?>
 
-    <a href="orcamento.php" class="btn" style="margin-top: 20px;">Voltar aos Orçamentos</a>
+    <a href="orcamento.php" class="btn">Voltar aos Orçamentos</a>
 </div>
 
 </body>

@@ -58,7 +58,7 @@ $dados = [
 // Inserir
 try {
     $usuario->inserir($dados);
-    header('Location: ../usuario/login_view.php');
+    header('Location: ./sucesso.php');
     exit;
 } catch (PDOException $e) {
     die("Erro ao inserir usuário: " . $e->getMessage());
