@@ -2,112 +2,76 @@
 session_start();
 require_once '../Conexao.php';
 
-// Verifica se está logado e se é usuário tipo 1 (Cliente)
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['tipoUsuario'] != 1) {
     header('Location: ../usuario/login_view.php');
     exit;
 }
 
-$conexao = new conexao();
+$conexao = new Conexao();
 $pdo = $conexao->getPdo();
 
 $idUsuario = $_SESSION['id_usuario'] ?? null;
-if (!$idUsuario) {
-    echo "Usuário não identificado.";
+$idOperacao = intval($_POST['id_operacao'] ?? 0);
+$statusPagamento = $_POST['status_pagamento'] ?? '';
+$dataPagamento = $_POST['data_pagamento'] ?? null;
+
+if (!$idUsuario || $idOperacao <= 0) {
+    echo "Dados inválidos.";
     exit;
 }
 
-$produtos = $_POST['produtos'] ?? [];
-if (empty($produtos)) {
-    echo "Nenhum produto foi enviado.";
+// Validar status_pagamento - só aceitar valores permitidos
+$valoresPermitidos = ['Pendente', 'Aprovado', 'Rejeitado'];
+if (!in_array($statusPagamento, $valoresPermitidos)) {
+    echo "Status de pagamento inválido.";
     exit;
+}
+
+// Validar data_pagamento (opcional)
+// Aceitar data no formato yyyy-mm-dd ou vazio/null
+if ($dataPagamento) {
+    $dateObj = DateTime::createFromFormat('Y-m-d', $dataPagamento);
+    if (!$dateObj || $dateObj->format('Y-m-d') !== $dataPagamento) {
+        echo "Data de pagamento inválida.";
+        exit;
+    }
+} else {
+    $dataPagamento = null; // Para gravar NULL no banco
 }
 
 try {
-    $pdo->beginTransaction();
-
-    // Buscar id_tipo_operacao do tipo "Orçamento" (corrigido aqui)
-    $stmtTipo = $pdo->prepare("SELECT id_tipo_operacao FROM tipo_operacao WHERE descricao = 'Orçamento' LIMIT 1");
-    $stmtTipo->execute();
-    $tipoOperacao = $stmtTipo->fetchColumn();
-
-    if (!$tipoOperacao) {
-        throw new Exception("Tipo de operação 'Orçamento' não encontrado no banco.");
-    }
-
-    // Inserir operação com tipo 'Orçamento'
-    $stmtOperacao = $pdo->prepare("
-        INSERT INTO operacao (fk_usuario_id_usuario, data_operacao, fk_tipo_operacao_id_tipo_operacao, valor_total_compra)
-        VALUES (:usuario, NOW(), :tipoOperacao, 0)
+    // Verificar se a operação pertence ao usuário e é do tipo orçamento (tipo 3)
+    $stmtCheck = $pdo->prepare("
+        SELECT COUNT(*) FROM operacao 
+        WHERE id_operacao = :idOperacao AND fk_usuario_id_usuario = :idUsuario AND fk_tipo_operacao_id_tipo_operacao = (
+            SELECT id_tipo_operacao FROM tipo_operacao WHERE descricao = 'Orçamento' LIMIT 1
+        )
     ");
-    $stmtOperacao->execute([
-        ':usuario' => $idUsuario,
-        ':tipoOperacao' => $tipoOperacao,
+    $stmtCheck->execute([
+        ':idOperacao' => $idOperacao,
+        ':idUsuario' => $idUsuario
     ]);
-
-    $idOperacao = $pdo->lastInsertId();
-    $valorTotalOperacao = 0;
-
-    foreach ($produtos as $item) {
-        $produtoId = $item['produto_id'] ?? null;
-        $quantidade = $item['quantidade'] ?? 0;
-
-        if (!$produtoId || $quantidade < 1) {
-            throw new Exception("Produto inválido ou quantidade inválida.");
-        }
-
-        $valorUnitario = 0;
-        $valorTotal = 0;
-
-        // Evitar duplicação
-        $stmtCheck = $pdo->prepare("SELECT quantidade FROM operacao_produto WHERE id_operacao = :idOperacao AND id_produto = :produtoId");
-        $stmtCheck->execute([
-            ':idOperacao' => $idOperacao,
-            ':produtoId' => $produtoId
-        ]);
-        $produtoExistente = $stmtCheck->fetchColumn();
-
-        if ($produtoExistente !== false) {
-            $novaQuantidade = $produtoExistente + $quantidade;
-            $stmtUpdate = $pdo->prepare("
-                UPDATE operacao_produto SET quantidade = :novaQtd WHERE id_operacao = :idOperacao AND id_produto = :produtoId
-            ");
-            $stmtUpdate->execute([
-                ':novaQtd' => $novaQuantidade,
-                ':idOperacao' => $idOperacao,
-                ':produtoId' => $produtoId
-            ]);
-        } else {
-            $stmtItem = $pdo->prepare("
-                INSERT INTO operacao_produto (id_operacao, id_produto, quantidade, valor_unitario, valor_total_produtos)
-                VALUES (:idOperacao, :produtoId, :quantidade, :valorUnitario, :valorTotal)
-            ");
-            $stmtItem->execute([
-                ':idOperacao' => $idOperacao,
-                ':produtoId' => $produtoId,
-                ':quantidade' => $quantidade,
-                ':valorUnitario' => $valorUnitario,
-                ':valorTotal' => $valorTotal
-            ]);
-        }
-
-        $valorTotalOperacao += $valorTotal;
+    if ($stmtCheck->fetchColumn() == 0) {
+        echo "Operação não encontrada ou não autorizada.";
+        exit;
     }
 
-    $stmtUpdateTotal = $pdo->prepare("UPDATE operacao SET valor_total_compra = :valorTotal WHERE id_operacao = :idOperacao");
-    $stmtUpdateTotal->execute([
-        ':valorTotal' => $valorTotalOperacao,
+    // Atualizar os campos status_pagamento e data_pagamento
+    $stmtUpdate = $pdo->prepare("
+        UPDATE operacao 
+        SET status_pagamento = :statusPagamento, data_pagamento = :dataPagamento
+        WHERE id_operacao = :idOperacao
+    ");
+    $stmtUpdate->execute([
+        ':statusPagamento' => $statusPagamento,
+        ':dataPagamento' => $dataPagamento,
         ':idOperacao' => $idOperacao
     ]);
 
-    $pdo->commit();
-
-    header('Location: orcamento.php?success=1');
+    header("Location: minhas-operacoes.php?msg=pagamento_atualizado");
     exit;
 
 } catch (Exception $e) {
-    $pdo->rollBack();
-    echo "Erro ao processar proposta: " . $e->getMessage();
+    echo "Erro ao atualizar pagamento: " . $e->getMessage();
     exit;
 }
-?>

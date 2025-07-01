@@ -16,12 +16,10 @@ if (!$idCliente) {
     exit;
 }
 
-// Filtros recebidos por GET
 $dataInicio = $_GET['dataInicio'] ?? '';
 $dataFim = $_GET['dataFim'] ?? '';
 $status = $_GET['status'] ?? '';
 
-// Montagem das condições SQL
 $condicoes = "o.fk_usuario_id_usuario = :idCliente
     AND o.fk_tipo_operacao_id_tipo_operacao = (
         SELECT id_tipo_operacao FROM tipo_operacao WHERE descricao = 'Orçamento' LIMIT 1
@@ -42,7 +40,6 @@ if (!empty($status)) {
     $params[':status'] = $status;
 }
 
-// Consulta SQL
 $sql = "
     SELECT 
         o.id_operacao,
@@ -64,7 +61,6 @@ $orcamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus Orçamentos - MVS Info</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
@@ -98,43 +94,38 @@ $orcamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Filtros -->
     <div class="d-flex justify-content-between align-items-end mb-3">
-  <form class="row g-3" method="GET" action="">
-    <div class="col-md-3">
-      <label for="dataInicio" class="form-label">Data Início</label>
-      <input type="date" name="dataInicio" class="form-control" value="<?= htmlspecialchars($dataInicio) ?>">
-    </div>
-    <div class="col-md-3">
-      <label for="dataFim" class="form-label">Data Fim</label>
-      <input type="date" name="dataFim" class="form-control" value="<?= htmlspecialchars($dataFim) ?>">
-    </div>
-    <div class="col-md-3">
-      <label for="status" class="form-label">Status</label>
-      <select name="status" class="form-select">
-        <option value="">Todos</option>
-        <option value="Pago" <?= $status == 'Pago' ? 'selected' : '' ?>>Pago</option>
-        <option value="Pendente" <?= $status == 'Pendente' ? 'selected' : '' ?>>Pendente</option>
-        <option value="Cancelado" <?= $status == 'Cancelado' ? 'selected' : '' ?>>Cancelado</option>
-      </select>
-    </div>
-    <div class="col-md-3 d-flex align-items-end">
-      <button type="submit" class="btn btn-primary w-100">Filtrar</button>
-    </div>
-  </form>
+        <form class="row g-3" method="GET" action="">
+            <div class="col-md-3">
+                <label for="dataInicio" class="form-label">Data Início</label>
+                <input type="date" name="dataInicio" class="form-control" value="<?= htmlspecialchars($dataInicio) ?>">
+            </div>
+            <div class="col-md-3">
+                <label for="dataFim" class="form-label">Data Fim</label>
+                <input type="date" name="dataFim" class="form-control" value="<?= htmlspecialchars($dataFim) ?>">
+            </div>
+            <div class="col-md-3">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="Pago" <?= $status == 'Pago' ? 'selected' : '' ?>>Pago</option>
+                    <option value="Pendente" <?= $status == 'Pendente' ? 'selected' : '' ?>>Pendente</option>
+                    <option value="Cancelado" <?= $status == 'Cancelado' ? 'selected' : '' ?>>Cancelado</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            </div>
+        </form>
 
-  <a href="criar-orcamento.php" class="btn btn-success ms-4" style="height: 42px;">
-    Novo Orçamento
-  </a>
-</div>
-
+        <a href="criar-orcamento.php" class="btn btn-success ms-4" style="height: 42px;">Novo Orçamento</a>
+    </div>
 
     <?php if (isset($_GET['success'])): ?>
-        <div style="background-color:#d4edda; color:#155724; padding: 10px 15px; border-radius: 5px; margin-bottom: 15px;">
-            Orçamento criado com sucesso!
-        </div>
+        <div class="alert alert-success">Orçamento criado com sucesso!</div>
     <?php endif; ?>
 
     <?php if (count($orcamentos) > 0): ?>
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -146,28 +137,74 @@ $orcamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($orcamentos as $orc): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($orc['id_operacao']) ?></td>
-                        <td><?= date('d/m/Y', strtotime($orc['data_operacao'])) ?></td>
-                        <td><?= htmlspecialchars($orc['prazo_entrega'] ?? '-') ?></td>
-                        <td class="<?= 'status-' . strtolower($orc['status_pagamento']) ?>">
-                            <?= htmlspecialchars($orc['status_pagamento']) ?>
-                        </td>
-                        <td><?= number_format($orc['valor_total_compra'], 2, ',', '.') ?></td>
-                        <td>
-                            <a href="visualizar-orcamento.php?id=<?= $orc['id_operacao'] ?>" class="btn btn-sm">Ver Detalhes</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
+    <?php foreach ($orcamentos as $orc): ?>
+        <tr>
+            <td><?= htmlspecialchars($orc['id_operacao']) ?></td>
+            <td><?= date('d/m/Y', strtotime($orc['data_operacao'])) ?></td>
+            <td><?= htmlspecialchars($orc['prazo_entrega'] ?? '-') ?></td>
+            <td class="<?= 'status-' . strtolower($orc['status_pagamento'] ?? 'pendente') ?>">
+                <?= htmlspecialchars($orc['status_pagamento'] ?: 'Pendente') ?>
+            </td>
+            <td><?= number_format($orc['valor_total_compra'], 2, ',', '.') ?></td>
+            <td>
+                <a href="visualizar-orcamento.php?id=<?= $orc['id_operacao'] ?>" class="btn btn-sm btn-outline-primary">Ver Detalhes</a>
+                <?php 
+                    $status = strtolower(trim($orc['status_pagamento'] ?? ''));
+                    if ($status === 'pendente' || $status === ''): 
+                ?>
+                    <a href="aprovar-proposta.php?id=<?= $orc['id_operacao'] ?>" class="btn btn-sm btn-outline-success ms-2">
+                        Aprovar/Rejeitar
+                    </a>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+
         </table>
     <?php else: ?>
         <p>Nenhum orçamento encontrado com os critérios selecionados.</p>
     <?php endif; ?>
 
-    <a href="area-cliente.php" class="btn">Voltar ao Perfil</a>
+    <a href="area-cliente.php" class="btn mt-3">Voltar ao Perfil</a>
 </div>
 
+<!-- MODAIS DINÂMICOS PARA PAGAMENTO -->
+<?php foreach ($orcamentos as $orc): ?>
+<?php if ($orc['status_pagamento'] === 'Pendente'): ?>
+<div class="modal fade" id="modalPagamento<?= $orc['id_operacao'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $orc['id_operacao'] ?>" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="aprovar-proposta.php">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel<?= $orc['id_operacao'] ?>">Pagamento - Orçamento #<?= $orc['id_operacao'] ?></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id_operacao" value="<?= $orc['id_operacao'] ?>">
+          <div class="mb-3">
+            <label>Status de Pagamento</label>
+            <select name="status_pagamento" class="form-select" required>
+              <option value="Aprovado">Aprovar</option>
+              <option value="Cancelado">Rejeitar</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label>Data de Pagamento</label>
+            <input type="date" name="data_pagamento" class="form-control" required value="<?= date('Y-m-d') ?>">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirmar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<?php endif; ?>
+<?php endforeach; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
