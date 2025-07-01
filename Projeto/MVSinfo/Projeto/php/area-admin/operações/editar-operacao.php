@@ -29,10 +29,10 @@ if (!$operacao) {
     exit;
 }
 
-// Buscar produtos dessa operação
+// Buscar produtos dessa operação (sem preco_venda)
 $stmtProdutos = $pdo->prepare("
     SELECT op.id_produto, p.descricao, op.quantidade, op.valor_unitario, op.valor_total_produtos,
-           op.margem_lucro, op.imposto, op.preco_venda
+           op.margem_lucro, op.imposto
     FROM operacao_produto op
     JOIN produtos p ON op.id_produto = p.id_produto
     WHERE op.id_operacao = :id_operacao
@@ -50,29 +50,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($dadosProdutos as $idProd => $campos) {
             $margemLucro = floatval(str_replace(',', '.', $campos['margem_lucro']));
             $imposto = floatval(str_replace(',', '.', $campos['imposto']));
-            $precoVenda = floatval(str_replace(',', '.', $campos['preco_venda']));
 
-            // Atualizar os valores no banco
+            // Atualizar os valores no banco (sem preco_venda)
             $stmtUpdate = $pdo->prepare("
                 UPDATE operacao_produto SET
                     margem_lucro = :margem_lucro,
-                    imposto = :imposto,
-                    preco_venda = :preco_venda
+                    imposto = :imposto
                 WHERE id_operacao = :id_operacao AND id_produto = :id_produto
             ");
             $stmtUpdate->execute([
                 ':margem_lucro' => $margemLucro,
                 ':imposto' => $imposto,
-                ':preco_venda' => $precoVenda,
                 ':id_operacao' => $idOperacao,
                 ':id_produto' => $idProd
             ]);
         }
 
-        // Recalcular valor_total_compra somando valor_total_produtos + margem_lucro + imposto + preco_venda
+        // Recalcular valor_total_compra somando somente valor_total_produtos + margem_lucro + imposto
         $stmtSoma = $pdo->prepare("
             SELECT 
-                SUM(valor_total_produtos + margem_lucro + imposto + preco_venda) AS total_calculado
+                SUM(valor_total_produtos + margem_lucro + imposto) AS total_calculado
             FROM operacao_produto
             WHERE id_operacao = :id_operacao
         ");
@@ -220,7 +217,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <th>Valor Total Produtos (R$)</th>
                         <th>Margem Lucro (R$)</th>
                         <th>Imposto (R$)</th>
-                        <th>Preço Venda (R$)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -235,9 +231,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </td>
                             <td>
                                 <input type="text" name="produtos[<?= $p['id_produto'] ?>][imposto]" value="<?= number_format($p['imposto'], 2, ',', '.') ?>">
-                            </td>
-                            <td>
-                                <input type="text" name="produtos[<?= $p['id_produto'] ?>][preco_venda]" value="<?= number_format($p['preco_venda'], 2, ',', '.') ?>">
                             </td>
                         </tr>
                     <?php endforeach; ?>
