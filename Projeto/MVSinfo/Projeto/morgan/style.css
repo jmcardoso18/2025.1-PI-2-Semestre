@@ -1,0 +1,103 @@
+:root {
+  --bg-dark: #111;
+  --accent: #00eaff;
+  --text-light: #f0f0f0;
+}
+
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  scroll-behavior: smooth;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 2rem;
+  z-index: 1000;
+}
+
+header img {
+  height: 50px;
+}
+
+nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+nav a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+.menu-toggle span {
+  background: var(--text-light);
+  height: 3px;
+  width: 25px;
+  margin: 4px 0;
+  transition: 0.4s;
+}
+
+main {
+  padding-top: 80px;
+}
+
+section {
+  padding: 80px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+h1, h2 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--accent);
+  text-align: center;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: #000;
+  font-size: 0.9rem;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  nav {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: #000;
+    flex-direction: column;
+    width: 200px;
+    display: none;
+    text-align: right;
+    padding: 1rem;
+    border-left: 2px solid var(--accent);
+    z-index: 999;
+  }
+  nav.active {
+    display: flex !important;
+  }
+  .menu-toggle {
+    display: flex;
+  }
+}
