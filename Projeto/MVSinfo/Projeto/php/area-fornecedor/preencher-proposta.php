@@ -25,15 +25,19 @@ if ($idOperacao <= 0) {
 $erro = '';
 $sucesso = '';
 
-// Buscar dados da proposta (operacao)
-$stmtOp = $pdo->prepare("SELECT * FROM operacao WHERE id_operacao = :id AND fk_usuario_id_usuario = :fornecedor");
-$stmtOp->execute([':id' => $idOperacao, ':fornecedor' => $fornecedorId]);
+// Buscar dados da proposta (operacao) APENAS pelo id_operacao
+$stmtOp = $pdo->prepare("SELECT * FROM operacao WHERE id_operacao = :id");
+$stmtOp->execute([':id' => $idOperacao]);
 $operacao = $stmtOp->fetch(PDO::FETCH_ASSOC);
 
 if (!$operacao) {
-    echo "Proposta não encontrada ou sem permissão.";
+    echo "Proposta não encontrada.";
     exit;
 }
+
+// Buscar transportadoras para o select
+$stmtTransportadoras = $pdo->query("SELECT id_transportadora, descricao, data_entrega, valor, tipo_transportadora FROM transportadora ORDER BY descricao");
+$transportadoras = $stmtTransportadoras->fetchAll(PDO::FETCH_ASSOC);
 
 // Buscar produtos da proposta em operacao_produto
 $stmtProdutosProposta = $pdo->prepare("
@@ -48,8 +52,7 @@ while ($row = $stmtProdutosProposta->fetch(PDO::FETCH_ASSOC)) {
     $produtosProposta[$row['id_produto']] = $row;
 }
 
-// Buscar produtos solicitados na compra (para referência, assumindo que operacao tem uma compra associada? Se não, vamos assumir que o pedido é a própria operação — ajuste conforme seu modelo)
-// Aqui vou assumir que essa proposta está vinculada a uma compra, via outro campo (não tem na tabela, então vou listar todos os produtos da categoria do fornecedor para simplificar)
+// Buscar produtos da categoria do fornecedor (para listar e permitir alteração)
 $stmtProdutosDisponiveis = $pdo->prepare("
     SELECT p.id_produto, p.descricao
     FROM produtos p
@@ -60,22 +63,32 @@ $stmtProdutosDisponiveis = $pdo->prepare("
 $stmtProdutosDisponiveis->execute([':fornecedor' => $fornecedorId]);
 $produtosDisponiveis = $stmtProdutosDisponiveis->fetchAll(PDO::FETCH_ASSOC);
 
-// Se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prazoEntrega = trim($_POST['prazo_entrega'] ?? '');
+    $dataOperacao = trim($_POST['data_operacao'] ?? '');
+    $idTransportadora = intval($_POST['fk_transportadora_id_transportadora'] ?? 0);
     $produtos = $_POST['produtos'] ?? [];
 
-    if (empty($prazoEntrega) || empty($produtos)) {
-        $erro = "Preencha todos os campos.";
+    if (empty($prazoEntrega) || empty($dataOperacao) || $idTransportadora <= 0 || empty($produtos)) {
+        $erro = "Preencha todos os campos corretamente.";
     } else {
         try {
             $pdo->beginTransaction();
 
-            // Atualizar prazo de entrega na operacao
-            $stmtUpdateOp = $pdo->prepare("UPDATE operacao SET prazo_entrega = :prazo WHERE id_operacao = :id");
-            $stmtUpdateOp->execute([':prazo' => $prazoEntrega, ':id' => $idOperacao]);
+            // Atualizar dados da operacao: prazo_entrega, data_operacao e transportadora
+            $stmtUpdateOp = $pdo->prepare("
+                UPDATE operacao 
+                SET prazo_entrega = :prazo, data_operacao = :data_operacao, fk_transportadora_id_transportadora = :transportadora 
+                WHERE id_operacao = :id
+            ");
+            $stmtUpdateOp->execute([
+                ':prazo' => $prazoEntrega,
+                ':data_operacao' => $dataOperacao,
+                ':transportadora' => $idTransportadora,
+                ':id' => $idOperacao
+            ]);
 
-            // Atualizar ou inserir produtos na operacao_produto
+            // Preparar statements para update e insert produtos
             $stmtCheckProd = $pdo->prepare("SELECT COUNT(*) FROM operacao_produto WHERE id_operacao = :id_operacao AND id_produto = :id_produto");
             $stmtUpdateProd = $pdo->prepare("
                 UPDATE operacao_produto
@@ -90,11 +103,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             foreach ($produtos as $idProd => $dados) {
                 $quantidade = intval($dados['quantidade']);
+                // Ajuste para aceitar vírgula e ponto
                 $valorUnitario = floatval(str_replace(',', '.', $dados['valor_unitario']));
                 $valorTotalProd = $quantidade * $valorUnitario;
 
                 if ($quantidade <= 0 || $valorUnitario <= 0) {
-                    throw new Exception("Quantidade e valor unitário devem ser maiores que zero.");
+                    continue;
                 }
 
                 $stmtCheckProd->execute([':id_operacao' => $idOperacao, ':id_produto' => $idProd]);
@@ -119,20 +133,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Atualizar valor_total_compra na operacao somando os produtos
+            // Atualizar valor_total_compra da operacao somando os produtos
             $stmtSum = $pdo->prepare("
                 SELECT SUM(valor_total_produtos) FROM operacao_produto WHERE id_operacao = :id_operacao
             ");
             $stmtSum->execute([':id_operacao' => $idOperacao]);
-            $valorTotal = $stmtSum->fetchColumn();
+            $valorTotal = $stmtSum->fetchColumn() ?: 0;
 
             $stmtValorTotal = $pdo->prepare("UPDATE operacao SET valor_total_compra = :valor WHERE id_operacao = :id");
             $stmtValorTotal->execute([':valor' => $valorTotal, ':id' => $idOperacao]);
 
             $pdo->commit();
             $sucesso = "Proposta atualizada com sucesso!";
-            
-            // Recarregar dados para exibir atualizados
+
             header("Location: preencher-proposta.php?id=$idOperacao&success=1");
             exit;
 
@@ -143,7 +156,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Recarregar produtos da proposta (depois do update, ou se nenhum post)
+// Recarregar dados após POST para refletir alterações
+$stmtOp->execute([':id' => $idOperacao]);
+$operacao = $stmtOp->fetch(PDO::FETCH_ASSOC);
+
 $stmtProdutosProposta->execute([':id_operacao' => $idOperacao]);
 $produtosProposta = [];
 while ($row = $stmtProdutosProposta->fetch(PDO::FETCH_ASSOC)) {
@@ -163,22 +179,29 @@ if (isset($_GET['success'])) {
     <link rel="stylesheet" href="/Projeto/MVSinfo/Projeto/css/styles.css" />
     <style>
         body { background-color: #f5f7fa; font-family: Arial, sans-serif; }
-        .navbar { background-color: #1976f2; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .navbar a { color: white; margin-left: 15px; text-decoration: none; }
+        .navbar { background-color: #1976f2; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;}
+        .navbar a { color: white; margin-left: 15px; text-decoration: none; font-weight: 600; }
+        .navbar a:hover { color: #cce0ff; }
         .container { max-width: 900px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         h2 { color: #1976f2; margin-bottom: 20px; }
         label { font-weight: bold; display: block; margin-top: 15px; }
-        input[type="text"], input[type="number"] {
+        input[type="text"], input[type="number"], input[type="date"], select {
             width: 100%; padding: 8px 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box;
         }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
         th { background-color: #f0f0f0; }
-        .btn { background-color: #1976f2; color: white; padding: 10px 18px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; text-decoration: none; display: inline-block; }
+        .btn { background-color: #1976f2; color: white; padding: 10px 18px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; text-decoration: none; display: inline-block; font-weight: 600; }
         .btn:hover { background-color: #155dc1; }
         .alert { padding: 12px; margin-top: 15px; border-radius: 5px; font-weight: bold; }
         .alert-success { background-color: #d4edda; color: #155724; }
         .alert-error { background-color: #f8d7da; color: #721c24; }
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .navbar a { margin-left: 0; margin-top: 8px; }
+            .container { margin: 20px 15px; padding: 20px; }
+            th, td { font-size: 13px; padding: 10px 8px; }
+        }
     </style>
 </head>
 <body>
@@ -195,17 +218,30 @@ if (isset($_GET['success'])) {
     <div class="container">
         <h2>Editar Proposta #<?= htmlspecialchars($idOperacao) ?></h2>
 
-        <?php if (!empty($erro)) : ?>
+        <?php if ($erro): ?>
             <div class="alert alert-error"><?= htmlspecialchars($erro) ?></div>
         <?php endif; ?>
 
-        <?php if (!empty($sucesso)) : ?>
+        <?php if ($sucesso): ?>
             <div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div>
         <?php endif; ?>
 
         <form method="post" action="preencher-proposta.php?id=<?= htmlspecialchars($idOperacao) ?>">
+            <label for="data_operacao">Data da Operação:</label>
+            <input type="date" id="data_operacao" name="data_operacao" required value="<?= htmlspecialchars(date('Y-m-d', strtotime($operacao['data_operacao']))) ?>">
+
             <label for="prazo_entrega">Prazo de Entrega:</label>
             <input type="text" id="prazo_entrega" name="prazo_entrega" required placeholder="Ex: 10 dias" value="<?= htmlspecialchars($operacao['prazo_entrega']) ?>">
+
+            <label for="fk_transportadora_id_transportadora">Transportadora:</label>
+            <select id="fk_transportadora_id_transportadora" name="fk_transportadora_id_transportadora" required>
+                <option value="">-- Selecione a Transportadora --</option>
+                <?php foreach ($transportadoras as $t): ?>
+                    <option value="<?= $t['id_transportadora'] ?>" <?= ($operacao['fk_transportadora_id_transportadora'] == $t['id_transportadora']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($t['descricao']) ?> - Entrega: <?= date('d/m/Y', strtotime($t['data_entrega'])) ?> - R$ <?= number_format($t['valor'], 2, ',', '.') ?> - Tipo: <?= htmlspecialchars($t['tipo_transportadora']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
             <table>
                 <thead>
@@ -216,7 +252,7 @@ if (isset($_GET['success'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($produtosDisponiveis as $produto) : 
+                    <?php foreach ($produtosDisponiveis as $produto):
                         $idProd = $produto['id_produto'];
                         $quantidade = $produtosProposta[$idProd]['quantidade'] ?? '';
                         $valorUnitario = $produtosProposta[$idProd]['valor_unitario'] ?? '';
@@ -224,10 +260,10 @@ if (isset($_GET['success'])) {
                         <tr>
                             <td><?= htmlspecialchars($produto['descricao']) ?></td>
                             <td>
-                                <input type="number" name="produtos[<?= $idProd ?>][quantidade]" min="0" value="<?= htmlspecialchars($quantidade) ?>">
+                                <input type="number" min="0" name="produtos[<?= $idProd ?>][quantidade]" value="<?= htmlspecialchars($quantidade) ?>">
                             </td>
                             <td>
-                                <input type="text" name="produtos[<?= $idProd ?>][valor_unitario]" pattern="^\d+(\.\d{1,2})?$" title="Formato: 0.00" value="<?= htmlspecialchars($valorUnitario) ?>">
+                                <input type="text" name="produtos[<?= $idProd ?>][valor_unitario]" pattern="^\d+([.,]\d{1,2})?$" title="Formato: 0.00" step="0.01" value="<?= htmlspecialchars($valorUnitario) ?>">
                             </td>
                         </tr>
                     <?php endforeach; ?>
